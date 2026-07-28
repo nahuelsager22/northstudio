@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="North Studio">
+  <!-- Favicon: recorte cuadrado — cumbre dominante + vecinas + destello de 8 puntas -->
+  <path d="M54 1 L54.92 8.78 L57.32 7.68 L56.22 10.08 L64 11 L56.22 11.92 L57.32 14.32 L54.92 13.22 L54 21 L53.08 13.22 L50.68 14.32 L51.78 11.92 L44 11 L51.78 10.08 L50.68 7.68 L53.08 8.78 Z" fill="#E9E5DE"/>
+  <path d="M6 54 L16 46 L26 34 L36 12 L44 30 L50 24 L58 44 L64 54 Z" fill="#E9E5DE"/>
+</svg>
