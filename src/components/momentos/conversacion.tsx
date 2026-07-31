@@ -1,4 +1,5 @@
 import { ConversacionFormulario } from "./conversacion-formulario";
+import { ANCLA_CONTACTO } from "@/lib/i18n/secciones";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/locales";
 
@@ -23,7 +24,10 @@ export function Conversacion({
   locale: Locale;
 }) {
   return (
-    <section id="conversacion" className="px-md pb-rest sm:px-xl">
+    // El ancla se llama como el destino que la nav ofrece (`contacto`), no como
+    // el momento (`la conversación`): la palabra que alguien clickea y la que
+    // termina en su barra de direcciones tienen que ser la misma.
+    <section id={ANCLA_CONTACTO} className="px-md pb-rest sm:px-xl">
       <div className="mx-auto w-full max-w-[92rem]">
         {/* La recepción se marca acá, en lo que no se desmonta: si estuviera
             sobre el formulario, la confirmación aparecería después de que el

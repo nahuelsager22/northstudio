@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { SiteNav } from "@/components/site-nav";
 import { RevealObserver } from "@/components/reveal-observer";
 import { ScrollSuave } from "@/components/scroll-suave";
+import { Cielo } from "@/components/cielo";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/locales";
 
@@ -36,6 +37,9 @@ export function SiteShell({
         altLocaleHref={altLocaleHref}
         conIndice={conIndice}
       />
+      {/* El cielo vive detrás de todo el lugar, no de un momento: cambiar de
+          tema en cualquier punto del recorrido tiene que revelarlo igual. */}
+      <Cielo />
       <main className="relative">{children}</main>
       <RevealObserver />
       <ScrollSuave />

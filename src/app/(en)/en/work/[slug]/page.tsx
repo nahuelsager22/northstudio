@@ -5,7 +5,7 @@ import { obtenerProyecto, listarSlugsPublicados } from "@/lib/content/proyectos"
 import { SiteShell } from "@/components/site-shell";
 import { ProyectoAdentro } from "@/components/proyecto/proyecto-adentro";
 import { resolverCampo } from "@/lib/content/types";
-import { ANCLA_TRABAJO, ANCLA_CONVERSACION } from "@/lib/i18n/secciones";
+import { ANCLA_TRABAJO, ANCLA_CONTACTO } from "@/lib/i18n/secciones";
 
 /** El mismo proyecto en inglés: cambian las palabras, no el recorrido. */
 export function generateStaticParams() {
@@ -55,7 +55,7 @@ export default async function WorkPage({
         dict={dict}
         locale="en"
         trabajoHref={`/en#${ANCLA_TRABAJO}`}
-        conversacionHref={`/en#${ANCLA_CONVERSACION}`}
+        conversacionHref={`/en#${ANCLA_CONTACTO}`}
       />
     </SiteShell>
   );

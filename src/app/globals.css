@@ -6,12 +6,22 @@
  * y se exponen a Tailwind vía @theme inline (§7 del handoff).
  */
 
+/*
+ * Modo claro — "Papel".
+ *
+ * El fondo bajó de L 0.98 a 0.955. A 0.98 el papel era nieve al sol: en una
+ * pantalla brillante deslumbraba, y un lugar que deslumbra no se puede mirar
+ * con calma — que es lo primero que este recorrido tiene que conseguir. La
+ * temperatura no cambió (sigue siendo el blanco cálido de un papel, no un gris);
+ * lo que cambió es cuánta luz devuelve. `surface` y `hairline` bajan con él para
+ * conservar las mismas distancias: el sistema se mueve entero o no se mueve.
+ */
 :root {
-  --bg: oklch(0.98 0.004 90);
-  --surface: oklch(0.965 0.004 90);
+  --bg: oklch(0.955 0.006 85);
+  --surface: oklch(0.935 0.006 85);
   --ink: oklch(0.22 0.008 60);
-  --muted: oklch(0.48 0.006 60);
-  --hairline: oklch(0.90 0.004 80);
+  --muted: oklch(0.46 0.006 60);
+  --hairline: oklch(0.875 0.006 82);
   --polar: oklch(0.55 0.06 250);
 }
 
@@ -28,11 +38,11 @@
 
 /* Mecanismo de toggle (sin UI todavía): un data-theme explícito gana sobre el sistema. */
 :root[data-theme="papel"] {
-  --bg: oklch(0.98 0.004 90);
-  --surface: oklch(0.965 0.004 90);
+  --bg: oklch(0.955 0.006 85);
+  --surface: oklch(0.935 0.006 85);
   --ink: oklch(0.22 0.008 60);
-  --muted: oklch(0.48 0.006 60);
-  --hairline: oklch(0.90 0.004 80);
+  --muted: oklch(0.46 0.006 60);
+  --hairline: oklch(0.875 0.006 82);
   --polar: oklch(0.55 0.06 250);
 }
 
@@ -371,7 +381,7 @@
 }
 
 [data-theme-target="noche"] {
-  display: inline;
+  display: inline-flex;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -386,7 +396,37 @@
 
 :root[data-theme="papel"] [data-theme-target="noche"],
 :root[data-theme="noche"] [data-theme-target="papel"] {
-  display: inline;
+  display: inline-flex;
+}
+
+/*
+ * El cielo (art-direction.md — la excepción atmosférica).
+ *
+ * Existe **solo en modo Noche**. En Papel no hay nada, y esa ausencia es la
+ * decisión que convierte el recurso en criterio: el papel no tiene cielo. Se
+ * declara acá, con los mismos selectores que gobiernan el tema, para que la
+ * capa no tenga que preguntarle a React en qué modo está.
+ */
+[data-cielo] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-cielo] {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+:root[data-theme="noche"] [data-cielo] {
+  opacity: 1;
+  visibility: visible;
+}
+
+:root[data-theme="papel"] [data-cielo] {
+  opacity: 0;
+  visibility: hidden;
 }
 
 :root[data-theme="papel"] [data-theme-target="papel"],

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { obtenerProyecto, listarSlugsPublicados } from "@/lib/content/proyectos";
-import { ANCLA_TRABAJO, ANCLA_CONVERSACION } from "@/lib/i18n/secciones";
+import { ANCLA_TRABAJO, ANCLA_CONTACTO } from "@/lib/i18n/secciones";
 import { SiteShell } from "@/components/site-shell";
 import { ProyectoAdentro } from "@/components/proyecto/proyecto-adentro";
 
@@ -54,7 +54,7 @@ export default async function ProyectoPage({
         dict={dict}
         locale="es"
         trabajoHref={`/#${ANCLA_TRABAJO}`}
-        conversacionHref={`/#${ANCLA_CONVERSACION}`}
+        conversacionHref={`/#${ANCLA_CONTACTO}`}
       />
     </SiteShell>
   );

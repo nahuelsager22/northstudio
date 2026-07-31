@@ -12,7 +12,7 @@ import type { es } from "./es";
 const umbralLine: Segmento[] = [
   { texto: "North Studio designs and builds sites that represent " },
   { texto: "an identity", enfasis: true },
-  { texto: ", not a category." },
+  { texto: "." },
 ];
 
 const studioPassage: Segmento[] = [
@@ -33,25 +33,16 @@ const studioClosing: Segmento[] = [
   { texto: ", but how they live it." },
 ];
 
-const commissionOpening: Segmento[] = [
-  { texto: "A commission here doesn't start with a design. It starts with " },
-  { texto: "a reading", enfasis: true },
-  { texto: " of who you are." },
-];
-
-const commissionDelivery: Segmento[] = [
+const studioDelivery: Segmento[] = [
   { texto: "What's left at the end is a site that's " },
   { texto: "yours", enfasis: true },
-  {
-    texto:
-      ": live, with content you can update without breaking anything, and a visual system that stays yours once the project is over.",
-  },
+  { texto: ", one you can update and grow without it losing coherence." },
 ];
 
 const conversationInvitation: Segmento[] = [
   { texto: "If you have a project in mind, " },
   { texto: "write to us", enfasis: true },
-  { texto: ". A short message is enough to start." },
+  { texto: "." },
 ];
 
 export const en: DeepPartial<typeof es> = {
@@ -60,16 +51,15 @@ export const en: DeepPartial<typeof es> = {
   meta: {
     title: "North Studio",
     description:
-      "North Studio designs and builds sites that represent an identity, not a category. Discovery, experience architecture, art direction, design and development.",
+      "North Studio designs and builds sites that represent an identity. Discovery, experience architecture, art direction, design and development.",
   },
   nav: {
     inicio: "North Studio — back to the start",
     secundaria: "Navigation",
     secciones: {
-      estudio: "Studio",
-      encargo: "Commission",
       trabajo: "Work",
-      conversacion: "Conversation",
+      estudio: "Studio",
+      contacto: "Contact",
     },
     menu: { abrir: "Menu", cerrar: "Close" },
     idioma: { corto: "ES", nombre: "Español" },
@@ -78,52 +68,16 @@ export const en: DeepPartial<typeof es> = {
   umbral: {
     linea: umbralLine,
   },
+  trabajo: {
+    nombre: "Work",
+    vacio: "The first project is on its way.",
+  },
   estudio: {
-    etiqueta: "The studio",
+    nombre: "The studio",
     pasaje: studioPassage,
     cierre: studioClosing,
-  },
-  encargo: {
-    etiqueta: "The commission",
-    entrada: commissionOpening,
-    etapas: [
-      {
-        titulo: "Observe",
-        linea:
-          "Your actual material gets looked at: how you write, what you show, what you choose not to show. That's where the framing of the project comes from.",
-      },
-      {
-        titulo: "Interpret",
-        linea:
-          "The framing becomes a journey and an art direction made for the project, with a pace and a visual system of its own.",
-      },
-      {
-        titulo: "Build",
-        linea:
-          "Design and development are the same task. The site is built so it can grow with you without losing coherence.",
-      },
-      {
-        titulo: "Refine",
-        linea:
-          "The project gets walked through whole before it's called finished. That's where it finds its form.",
-      },
-    ],
-    entrega: commissionDelivery,
-    ficha: [
-      {
-        etiqueta: "Who for",
-        valor: "People and projects with an identity worth representing",
-      },
-      { etiqueta: "How many at a time", valor: "One" },
-      {
-        etiqueta: "What it covers",
-        valor: "Discovery · Experience · Art direction · Design · Development",
-      },
-    ],
-  },
-  trabajo: {
-    titulo: "Work",
-    vacio: "The first project is on its way.",
+    entrega: studioDelivery,
+    oficios: "Discovery · Experience · Art direction · Design · Development",
   },
   conversacion: {
     invitacion: conversationInvitation,

@@ -2,22 +2,29 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { listarProyectosPublicados } from "@/lib/content/proyectos";
 import { SiteShell } from "@/components/site-shell";
 import { Umbral } from "@/components/momentos/umbral";
-import { Estudio } from "@/components/momentos/estudio";
-import { Encargo } from "@/components/momentos/encargo";
 import { Trabajo } from "@/components/momentos/trabajo";
+import { Estudio } from "@/components/momentos/estudio";
 import { Conversacion } from "@/components/momentos/conversacion";
 
 /**
- * El lugar (experience-architecture.md §1): un solo plano vertical continuo,
- * no una página con secciones. Los momentos no se separan con divisores: los
- * separa el silencio entre ellos, que es parte del recorrido.
+ * El lugar: un solo plano vertical continuo, no una página con secciones.
  *
- * El silencio ahora lo carga cada momento como `padding-bottom` propio y de
- * tamaño distinto según la transición: 8rem donde el recorrido sigue, 12rem
- * antes del trabajo y antes de la conversación, que son los dos momentos a los
- * que hay que *llegar*. Antes todas las transiciones medían lo mismo, y un ritmo
- * constante no es ritmo. Además hace que el borde superior de cada sección sea
- * el comienzo real de su contenido, que es lo que vuelve preciso al índice.
+ * **El orden cambió, y es el cambio más importante del recorrido.** Antes era
+ * umbral → estudio → encargo → trabajo → conversación: doscientas cincuenta
+ * palabras sobre cómo trabajamos antes de que apareciera una sola imagen. Ahora
+ * lo primero después del umbral es el trabajo. Las frases del estudio llegan
+ * después y confirman algo que el visitante ya vio, en vez de prometerlo.
+ *
+ * Mapa de intensidad, que ahora se puede escribir porque hay contraste:
+ *   umbral       contemplativo — pantalla completa, silencio, el cielo de noche
+ *   trabajo      impacto       — la portada a sangre, el nombre en display
+ *   estudio      respiración   — corto, entrado, en voz baja
+ *   conversación cierre
+ *
+ * El silencio entre momentos lo carga cada uno como `padding-bottom` propio y de
+ * tamaño distinto según la transición, para que el borde superior de cada
+ * sección sea el comienzo real de su contenido — que es lo que vuelve preciso al
+ * índice de la nav.
  */
 export default function EsHomePage() {
   const dict = getDictionary("es");
@@ -32,14 +39,13 @@ export default function EsHomePage() {
       conIndice
     >
       <Umbral dict={dict} />
-      <Estudio dict={dict} />
-      <Encargo dict={dict} />
       <Trabajo
         dict={dict}
         locale="es"
         proyectos={proyectos}
         projectHref={(slug) => `/proyectos/${slug}`}
       />
+      <Estudio dict={dict} />
       <Conversacion dict={dict} locale="es" />
     </SiteShell>
   );

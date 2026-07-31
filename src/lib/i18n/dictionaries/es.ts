@@ -11,21 +11,31 @@ import type { Segmento } from "../segments";
  * aparece donde evitarlo produciría una frase contorsionada, que sería peor.
  */
 
-/** Momento 1 · El umbral — la línea que dice qué hace el estudio. */
+/**
+ * Momento 1 · El umbral — la línea que dice qué hace el estudio.
+ *
+ * Termina en la itálica. El ", no un rubro" que cerraba antes explicaba el
+ * contraste en vez de dejarlo entender, y le sacaba el peso a la afirmación:
+ * una frase que se defiende suena menos segura que una que se apoya sola.
+ */
 const lineaUmbral: Segmento[] = [
   { texto: "North Studio diseña y desarrolla sitios que representan " },
   { texto: "una identidad", enfasis: true },
-  { texto: ", no un rubro." },
+  { texto: "." },
 ];
 
 /**
- * Momento 2 · El estudio — la forma de mirar. Se nombra; no se explica.
+ * Momento 3 · El estudio — la forma de mirar.
  *
- * Antes enumeraba acá lo que se observa (material, manera de comunicar, lo que
- * se repite y lo que se evita) y cerraba con "y no de un brief". Dos problemas:
- * repetía la misma lista que ya da la primera etapa del encargo, y el remate era
- * un pequeño golpe contra cómo trabajan otros. La lista quedó una sola vez, donde
- * corresponde, y el remate se retiró.
+ * Llega **después** del trabajo, a propósito: una frase sobre uno mismo se
+ * sostiene cuando confirma algo que el visitante ya vio, y suena a promesa
+ * cuando lo antecede.
+ *
+ * Tres líneas y un colofón. Lo que antes era una sección entera explicando el
+ * proceso —observar, interpretar, construir, refinar— se eliminó: el proceso ya
+ * está a la vista en el caso, que *es* discovery, dirección de arte y desarrollo.
+ * Un estudio que enumera sus etapas está describiendo lo que su trabajo debería
+ * poder mostrar solo.
  */
 const pasajeEstudio: Segmento[] = [
   { texto: "Antes de proponer nada, el estudio " },
@@ -42,27 +52,27 @@ const cierreEstudio: Segmento[] = [
   { texto: ", sino cómo lo vive." },
 ];
 
-/** Momento 3 · El encargo — qué hace el estudio, cómo trabaja y qué recibís. */
-const entradaEncargo: Segmento[] = [
-  { texto: "Un encargo acá no empieza con un diseño. Empieza con " },
-  { texto: "una lectura", enfasis: true },
-  { texto: " de quién sos." },
-];
-
-const entregaEncargo: Segmento[] = [
-  { texto: "Lo que queda al final es un sitio " },
+/**
+ * Lo único de todo aquello que no se puede mostrar: qué queda cuando el proyecto
+ * termina. Sobrevive como una frase, no como el cierre de una sección.
+ */
+const entregaEstudio: Segmento[] = [
+  { texto: "Al final queda un sitio " },
   { texto: "propio", enfasis: true },
-  {
-    texto:
-      ": en producción, con contenido que podés actualizar sin romper nada y un sistema visual que sigue siendo tuyo cuando el proyecto termina.",
-  },
+  { texto: ", que podés actualizar y hacer crecer sin que pierda coherencia." },
 ];
 
-/** Momento 5 · La conversación — la invitación. */
+/**
+ * Momento 5 · La conversación — la invitación.
+ *
+ * Una sola frase. "Un mensaje corto alcanza para empezar" tranquilizaba a
+ * alguien que no había dicho estar intranquilo: es la nota justificativa que se
+ * agrega cuando no se confía en que la invitación se sostenga sola. Se sostiene.
+ */
 const invitacionConversacion: Segmento[] = [
   { texto: "Si tenés un proyecto en mente, " },
   { texto: "escribinos", enfasis: true },
-  { texto: ". Un mensaje corto alcanza para empezar." },
+  { texto: "." },
 ];
 
 export const es = {
@@ -71,20 +81,18 @@ export const es = {
   meta: {
     title: "North Studio",
     description:
-      "North Studio diseña y desarrolla sitios que representan una identidad, no un rubro. Discovery, arquitectura de experiencia, dirección de arte, diseño y desarrollo.",
+      "North Studio diseña y desarrolla sitios que representan una identidad. Discovery, arquitectura de experiencia, dirección de arte, diseño y desarrollo.",
   },
   nav: {
     /** Nombre accesible de la firma; también el destino "volver al inicio". */
     inicio: "North Studio — volver al inicio",
     secundaria: "Navegación",
-    /** Índice del recorrido. El orden y la numeración viven en el código
-        (`src/lib/i18n/secciones.ts`): acá solo el nombre de cada sección, para
-        que traducir no pueda desincronizar un ancla. */
+    /** Los destinos. El orden vive en el código (`src/lib/i18n/secciones.ts`):
+        acá solo el nombre, para que traducir no desincronice un ancla. */
     secciones: {
-      estudio: "Estudio",
-      encargo: "Encargo",
       trabajo: "Trabajo",
-      conversacion: "Conversación",
+      estudio: "Estudio",
+      contacto: "Contacto",
     },
     menu: { abrir: "Menú", cerrar: "Cerrar" },
     idioma: { corto: "EN", nombre: "English" },
@@ -93,54 +101,27 @@ export const es = {
   umbral: {
     linea: lineaUmbral,
   },
+  /**
+   * Los momentos ya no llevan etiqueta visible. La nav los nombra; imprimir
+   * "El estudio" arriba del estudio es un sitio explicándose su propio índice.
+   * El nombre sigue existiendo para quien navega con lector de pantalla, que sí
+   * necesita saber en qué región está.
+   */
+  trabajo: {
+    nombre: "Trabajo",
+    vacio: "El primer proyecto está por publicarse.",
+  },
   estudio: {
-    etiqueta: "El estudio",
+    nombre: "El estudio",
     pasaje: pasajeEstudio,
     cierre: cierreEstudio,
-  },
-  encargo: {
-    etiqueta: "El encargo",
-    entrada: entradaEncargo,
-    /** El método del estudio como secuencia, no como "4 pasos con íconos". */
-    etapas: [
-      {
-        titulo: "Observar",
-        linea:
-          "Se mira tu material real: cómo escribís, qué mostrás y qué elegís no mostrar. De ahí sale el encuadre del proyecto.",
-      },
-      {
-        titulo: "Interpretar",
-        linea:
-          "El encuadre se vuelve un recorrido y una dirección de arte hechos para el proyecto, con su propio ritmo y su propio sistema visual.",
-      },
-      {
-        titulo: "Construir",
-        linea:
-          "Diseño y desarrollo son la misma tarea. El sitio se construye para que pueda crecer con vos sin perder coherencia.",
-      },
-      {
-        titulo: "Refinar",
-        linea:
-          "El proyecto se recorre entero antes de darlo por terminado. Ahí es donde encuentra su forma.",
-      },
-    ],
-    entrega: entregaEncargo,
-    /** La ficha del encargo, en registro de notación. Filtra sin vender. */
-    ficha: [
-      {
-        etiqueta: "Con quién",
-        valor: "Personas y proyectos con una identidad que vale la pena representar",
-      },
-      { etiqueta: "Cuántos a la vez", valor: "Uno" },
-      {
-        etiqueta: "Qué incluye",
-        valor: "Discovery · Experiencia · Dirección de arte · Diseño · Desarrollo",
-      },
-    ],
-  },
-  trabajo: {
-    titulo: "Trabajo",
-    vacio: "El primer proyecto está por publicarse.",
+    entrega: entregaEstudio,
+    /**
+     * El colofón. Responde "¿qué hacen?" en tres segundos para quien lo
+     * necesita, y es invisible para quien no. Registro de notación, sin
+     * etiqueta: una lista rotulada sería un menú de servicios.
+     */
+    oficios: "Discovery · Experiencia · Dirección de arte · Diseño · Desarrollo",
   },
   conversacion: {
     invitacion: invitacionConversacion,

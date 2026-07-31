@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Mark } from "@/components/brand/mark";
+import { Destello } from "@/components/brand/destello";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { irASeccion, pausarScroll } from "@/lib/scroll";
 import { SECCIONES, type SeccionId } from "@/lib/i18n/secciones";
@@ -10,25 +10,33 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/locales";
 
 /**
- * Nav persistente.
+ * Nav persistente — el encabezado corriente de una publicación.
  *
- * Ya no es la nav mínima sin secciones de los bloques anteriores: el recorrido
- * ahora tiene un índice. La forma elegida no es una barra de links —eso sería el
- * header de cualquier sitio— sino el **índice de un impreso**: número y nombre en
- * registro de notación, y la sección donde estás marcada con el acento polar.
+ * Tres cosas cambiaron y las tres apuntan al mismo lado:
  *
- * Ese detalle es el que hace el trabajo del norte rector: el índice responde a
- * dónde está el visitante, no a lo que la nav quiere anunciar. La estrella marca
- * tu posición — que es, literalmente, para lo que sirve una estrella polar.
+ * 1. **Se quedó.** Antes se retiraba al bajar y volvía al subir. Era un problema
+ *    práctico —para navegar había que volver arriba— y también de carácter: un
+ *    elemento que se va y vuelve pide ser mirado dos veces. Ahora está siempre,
+ *    en `muted` y sin banda; recupera la tinta al llegar al tope. La seguridad
+ *    es quedarse quieto, no desaparecer.
+ * 2. **Dejó de numerar.** `01 · 02 · 03` prometía un método ordenado y convertía
+ *    el índice en un catálogo de metodología. La sección activa se marca con un
+ *    punto polar: la estrella sigue orientando, sin catálogo.
+ * 3. **Dejó de ser interfaz.** El registro pasó de mono en versalitas —que es el
+ *    registro de una terminal— a la serif en caja baja. El mono vuelve a quedar
+ *    solo para metadatos reales.
  *
- * Sigue acompañando sin apurar: baja el visitante y la nav se retira; sube y
- * vuelve. Se retira con un fundido y no con un deslizamiento, porque un elemento
- * que se desliza pide ser mirado.
+ * La marca es el destello solo (`Destello`): la firma completa quedó reservada
+ * para el umbral, donde tiene protagonismo.
  */
 
-/** Preferencias: registro de acción (grotesque), separado del índice a propósito. */
+/** Los destinos: serif, caja baja, sin tracking. Un encabezado, no una barra. */
+const DESTINO =
+  "font-serif text-[0.9375rem] leading-none no-underline transition-colors";
+
+/** Idioma y tema: el mismo registro, más chicos y siempre en segundo plano. */
 const PREFERENCIA =
-  "-my-xs py-xs font-sans text-label uppercase text-muted no-underline hover:text-ink";
+  "-my-xs py-xs font-serif text-[0.875rem] leading-none no-underline";
 
 export function SiteNav({
   dict,
@@ -44,34 +52,19 @@ export function SiteNav({
   altLocaleHref: string;
   conIndice?: boolean;
 }) {
-  const [retraida, setRetraida] = useState(false);
-  const [sobreContenido, setSobreContenido] = useState(false);
+  const [alTope, setAlTope] = useState(true);
   const [activa, setActiva] = useState<SeccionId | null>(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
   const panel = useRef<HTMLDivElement>(null);
   const disparador = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    let anterior = window.scrollY;
     let pendiente = 0;
-
     const alScrollear = () => {
       if (pendiente) return;
       pendiente = requestAnimationFrame(() => {
         pendiente = 0;
-        const y = window.scrollY;
-
-        setSobreContenido(y > 80);
-
-        if (!quieto) {
-          if (y < 80) setRetraida(false);
-          else if (y > anterior + 8) setRetraida(true);
-          else if (y < anterior - 8) setRetraida(false);
-        }
-
-        anterior = y;
+        setAlTope(window.scrollY < 80);
       });
     };
 
@@ -146,15 +139,10 @@ export function SiteNav({
 
   function irA(id: SeccionId) {
     setMenuAbierto(false);
-    // El recorrido se suelta **antes** de pedirle que vaya a ningún lado. Con el
-    // panel abierto el scroll está detenido, y un Lenis detenido ignora un
-    // `scrollTo`: si se esperaba a que el efecto lo reanudara, el click cerraba
-    // el menú y no llevaba a ninguna parte. El efecto sigue siendo la fuente de
-    // verdad del estado; esto solo se adelanta a él para este gesto.
+    // El recorrido se suelta antes de pedirle que vaya a ningún lado: un Lenis
+    // detenido ignora un `scrollTo`, y esperar al efecto dejaba el click sin
+    // destino. El efecto sigue siendo la fuente de verdad del estado.
     pausarScroll(false);
-
-    // El hash se escribe igual: la sección queda enlazable y el botón "atrás"
-    // del navegador sigue significando algo.
     if (irASeccion(id)) history.replaceState(null, "", `#${id}`);
   }
 
@@ -163,33 +151,29 @@ export function SiteNav({
       <header
         data-abierto={menuAbierto ? "" : undefined}
         className={[
-          "fixed inset-x-0 top-0 z-20 border-b transition-[opacity,background-color,border-color] duration-[var(--duration-fast)] ease-[var(--ease-out-calm)]",
-          // Solo el foco de teclado la retiene: `focus-within` la dejaría fijada
-          // después de cualquier click, y entonces estorbaría en vez de acompañar.
-          "has-[:focus-visible]:pointer-events-auto has-[:focus-visible]:opacity-100",
-          sobreContenido && !menuAbierto ? "border-hairline bg-bg" : "border-transparent",
+          "fixed inset-x-0 top-0 z-20 transition-colors duration-[var(--duration-base)] ease-[var(--ease-out-calm)]",
+          // Al tope el encabezado tiene la tinta del lugar; una vez que hay
+          // contenido debajo se retira a segundo plano sin irse. Sin banda y sin
+          // regla: lo que lo separa del contenido es su propio silencio.
+          alTope || menuAbierto ? "text-ink" : "text-muted",
           menuAbierto ? "bg-bg" : "",
-          retraida && !menuAbierto ? "pointer-events-none opacity-0" : "opacity-100",
         ].join(" ")}
       >
-        <div className="mx-auto flex w-full max-w-[92rem] items-center justify-between gap-md px-md py-2xs sm:px-xl">
+        <div className="mx-auto flex w-full max-w-[92rem] items-center justify-between gap-md px-md py-sm sm:px-xl">
           <Link
             href={homeHref}
             aria-label={dict.nav.inicio}
-            className="-m-2xs p-2xs text-ink"
+            className="-m-2xs p-2xs"
           >
-            {/* A 20 px el cordón entero se dispersa (art-direction.md §6.3): la
-                marca necesita el tamaño que la hace legible, no el más discreto. */}
-            <Mark className="h-7 w-auto sm:h-8" />
+            <Destello className="size-5" />
           </Link>
 
-          {/* Escritorio: el índice del lugar. */}
           {conIndice ? (
             <nav
               aria-label={dict.nav.secundaria}
-              className="hidden lg:flex lg:items-baseline lg:gap-lg"
+              className="hidden lg:flex lg:items-center lg:gap-xl"
             >
-              {SECCIONES.map(({ id, numero }) => {
+              {SECCIONES.map(({ id }) => {
                 const esActiva = activa === id;
                 return (
                   <a
@@ -200,32 +184,26 @@ export function SiteNav({
                       irA(id);
                     }}
                     aria-current={esActiva ? "true" : undefined}
-                    className="group font-mono text-meta no-underline"
+                    className={`${DESTINO} relative ${esActiva ? "text-ink" : "hover:text-ink"}`}
                   >
-                    {/* El acento polar, una sola vez y como orientación: marca
-                        dónde estás. Es el uso que art-direction.md §2.3 autoriza
-                        —un punto que guía— y el único de todo el recorrido. */}
+                    {/* El punto polar reemplaza al número. Marca dónde estás sin
+                        prometer una estructura: es el uso de orientación que
+                        art-direction.md §2.3 autoriza, y el único del recorrido. */}
                     <span
                       aria-hidden="true"
-                      className={esActiva ? "text-polar" : "text-muted"}
-                    >
-                      {numero}
-                    </span>{" "}
-                    <span
-                      className={`quiet-underline ${esActiva ? "text-ink" : "text-muted group-hover:text-ink"}`}
-                    >
-                      {dict.nav.secciones[id]}
-                    </span>
+                      className={[
+                        "absolute top-1/2 -left-md size-[3px] -translate-y-1/2 rounded-full bg-polar transition-opacity duration-[var(--duration-base)] ease-[var(--ease-out-calm)]",
+                        esActiva ? "opacity-100" : "opacity-0",
+                      ].join(" ")}
+                    />
+                    <span className="quiet-underline">{dict.nav.secciones[id]}</span>
                   </a>
                 );
               })}
             </nav>
           ) : null}
 
-          <div className="flex items-center gap-md sm:gap-lg">
-            {/* Idioma y tema quedan en el registro de acción y solo en escritorio:
-                en móvil viven adentro del panel, para que la fila no compita con
-                el gesto de apertura. */}
+          <div className="flex items-center gap-lg">
             <div className="hidden items-center gap-lg lg:flex">
               <Link
                 href={altLocaleHref}
@@ -238,7 +216,10 @@ export function SiteNav({
                 </span>
                 <span className="sr-only">{dict.nav.idioma.nombre}</span>
               </Link>
-              <ThemeToggle labels={dict.nav.tema} className={PREFERENCIA} />
+              <ThemeToggle
+                labels={dict.nav.tema}
+                className="-m-2xs flex p-2xs hover:text-ink"
+              />
             </div>
 
             {conIndice ? (
@@ -249,7 +230,7 @@ export function SiteNav({
                 aria-expanded={menuAbierto}
                 aria-controls="menu-movil"
                 aria-label={menuAbierto ? dict.nav.menu.cerrar : dict.nav.menu.abrir}
-                className="-m-2xs p-2xs text-ink lg:hidden"
+                className="-m-2xs p-2xs lg:hidden"
               >
                 <span className="gesto-n block" aria-hidden="true">
                   <span />
@@ -262,9 +243,8 @@ export function SiteNav({
         </div>
       </header>
 
-      {/* El panel móvil. No es un overlay traslúcido ni un cajón que entra desde
-          un borde: es el mismo lugar, ocupado por su índice. Fondo sólido (nada
-          de glass), composición asimétrica y el índice en la voz del sitio. */}
+      {/* El panel móvil: el mismo lugar, ocupado por su índice. Fondo sólido,
+          composición asimétrica, los destinos en la voz del sitio. */}
       {conIndice ? (
         <div
           id="menu-movil"
@@ -278,7 +258,7 @@ export function SiteNav({
         >
           <nav aria-label={dict.nav.secundaria} className="ml-[6%]">
             <ul>
-              {SECCIONES.map(({ id, numero }) => (
+              {SECCIONES.map(({ id }) => (
                 <li key={id} className="mt-lg first:mt-0">
                   <a
                     href={`#${id}`}
@@ -287,14 +267,15 @@ export function SiteNav({
                       irA(id);
                     }}
                     aria-current={activa === id ? "true" : undefined}
-                    className="group flex items-baseline gap-md no-underline"
+                    className="relative inline-block no-underline"
                   >
                     <span
                       aria-hidden="true"
-                      className={`font-mono text-meta ${activa === id ? "text-polar" : "text-muted"}`}
-                    >
-                      {numero}
-                    </span>
+                      className={[
+                        "absolute top-1/2 -left-md size-[4px] -translate-y-1/2 rounded-full bg-polar transition-opacity duration-[var(--duration-base)] ease-[var(--ease-out-calm)]",
+                        activa === id ? "opacity-100" : "opacity-0",
+                      ].join(" ")}
+                    />
                     <span
                       className={`quiet-underline font-serif text-title-1 ${activa === id ? "text-ink" : "text-muted"}`}
                     >
@@ -306,7 +287,7 @@ export function SiteNav({
             </ul>
           </nav>
 
-          <div className="mt-rest ml-[6%] flex items-center gap-lg">
+          <div className="mt-rest ml-[6%] flex items-center gap-lg text-muted">
             <Link
               href={altLocaleHref}
               hrefLang={altLocale}
@@ -318,7 +299,7 @@ export function SiteNav({
               </span>
               <span className="sr-only">{dict.nav.idioma.nombre}</span>
             </Link>
-            <ThemeToggle labels={dict.nav.tema} className={PREFERENCIA} />
+            <ThemeToggle labels={dict.nav.tema} className="-m-2xs flex p-2xs" />
           </div>
         </div>
       ) : null}
