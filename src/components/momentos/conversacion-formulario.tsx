@@ -58,22 +58,20 @@ const ETIQUETA =
  * Lo que la persona escribe va en serif. Es la única vez que la voz del sistema
  * no es la del estudio: quien escribe está hablando.
  *
- * A `text-title-3` y no a `text-body`: a 18 px la Newsreader dentro de un input
- * se leía como el serif por defecto de un navegador —clásico y genérico, que fue
- * la observación—. A 22 px se lee como lo que es, la misma voz con la que habla
- * el resto del sitio.
+ * El tamaño (20 px) y sobre todo **el interlineado** son la corrección. Antes
+ * usaba `text-title-3`, que es un token de *título*: interlineado 1.15 y tracking
+ * negativo. Sirve para una línea corta y aprieta cualquier cosa de dos líneas
+ * para arriba — que es justo lo que alguien escribe en el campo del proyecto. Con
+ * 1.6 de interlineado y tracking neutro el texto tipeado se lee con la misma
+ * comodidad que el cuerpo del sitio: es prosa, no un encabezado.
  *
- * Ya no declara su propia transición. Antes tenía `transition-[border-color]`
- * para mantener afuera el `outline-color` del anillo de foco (un foco que aparece
- * en 400 ms llega tarde para quien navega con teclado); ahora ese cuidado vive en
- * `globals.css`, en la regla de `:focus-visible`, y vale para todo el sitio. El
- * campo hereda la transición común, así que su tinta también acompaña el cambio
- * de tema en vez de saltar.
+ * Sin caja, sin fondo y sin sombra: una sola línea abajo, y el texto apoyado
+ * encima. El indicador de foco es esa misma línea (ver `globals.css`).
  */
 const CONTROL =
-  "mt-2xs w-full appearance-none rounded-none bg-transparent font-serif text-title-3 text-ink";
+  "mt-2xs w-full appearance-none rounded-none bg-transparent font-serif text-[1.25rem] leading-[1.6] tracking-normal text-ink";
 
-const LINEA = "border-b border-hairline py-2xs focus:border-ink";
+const LINEA = "border-b border-hairline py-2xs";
 
 const AVISO = "mt-2xs font-sans text-ui text-ink";
 
@@ -163,7 +161,6 @@ export function ConversacionFormulario({
 
             <CampoProyecto
               etiqueta={c.campos.mensaje}
-              ayuda={c.ayudaMensaje}
               error={mensajeDeCampo(c, estado.errores?.mensaje)}
               defaultValue={estado.valores?.mensaje}
             />
@@ -240,7 +237,16 @@ function CampoLinea({
         name={campo}
         type={type}
         defaultValue={defaultValue ?? ""}
+        // Sin corrector ni mayúscula automática: un apellido subrayado en rojo
+        // es el navegador diciéndole a alguien que su nombre está mal escrito.
+        // El `autocomplete` sí se conserva —a diferencia del campo del proyecto—
+        // porque es lo que permite completar nombre y correo de una vez, y
+        // quitarlo sería fricción disfrazada de limpieza.
         autoComplete={autoComplete}
+        autoCorrect="off"
+        autoCapitalize={campo === "email" ? "off" : "words"}
+        spellCheck={false}
+        data-campo
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? idError : undefined}
         className={`${CONTROL} ${LINEA}`}
@@ -255,28 +261,29 @@ function CampoLinea({
 }
 
 /**
- * El corazón del formulario: una hoja donde escribir, no un campo más.
+ * El corazón del formulario. Ya no es una hoja con caja y fondo: es el mismo
+ * renglón que los otros dos campos, y el texto se apoya encima.
  *
- * Crece con lo que se escribe. Empieza en cuatro líneas de alto —una invitación,
- * no un vacío de siete filas dominando el cierre del recorrido— y se estira sin
- * tope: el largo lo sigue decidiendo quien escribe, que era la intención
- * original. Si no hay JavaScript queda en su alto inicial y el navegador da su
- * propio scroll interno: nadie pierde la posibilidad de escribir largo.
+ * La caja anterior (`surface` + borde) dibujaba el marco que todo el resto del
+ * sitio se cuidó de no poner, y al enfocar el anillo rectangular lo remarcaba.
+ * Sin caja, lo único que hay es una línea — y el foco es esa línea volviéndose
+ * tinta.
+ *
+ * Crece con lo que se escribe: empieza en tres líneas y se estira sin tope, así
+ * que el largo lo decide quien escribe. Si no hay JavaScript queda en su alto
+ * inicial y el navegador da su propio scroll interno.
  */
 function CampoProyecto({
   etiqueta,
-  ayuda,
   error,
   defaultValue,
 }: {
   etiqueta: string;
-  ayuda: string;
   error: string | null;
   defaultValue?: string;
 }) {
   const id = "conversacion-mensaje";
   const idError = `${id}-aviso`;
-  const idAyuda = `${id}-ayuda`;
   const area = useRef<HTMLTextAreaElement>(null);
   const [alto, setAlto] = useState<number | null>(null);
 
@@ -302,26 +309,30 @@ function CampoProyecto({
         {etiqueta}
       </label>
 
-      {/* La ayuda orienta qué contar. Sin ella, el campo más importante del
-          sitio llega vacío de intención y quien escribe tiene que adivinar. */}
-      <p id={idAyuda} className="mt-2xs font-serif text-body italic text-muted">
-        {ayuda}
-      </p>
-
       <textarea
         ref={area}
         id={id}
         name="mensaje"
-        rows={4}
+        rows={3}
         defaultValue={defaultValue ?? ""}
         onInput={ajustar}
+        data-campo
+        // Nada del navegador se mete acá: sin autocompletado, sin autocorrección,
+        // sin mayúscula automática y sin subrayado rojo. Alguien que está
+        // contando qué quiere hacer no necesita que el sistema le discuta cómo
+        // se escribe el nombre de su proyecto — y las líneas rojas son lo más
+        // ruidoso que puede aparecer en una pantalla que se compuso en silencio.
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
         // El `overflow` se oculta solo cuando el alto lo administra JS. Sin JS,
         // `alto` es null y el navegador da su propio scroll interno: escribir
-        // largo sigue siendo posible aunque la hoja no crezca.
+        // largo sigue siendo posible aunque el campo no crezca.
         style={alto ? { height: `${alto}px`, overflowY: "hidden" } : undefined}
         aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${idAyuda} ${idError}` : idAyuda}
-        className={`${CONTROL} resize-none overflow-auto border border-hairline bg-surface p-md focus:border-ink`}
+        aria-describedby={error ? idError : undefined}
+        className={`${CONTROL} ${LINEA} resize-none overflow-auto`}
       />
 
       {error ? (

@@ -25,14 +25,29 @@
   --polar: oklch(0.55 0.06 250);
 }
 
+/*
+ * Modo oscuro — "Noche".
+ *
+ * Bajó de L 0.18 a 0.115 y ganó una traza fría (croma 0.018, hacia el azul).
+ * A 0.18 no era una noche: era el gris de una interfaz oscura, y sobre un gris
+ * las estrellas no tienen dónde brillar. La profundidad de un cielo no viene de
+ * apagar la luz sino de bajar el fondo hasta que lo poco que brilla se note.
+ *
+ * No es negro absoluto a propósito: `#000` es vacío, no noche (art-direction
+ * §2.2). El croma frío es lo que lo mantiene atmósfera y no ausencia.
+ *
+ * `muted` sube un punto para compensar: sobre un fondo más profundo, el mismo
+ * gris se hunde. La hairline baja, porque una línea que en un gris se leía como
+ * susurro sobre este fondo se leía como raya.
+ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: oklch(0.18 0.012 250);
-    --surface: oklch(0.22 0.012 250);
-    --ink: oklch(0.92 0.006 85);
-    --muted: oklch(0.68 0.008 250);
-    --hairline: oklch(0.30 0.010 250);
-    --polar: oklch(0.72 0.06 250);
+    --bg: oklch(0.115 0.018 265);
+    --surface: oklch(0.155 0.018 265);
+    --ink: oklch(0.93 0.006 85);
+    --muted: oklch(0.70 0.010 258);
+    --hairline: oklch(0.26 0.014 262);
+    --polar: oklch(0.74 0.07 250);
   }
 }
 
@@ -47,12 +62,12 @@
 }
 
 :root[data-theme="noche"] {
-  --bg: oklch(0.18 0.012 250);
-  --surface: oklch(0.22 0.012 250);
-  --ink: oklch(0.92 0.006 85);
-  --muted: oklch(0.68 0.008 250);
-  --hairline: oklch(0.30 0.010 250);
-  --polar: oklch(0.72 0.06 250);
+  --bg: oklch(0.115 0.018 265);
+  --surface: oklch(0.155 0.018 265);
+  --ink: oklch(0.93 0.006 85);
+  --muted: oklch(0.70 0.010 258);
+  --hairline: oklch(0.26 0.014 262);
+  --polar: oklch(0.74 0.07 250);
 }
 
 @theme inline {
@@ -190,6 +205,10 @@
     transition-property: background-color, color, border-color, fill;
   }
 
+  /* Va sin capa (más abajo, fuera de `@layer base`) a propósito: la utilidad
+     `border-hairline` del campo vive en la capa de utilidades y le ganaría a
+     cualquier regla declarada acá. */
+
   /* El material del objeto editorial (art-direction.md §5.3): un grano tonal
      apenas perceptible para que el papel no sea una superficie clínica. Es
      textura, no efecto — si se nota como ruido, sobra. No se mueve, no
@@ -207,9 +226,11 @@
 
   /* En noche el grano tiene que aclarar, no oscurecer: sobre un fondo casi negro
      un grano oscuro no existe. */
+  /* Sobre el negro profundo, el mismo grano en `screen` levanta el fondo y le
+     roba contraste a las estrellas. Menos grano, más cielo. */
   @media (prefers-color-scheme: dark) {
     body::before {
-      opacity: 0.05;
+      opacity: 0.03;
       mix-blend-mode: screen;
     }
   }
@@ -220,7 +241,7 @@
   }
 
   :root[data-theme="noche"] body::before {
-    opacity: 0.05;
+    opacity: 0.03;
     mix-blend-mode: screen;
   }
 
@@ -333,6 +354,24 @@
   [data-abierto] .gesto-n span:nth-child(3) {
     transform: translateX(7px) rotate(90deg) scaleX(0.667);
   }
+}
+
+/*
+ * Los campos del formulario son la única excepción al anillo de foco.
+ *
+ * Un anillo rectangular alrededor de un campo que no tiene caja dibuja la caja
+ * que el diseño decidió no tener: el foco terminaba inventando el marco que todo
+ * el resto del sitio se cuidó de no poner. Acá el indicador es el propio renglón
+ * — pasa de hairline a tinta y se duplica de 1 a 2 px con una sombra que no ocupa
+ * lugar, así que nada se mueve al enfocar.
+ *
+ * Sigue cumpliendo su función: son **dos** cambios simultáneos y de alto
+ * contraste (el renglón y la etiqueta del campo, que pasa a tinta), no un matiz.
+ */
+[data-campo]:focus-visible {
+  outline: none;
+  border-bottom-color: var(--color-ink);
+  box-shadow: 0 1px 0 0 var(--color-ink);
 }
 
 /*

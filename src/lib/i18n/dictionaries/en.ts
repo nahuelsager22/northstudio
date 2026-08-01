@@ -16,27 +16,15 @@ const umbralLine: Segmento[] = [
 ];
 
 const studioPassage: Segmento[] = [
-  { texto: "Before proposing anything, the studio " },
-  { texto: "looks", enfasis: true },
-  {
-    texto:
-      ". The decisions in a project come from understanding who they represent.",
-  },
+  { texto: "What makes someone memorable is " },
+  { texto: "how they live", enfasis: true },
+  { texto: " what they do." },
 ];
 
 const studioClosing: Segmento[] = [
-  {
-    texto:
-      "Two people in the same profession rarely need the same site. What makes someone memorable is almost never ",
-  },
-  { texto: "what they do", enfasis: true },
-  { texto: ", but how they live it." },
-];
-
-const studioDelivery: Segmento[] = [
-  { texto: "What's left at the end is a site that's " },
-  { texto: "yours", enfasis: true },
-  { texto: ", one you can update and grow without it losing coherence." },
+  { texto: "Websites built from the ground up to represent " },
+  { texto: "an identity", enfasis: true },
+  { texto: "." },
 ];
 
 const conversationInvitation: Segmento[] = [
@@ -51,7 +39,7 @@ export const en: DeepPartial<typeof es> = {
   meta: {
     title: "North Studio",
     description:
-      "North Studio designs and builds sites that represent an identity. Discovery, experience architecture, art direction, design and development.",
+      "North Studio designs and builds sites that represent an identity. Websites, landing pages, portfolios and digital experiences.",
   },
   nav: {
     inicio: "North Studio — back to the start",
@@ -76,8 +64,7 @@ export const en: DeepPartial<typeof es> = {
     nombre: "The studio",
     pasaje: studioPassage,
     cierre: studioClosing,
-    entrega: studioDelivery,
-    oficios: "Discovery · Experience · Art direction · Design · Development",
+    oficios: "Websites · Landing pages · Portfolios · Digital experiences",
   },
   conversacion: {
     invitacion: conversationInvitation,
@@ -86,20 +73,19 @@ export const en: DeepPartial<typeof es> = {
       email: "Email",
       mensaje: "Your project",
     },
-    ayudaMensaje: "What you want to make, who it's for, and where you are with it.",
     enviar: "Send",
     enviando: "Sending",
-    confirmacion: "Your message arrived. We'll read it carefully and write back.",
+    confirmacion: "It's here. We'll write back.",
     errores: {
       "nombre-vacio": "Your name is missing.",
-      "nombre-largo": "That name is longer than we can take.",
-      "email-vacio": "Without an address there's nowhere to write back.",
-      "email-invalido": "That address looks incomplete. Mind checking it?",
-      "email-largo": "That address is longer than we can take.",
-      "mensaje-vacio": "Tell us something, even if it's brief.",
-      "mensaje-largo": "That's longer than we can take. Could you trim it a little?",
-      limite: "Your messages already arrived. Give it a few minutes and we'll go on.",
-      envio: "Something failed on our end and the message didn't go out. Try again in a while.",
+      "nombre-largo": "That name is too long.",
+      "email-vacio": "Your email is missing.",
+      "email-invalido": "That address looks incomplete.",
+      "email-largo": "That address is too long.",
+      "mensaje-vacio": "Tell us something.",
+      "mensaje-largo": "That's too long. Could you trim it?",
+      limite: "Your messages already arrived. Give it a few minutes.",
+      envio: "Something failed on our end. Try again in a while.",
     },
   },
   project: {
@@ -108,13 +94,12 @@ export const en: DeepPartial<typeof es> = {
     sitio: "View the site",
     sitioNuevaPestana: "(opens in a new tab)",
     volver: "Back to the work",
-    conversacion: "Start a conversation",
+    conversacion: "Write",
   },
   acuse: {
     asunto: "Your message reached North Studio",
     saludo: "Hi",
-    cuerpo:
-      "Your message came through. We'll read it carefully and you'll get a reply written by a person, not an automatic one.",
+    cuerpo: "Your message arrived. We'll write back soon, and a person writes it.",
     despedida: "North Studio",
     copia: "This is what you wrote:",
   },

@@ -46,14 +46,45 @@ type Estrella = {
   fase: number;
 };
 
+/**
+ * Un cometa, no una raya.
+ *
+ * La versión anterior era un segmento con degradado que aparecía entero y se
+ * apagaba: funcionaba, pero todas salían iguales y en la misma dirección. Un
+ * meteoro real tiene tres tiempos —el núcleo enciende, la cola se estira detrás,
+ * todo se apaga— y ninguno se parece al anterior.
+ */
 type Fugaz = {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
-  vida: number;
+  /** Dirección normalizada. Puede venir de cualquiera de los dos lados. */
+  dx: number;
+  dy: number;
+  velocidad: number;
+  /** >1 acelera, <1 frena. Algunos entran empujados y otros se van muriendo. */
+  curva: number;
+  /** 0 → 1 a lo largo de la vida. Toda la envolvente cuelga de acá. */
+  t: number;
+  paso: number;
   largo: number;
+  /** Tinte apenas desaturado; casi siempre blanco. */
+  tinte: [number, number, number];
 };
+
+/**
+ * Los tintes de un meteoro real vienen de lo que se quema al entrar: sodio
+ * (amarillo cálido), magnesio (azulado), níquel (verdoso). Acá están casi
+ * blancos a propósito — la variación tiene que sospecharse, no reconocerse.
+ */
+const TINTES: [number, number, number][] = [
+  [255, 252, 246],
+  [255, 252, 246],
+  [255, 252, 246],
+  [255, 252, 246],
+  [255, 232, 214],
+  [214, 228, 255],
+  [222, 250, 232],
+];
 
 /** Tres profundidades: más lejos = más chico, más tenue, más lento. */
 const CAPAS: Capa[] = [
@@ -65,6 +96,56 @@ const CAPAS: Capa[] = [
 /** Un punto cada ~26.000 px²: densidad de cielo, no de planetario. */
 const AREA_POR_ESTRELLA = 26000;
 const MAX_ESTRELLAS = 140;
+
+/**
+ * La constelación.
+ *
+ * Dos letras dibujadas con estrellas: la N y la S. No están señaladas, no tienen
+ * etiqueta y nadie las anuncia — a simple vista son once puntos más del cielo,
+ * apenas más brillantes que sus vecinos.
+ *
+ * Las líneas que las unen aparecen **solo si alguien se queda mirando ahí**: hay
+ * que acercar el puntero y, sobre todo, quedarse quieto. Un barrido rápido no la
+ * revela; moverse despacio, sí. Es la diferencia exacta entre buscar algo y estar
+ * prestando atención, y este sitio existe para recompensar lo segundo.
+ *
+ * Coordenadas en el espacio 0–1 de un cuadro propio, que después se ancla arriba
+ * a la derecha. La N es tres trazos; la S, una curva de seis puntos.
+ */
+const CONSTELACION: { puntos: [number, number][]; trazos: [number, number][] }[] = [
+  {
+    // N — astil izquierdo, diagonal, astil derecho.
+    puntos: [
+      [0, 1],
+      [0, 0],
+      [0.62, 1],
+      [0.62, 0],
+    ],
+    trazos: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+    ],
+  },
+  {
+    // S — seis puntos que la insinúan sin cerrarla del todo.
+    puntos: [
+      [1.32, 0.12],
+      [1.0, 0.03],
+      [0.92, 0.42],
+      [1.34, 0.58],
+      [1.28, 0.97],
+      [0.94, 0.88],
+    ],
+    trazos: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+    ],
+  },
+];
 
 export function Cielo() {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -83,6 +164,13 @@ export function Cielo() {
     let alto = 0;
     let raf = 0;
     let corriendo = false;
+    let tinta = "#fff";
+
+    /** Geometría de la constelación en píxeles, recalculada al medir. */
+    let constelacion: { x: number; y: number }[][] = [];
+    /** 0 = invisible; sube mientras el puntero se queda cerca y quieto. */
+    let revelado = 0;
+    let quietud = 0;
 
     // El puntero mueve las capas a ritmos distintos: eso es profundidad. El
     // objetivo se persigue con suavizado para que nunca haya un salto.
@@ -98,6 +186,26 @@ export function Cielo() {
       nodo!.style.height = `${alto}px`;
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       sembrar();
+      ubicarConstelacion();
+    }
+
+    /**
+     * Se apoya arriba a la derecha, sobre el margen que el recorrido deja libre
+     * en todos los formatos. El tamaño sale del lado menor de la ventana: en un
+     * teléfono tiene que caber, y en una pantalla ancha no puede volverse un
+     * cartel.
+     */
+    function ubicarConstelacion() {
+      const escala = Math.min(ancho, alto) * (ancho < 640 ? 0.2 : 0.16);
+      const origenX = ancho - escala * 2.15;
+      const origenY = alto * (ancho < 640 ? 0.14 : 0.2);
+
+      constelacion = CONSTELACION.map((letra) =>
+        letra.puntos.map(([x, y]) => ({
+          x: origenX + x * escala,
+          y: origenY + y * escala,
+        }))
+      );
     }
 
     function sembrar() {
@@ -119,30 +227,189 @@ export function Cielo() {
     }
 
     function programarFugaz(ahora: number) {
-      // Nunca en los primeros quince segundos: una fugaz al entrar se leería
-      // como bienvenida, y esto no viene a saludar a nadie.
-      proximaFugaz = ahora + 15000 + Math.random() * 105000;
+      // Antes eran una cada 60–120 s: tan raras que mucha gente no llegaba a ver
+      // ninguna, y un detalle que nadie ve no existe. Ahora una cada 9–26 s
+      // (~17 de promedio): siguen siendo una sorpresa y ya no un secreto.
+      // Nunca en los primeros ocho segundos: una fugaz al entrar se leería como
+      // bienvenida, y esto no viene a saludar a nadie.
+      proximaFugaz = ahora + 9000 + Math.random() * 17000;
     }
 
     function lanzarFugaz() {
-      const desdeArriba = Math.random() < 0.7;
-      const velocidad = 0.42 + Math.random() * 0.3;
-      const angulo = (Math.PI / 180) * (24 + Math.random() * 18);
+      // De los dos lados, y con un abanico de ángulos ancho: dos meteoros
+      // seguidos por la misma diagonal se leen como un bucle.
+      const haciaLaIzquierda = Math.random() < 0.62;
+      const angulo = (Math.PI / 180) * (16 + Math.random() * 42);
+      const dx = (haciaLaIzquierda ? -1 : 1) * Math.cos(angulo);
+      const dy = Math.sin(angulo);
+
+      // Entra por arriba, o por el costado alto. Nunca desde el pie de la
+      // pantalla: un meteoro que sube es un cohete.
+      const porArriba = Math.random() < 0.68;
+      const desdeX = haciaLaIzquierda ? ancho + 60 : -60;
+
       fugaz = {
-        x: desdeArriba ? Math.random() * ancho : ancho + 40,
-        y: desdeArriba ? -40 : Math.random() * alto * 0.4,
-        vx: -Math.cos(angulo) * velocidad,
-        vy: Math.sin(angulo) * velocidad,
-        vida: 0,
-        largo: 90 + Math.random() * 70,
+        x: porArriba ? Math.random() * ancho : desdeX,
+        y: porArriba ? -50 : Math.random() * alto * 0.45,
+        dx,
+        dy,
+        velocidad: 5.5 + Math.random() * 5,
+        curva: 0.72 + Math.random() * 0.62,
+        t: 0,
+        // Entre ~75 y ~150 cuadros de vida: unos se cruzan rápido y otros
+        // demoran, que es la diferencia entre un destello y un cometa.
+        paso: 1 / (75 + Math.random() * 75),
+        largo: 70 + Math.random() * 130,
+        tinte: TINTES[Math.floor(Math.random() * TINTES.length)] ?? TINTES[0]!,
       };
+    }
+
+    /**
+     * La envolvente del cometa, en tres tiempos:
+     *   núcleo  enciende rápido y se apaga al final;
+     *   cola    aparece un instante después y se estira hasta su largo;
+     *   ambos   se desvanecen juntos en el último tercio.
+     */
+    function envolvente(t: number) {
+      const encendido = Math.min(1, t / 0.12);
+      const apagado = t < 0.62 ? 1 : Math.max(0, 1 - (t - 0.62) / 0.38);
+      const cola = Math.min(1, Math.max(0, (t - 0.05) / 0.3));
+      return { intensidad: encendido * apagado, cola };
+    }
+
+    function pintarFugaz(f: Fugaz) {
+      const { intensidad, cola } = envolvente(f.t);
+      if (intensidad <= 0) return;
+
+      const [r, g, b] = f.tinte;
+      const largo = f.largo * cola;
+      const finX = f.x - f.dx * largo;
+      const finY = f.y - f.dy * largo;
+
+      if (largo > 1) {
+        const estela = ctx!.createLinearGradient(f.x, f.y, finX, finY);
+        estela.addColorStop(0, `rgba(${r},${g},${b},${0.55 * intensidad})`);
+        estela.addColorStop(0.35, `rgba(${r},${g},${b},${0.18 * intensidad})`);
+        estela.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        ctx!.strokeStyle = estela;
+        ctx!.lineWidth = 1.1;
+        ctx!.lineCap = "round";
+        ctx!.beginPath();
+        ctx!.moveTo(f.x, f.y);
+        ctx!.lineTo(finX, finY);
+        ctx!.stroke();
+      }
+
+      // El núcleo: un punto con un halo mínimo. Es lo que hace que se lea como
+      // algo que viaja y no como una línea que se dibujó sola.
+      const halo = ctx!.createRadialGradient(f.x, f.y, 0, f.x, f.y, 3.2);
+      halo.addColorStop(0, `rgba(${r},${g},${b},${0.95 * intensidad})`);
+      halo.addColorStop(1, `rgba(${r},${g},${b},0)`);
+      ctx!.fillStyle = halo;
+      ctx!.beginPath();
+      ctx!.arc(f.x, f.y, 3.2, 0, Math.PI * 2);
+      ctx!.fill();
+    }
+
+    /**
+     * ¿Está alguien mirando la constelación?
+     *
+     * Dos condiciones a la vez: el puntero cerca, y el puntero **quieto**. La
+     * quietud se acumula cuadro a cuadro y se pierde de golpe con cualquier
+     * movimiento brusco, así que barrer la pantalla no la revela. Hay que
+     * detenerse — que es justo lo que nadie hace de casualidad.
+     */
+    function actualizarRevelado(px: number, py: number, movimiento: number) {
+      if (quieto.matches || constelacion.length === 0) {
+        revelado = 0;
+        return;
+      }
+
+      const centro = centroDeConstelacion();
+      const distancia = Math.hypot(px - centro.x, py - centro.y);
+      const radio = Math.min(ancho, alto) * 0.34;
+
+      quietud =
+        movimiento > 2.2 ? 0 : Math.min(1, quietud + (distancia < radio ? 0.012 : 0));
+
+      const objetivo = distancia < radio ? quietud : 0;
+      revelado += (objetivo - revelado) * (objetivo > revelado ? 0.02 : 0.05);
+    }
+
+    function centroDeConstelacion() {
+      let sx = 0;
+      let sy = 0;
+      let n = 0;
+      for (const letra of constelacion) {
+        for (const p of letra) {
+          sx += p.x;
+          sy += p.y;
+          n += 1;
+        }
+      }
+      return n === 0 ? { x: 0, y: 0 } : { x: sx / n, y: sy / n };
+    }
+
+    function pintarConstelacion(desplazX: number, desplazY: number) {
+      if (constelacion.length === 0) return;
+
+      // Las estrellas de la constelación están siempre, apenas más presentes que
+      // el resto. Nadie las va a contar; lo único que se percibe es que ahí el
+      // cielo tiene un poco más de peso.
+      ctx!.fillStyle = tinta;
+      for (const letra of constelacion) {
+        for (const p of letra) {
+          ctx!.globalAlpha = 0.5 + revelado * 0.45;
+          ctx!.beginPath();
+          ctx!.arc(p.x + desplazX, p.y + desplazY, 1.25, 0, Math.PI * 2);
+          ctx!.fill();
+        }
+      }
+
+      if (revelado <= 0.01) return;
+
+      ctx!.globalAlpha = revelado * 0.16;
+      ctx!.strokeStyle = tinta;
+      ctx!.lineWidth = 0.75;
+      ctx!.lineCap = "round";
+      CONSTELACION.forEach((letra, i) => {
+        const puntos = constelacion[i];
+        if (!puntos) return;
+        for (const [desde, hasta] of letra.trazos) {
+          const a = puntos[desde];
+          const b = puntos[hasta];
+          if (!a || !b) continue;
+          ctx!.beginPath();
+          ctx!.moveTo(a.x + desplazX, a.y + desplazY);
+          ctx!.lineTo(b.x + desplazX, b.y + desplazY);
+          ctx!.stroke();
+        }
+      });
+      ctx!.globalAlpha = 1;
     }
 
     function pintar(t: number) {
       ctx!.clearRect(0, 0, ancho, alto);
 
+      const antesX = puntero.sx;
+      const antesY = puntero.sy;
       puntero.sx += (puntero.x - puntero.sx) * 0.045;
       puntero.sy += (puntero.y - puntero.sy) * 0.045;
+      const movimiento =
+        Math.hypot(puntero.sx - antesX, puntero.sy - antesY) *
+        Math.min(ancho, alto) *
+        0.5;
+
+      actualizarRevelado(
+        ((puntero.x + 1) / 2) * ancho,
+        ((puntero.y + 1) / 2) * alto,
+        movimiento
+      );
+
+      // Se reafirma cada cuadro: el halo del cometa deja un degradado en
+      // `fillStyle`, y sin esto las estrellas del cuadro siguiente se pintarían
+      // con él.
+      ctx!.fillStyle = tinta;
 
       for (const e of estrellas) {
         const capa = e.capa;
@@ -165,6 +432,9 @@ export function Cielo() {
         ctx!.fill();
       }
 
+      // La constelación va en la capa media: es cielo, no adorno encima de él.
+      pintarConstelacion(puntero.sx * 3.0, puntero.sy * 3.0);
+
       if (!quieto.matches) {
         if (!fugaz && t > proximaFugaz) {
           lanzarFugaz();
@@ -172,38 +442,24 @@ export function Cielo() {
         }
 
         if (fugaz) {
-          fugaz.vida += 1;
-          fugaz.x += fugaz.vx * 16;
-          fugaz.y += fugaz.vy * 16;
+          fugaz.t += fugaz.paso;
 
-          // Entra y se apaga: nunca se corta de golpe.
-          const desvanecido = Math.max(0, 1 - fugaz.vida / 70);
-          const cola = ctx!.createLinearGradient(
-            fugaz.x,
-            fugaz.y,
-            fugaz.x - fugaz.vx * fugaz.largo,
-            fugaz.y - fugaz.vy * fugaz.largo
-          );
-          cola.addColorStop(0, `rgba(255,255,255,${0.5 * desvanecido})`);
-          cola.addColorStop(1, "rgba(255,255,255,0)");
+          // La velocidad no es constante: `curva` por encima de 1 hace que el
+          // cometa entre y se apure, y por debajo que llegue frenando. Es lo que
+          // impide que dos se muevan igual.
+          const paso =
+            fugaz.velocidad * (1 + (fugaz.curva - 1) * fugaz.t);
+          fugaz.x += fugaz.dx * paso;
+          fugaz.y += fugaz.dy * paso;
 
           ctx!.globalAlpha = 1;
-          ctx!.strokeStyle = cola;
-          ctx!.lineWidth = 1;
-          ctx!.lineCap = "round";
-          ctx!.beginPath();
-          ctx!.moveTo(fugaz.x, fugaz.y);
-          ctx!.lineTo(
-            fugaz.x - fugaz.vx * fugaz.largo,
-            fugaz.y - fugaz.vy * fugaz.largo
-          );
-          ctx!.stroke();
+          pintarFugaz(fugaz);
 
           if (
-            desvanecido <= 0 ||
-            fugaz.y > alto + 120 ||
-            fugaz.x < -160 ||
-            fugaz.x > ancho + 160
+            fugaz.t >= 1 ||
+            fugaz.y > alto + 160 ||
+            fugaz.x < -220 ||
+            fugaz.x > ancho + 220
           ) {
             fugaz = null;
           }
@@ -218,7 +474,7 @@ export function Cielo() {
       if (corriendo) return;
       corriendo = true;
       // La tinta la decide el tema, no este archivo: se lee del propio canvas.
-      ctx!.fillStyle = getComputedStyle(nodo!).color;
+      tinta = getComputedStyle(nodo!).color;
       raf = requestAnimationFrame(pintar);
     }
 

@@ -151,7 +151,7 @@ export function SiteNav({
       <header
         data-abierto={menuAbierto ? "" : undefined}
         className={[
-          "fixed inset-x-0 top-0 z-20 transition-colors duration-[var(--duration-base)] ease-[var(--ease-out-calm)]",
+          "fixed inset-x-0 top-0 z-20 isolate transition-colors duration-[var(--duration-base)] ease-[var(--ease-out-calm)]",
           // Al tope el encabezado tiene la tinta del lugar; una vez que hay
           // contenido debajo se retira a segundo plano sin irse. Sin banda y sin
           // regla: lo que lo separa del contenido es su propio silencio.
@@ -159,6 +159,25 @@ export function SiteNav({
           menuAbierto ? "bg-bg" : "",
         ].join(" ")}
       >
+        {/*
+          El velo.
+          La nav no tiene fondo propio ni banda: sería una placa apoyada encima
+          del recorrido. Lo que tiene es el **mismo fondo del lugar disolviéndose**
+          —opaco arriba, nada abajo—, así que hereda la atmósfera sobre la que se
+          apoya en vez de taparla. Lo que pasa por debajo se intuye y no se lee,
+          que era lo que faltaba: sin esto, el verde a sangre del trabajo cruzaba
+          entero por detrás de las palabras.
+          Nada de blur ni de glass: es el color del sitio, nada más.
+        */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[7.5rem]"
+          style={{
+            background:
+              "linear-gradient(to bottom, var(--bg) 0%, color-mix(in oklab, var(--bg) 82%, transparent) 34%, color-mix(in oklab, var(--bg) 38%, transparent) 66%, transparent 100%)",
+          }}
+        />
+
         <div className="mx-auto flex w-full max-w-[92rem] items-center justify-between gap-md px-md py-sm sm:px-xl">
           <Link
             href={homeHref}

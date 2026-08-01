@@ -32,8 +32,8 @@ export const delfinaGayoso: Proyecto = {
   destacado: true,
   persona: "Delfina Gayoso",
   descriptor: {
-    es: "Una cocinera que enseña como si estuvieras en su cocina.",
-    en: "A cook who teaches as if you were standing in her kitchen.",
+    es: "Una forma de enseñar que hace sentir que cualquiera puede cocinar.",
+    en: "A way of teaching that makes anyone feel they could cook.",
   },
   año: 2026,
   rol: [
@@ -52,45 +52,53 @@ export const delfinaGayoso: Proyecto = {
   // Pausado: el caso tiene que sentirse como una historia que se recorre, no
   // como una ficha técnica que se consulta.
   clima: { ritmo: "pausado" },
+  /**
+   * REGLA DE LOS CASOS (vigente para todos los proyectos):
+   * **el protagonista es siempre la persona, nunca el estudio.**
+   *
+   * Un caso no cuenta "había un problema, llegó North Studio, ahora está
+   * resuelto". Eso convierte al cliente en el antes y al estudio en el después,
+   * y North Studio no salva proyectos: representa mejor a alguien. El estudio
+   * aparece únicamente a través de las decisiones que se ven, y no hace falta
+   * que las nombre.
+   *
+   * De acá salieron tres eliminaciones concretas en este cuerpo: el párrafo que
+   * explicaba cómo está organizado el sitio (le interesa al que lo hizo, no al
+   * que lo lee), el que decía que el material "vivía repartido en plataformas
+   * que no eran suyas" (planteaba a Delfina como un problema), y el cierre
+   * "sus redes siguen funcionando como antes, la diferencia es que ahora…"
+   * (era el gracias-a-nosotros de siempre, con otro traje).
+   */
   cuerpo: [
     {
       tipo: "texto",
       contenido: {
-        es: `Delfina cocina, enseña y publica desde hace años. Todo eso vivía repartido entre plataformas que no eran suyas; el encargo fue reunirlo en un lugar propio.
+        es: `Delfina comparte una manera de cocinar que se siente simple y cotidiana.
 
-Lo que la distingue es su forma de *enseñar*: cercana, paciente, con la idea de que cualquiera puede cocinar si alguien lo acompaña. El sitio se organizó alrededor de esa idea.`,
-        en: `Delfina has been cooking, teaching and publishing for years. All of it lived scattered across platforms that weren't hers; the commission was to bring it together somewhere of her own.
+Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro, sin tecnicismos, con la certeza de que cualquiera puede.`,
+        en: `Delfina shares a way of cooking that feels simple and everyday.
 
-What sets her apart is the way she *teaches*: close by, patient, working from the idea that anyone can cook if someone walks them through it. The site was organised around that idea.`,
+The way she *teaches* makes cooking feel much closer. No rush, no jargon, and the certainty that anyone can.`,
       },
     },
     { tipo: "pausa", tamaño: "rest-lg" },
     { tipo: "media", media: apertura },
     { tipo: "pausa" },
     {
-      tipo: "texto",
-      contenido: {
-        es: `La navegación sigue lo que alguien viene a hacer —conocerla, aprender con ella o trabajar con ella— en lugar de seguir los tipos de contenido. Cada camino tiene su propia extensión y su propio ritmo.`,
-        en: `Navigation follows what someone comes to do — get to know her, learn with her, or work with her — rather than following content types. Each path has its own length and its own pace.`,
-      },
-    },
-    {
       tipo: "dato",
-      etiqueta: { es: "El sitio reúne", en: "The site brings together" },
+      etiqueta: { es: "En un mismo lugar", en: "All in one place" },
       valor: {
-        es: "Quién es, qué enseña, su trabajo con marcas y el contacto",
-        en: "Who she is, what she teaches, her work with brands, and contact",
+        es: "Recetas, marcas, contenido y formas de trabajar juntas",
+        en: "Recipes, brands, content, and ways of working together",
       },
     },
     {
       tipo: "texto",
       contenido: {
-        es: `La dirección de arte parte de la cocina de todos los días: un verde salvia, una serif de trazo fino, fotografía sin estilizar. Es el mismo tono con el que ella enseña, dicho en color, tipografía y ritmo.
-
-Sus redes siguen funcionando como antes. La diferencia es que ahora llevan a un lugar que le pertenece.`,
-        en: `The art direction comes from an everyday kitchen: a sage green, a fine-stroked serif, unstyled photography. It's the same tone she teaches in, said in colour, type and pace.
-
-Her social accounts work the same as before. The difference is that now they lead somewhere that belongs to her.`,
+        // Pendiente de revisión con el proyecto terminado: este párrafo se
+        // reescribe cuando estén cerradas las decisiones reales de arte.
+        es: `La dirección de arte viene de una cocina de todos los días: un verde salvia, una serif de trazo fino, fotografía sin estilizar. El mismo tono con el que ella enseña.`,
+        en: `The art direction comes from an everyday kitchen: a sage green, a fine-stroked serif, unstyled photography. The same tone she teaches in.`,
       },
     },
   ],

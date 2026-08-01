@@ -43,19 +43,12 @@ export function Estudio({ dict }: { dict: Dictionary }) {
           <Pasaje segmentos={e.cierre} />
         </p>
 
+        {/* El colofón: qué hace el estudio, sin rótulo. Una lista rotulada sería
+            un menú de servicios; sin rótulo es la línea de créditos de un
+            impreso — está para quien la busca. */}
         <p
           data-reveal
-          className="mt-xl max-w-[38ch] font-serif text-body text-muted md:ml-[30%] md:max-w-[44ch]"
-        >
-          <Pasaje segmentos={e.entrega} />
-        </p>
-
-        {/* El colofón: qué hace el estudio, en tres segundos, sin rótulo. Una
-            lista rotulada sería un menú de servicios; sin rótulo es la línea de
-            créditos de un impreso — está para quien la busca. */}
-        <p
-          data-reveal
-          className="mt-2xl max-w-[44ch] font-mono text-meta text-muted md:ml-[30%]"
+          className="mt-3xl max-w-[56ch] font-mono text-meta text-muted md:ml-[30%]"
         >
           {e.oficios}
         </p>
