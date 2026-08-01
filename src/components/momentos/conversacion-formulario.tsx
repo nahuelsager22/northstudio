@@ -121,7 +121,17 @@ export function ConversacionFormulario({
           {/* `noValidate` apaga los mensajes del navegador: todo lo que alguien
               lea acá está escrito en la voz del sitio, y la validación de verdad
               vive en el servidor. */}
-          <form action={accion} noValidate className="mt-2xl max-w-[46rem]">
+          {/* `autoComplete="off"` va también en el formulario y no solo en cada
+              campo: es la forma correcta de desactivarlo, y algunos navegadores
+              solo respetan el atributo del campo si el formulario lo declara
+              primero. No afecta el envío en absoluto — `autocomplete` gobierna
+              lo que el navegador ofrece completar, nunca lo que se manda. */}
+          <form
+            action={accion}
+            noValidate
+            autoComplete="off"
+            className="mt-2xl max-w-[46rem]"
+          >
             <input type="hidden" name="locale" value={locale} />
 
             {/* Honeypot: nadie lo ve, nadie llega con el teclado, nadie lo
@@ -146,15 +156,16 @@ export function ConversacionFormulario({
                 etiqueta={c.campos.nombre}
                 error={mensajeDeCampo(c, estado.errores?.nombre)}
                 defaultValue={estado.valores?.nombre}
-                autoComplete="name"
               />
               <CampoLinea
                 campo="email"
                 etiqueta={c.campos.email}
                 error={mensajeDeCampo(c, estado.errores?.email)}
                 defaultValue={estado.valores?.email}
+                // `type="email"` se conserva: no tiene nada que ver con el
+                // autocompletado. Es lo que le da a un teléfono el teclado con
+                // arroba, y quitarlo sí sería fricción real.
                 type="email"
-                autoComplete="email"
                 className="mt-2xl sm:mt-0"
               />
             </div>
@@ -212,7 +223,6 @@ function CampoLinea({
   error,
   defaultValue,
   type = "text",
-  autoComplete,
   className = "",
 }: {
   campo: ClaveDeCampo;
@@ -220,7 +230,6 @@ function CampoLinea({
   error: string | null;
   defaultValue?: string;
   type?: "text" | "email";
-  autoComplete?: string;
   className?: string;
 }) {
   const id = `conversacion-${campo}`;
@@ -237,14 +246,15 @@ function CampoLinea({
         name={campo}
         type={type}
         defaultValue={defaultValue ?? ""}
-        // Sin corrector ni mayúscula automática: un apellido subrayado en rojo
-        // es el navegador diciéndole a alguien que su nombre está mal escrito.
-        // El `autocomplete` sí se conserva —a diferencia del campo del proyecto—
-        // porque es lo que permite completar nombre y correo de una vez, y
-        // quitarlo sería fricción disfrazada de limpieza.
-        autoComplete={autoComplete}
+        // Nada del navegador se mete acá. Sin autocompletado —decisión tomada
+        // con el costo sobre la mesa: son dos campos cortos, y el desplegable
+        // del sistema aparecía encima de una composición que se cuidó al
+        // milímetro—, sin corrector y sin mayúscula automática. Un apellido
+        // subrayado en rojo es el navegador diciéndole a alguien que su nombre
+        // está mal escrito.
+        autoComplete="off"
         autoCorrect="off"
-        autoCapitalize={campo === "email" ? "off" : "words"}
+        autoCapitalize="off"
         spellCheck={false}
         data-campo
         aria-invalid={error ? true : undefined}

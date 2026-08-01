@@ -21,10 +21,25 @@ const studioPassage: Segmento[] = [
   { texto: " what they do." },
 ];
 
+const studioBridge: Segmento[] = [
+  {
+    texto:
+      "You can see it in how you write, in what you choose to show, in how much room you leave. A site is built the same way: an identity isn't in one piece, it's in ",
+  },
+  { texto: "everything saying the same thing", enfasis: true },
+  { texto: "." },
+];
+
 const studioClosing: Segmento[] = [
   { texto: "Websites built from the ground up to represent " },
   { texto: "an identity", enfasis: true },
   { texto: "." },
+];
+
+const studioCoda: Segmento[] = [
+  { texto: "Every decision is after the same thing: an experience that feels as " },
+  { texto: "much yours", enfasis: true },
+  { texto: " as the person it represents." },
 ];
 
 const conversationInvitation: Segmento[] = [
@@ -63,7 +78,9 @@ export const en: DeepPartial<typeof es> = {
   estudio: {
     nombre: "The studio",
     pasaje: studioPassage,
+    puente: studioBridge,
     cierre: studioClosing,
+    remate: studioCoda,
     oficios: "Websites · Landing pages · Portfolios · Digital experiences",
   },
   conversacion: {

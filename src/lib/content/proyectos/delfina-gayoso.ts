@@ -31,9 +31,15 @@ export const delfinaGayoso: Proyecto = {
   orden: 1,
   destacado: true,
   persona: "Delfina Gayoso",
+  /**
+   * "…que hace sentir que cualquiera puede cocinar" se leía como *cocinar es
+   * fácil*, y ahí lo que se minimiza es su trabajo. El foco se corrió del logro
+   * al vínculo: no es que cocinar sea sencillo, es que con ella la cocina se
+   * vuelve un lugar agradable.
+   */
   descriptor: {
-    es: "Una forma de enseñar que hace sentir que cualquiera puede cocinar.",
-    en: "A way of teaching that makes anyone feel they could cook.",
+    es: "Una forma de enseñar que transforma la cocina en un lugar al que siempre dan ganas de volver.",
+    en: "A way of teaching that turns the kitchen into a place you always want to come back to.",
   },
   año: 2026,
   rol: [

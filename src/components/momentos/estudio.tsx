@@ -36,21 +36,40 @@ export function Estudio({ dict }: { dict: Dictionary }) {
           <Pasaje segmentos={e.pasaje} />
         </p>
 
+        {/* El puente: de la persona al trabajo. Cuerpo en `muted` — es la voz
+            bajando el tono para explicar una idea, no una afirmación nueva. */}
         <p
           data-reveal
-          className="mt-xl max-w-[38ch] font-serif text-body text-muted md:ml-[30%] md:max-w-[44ch]"
+          className="mt-xl max-w-[42ch] font-serif text-body text-muted md:ml-[30%] md:max-w-[52ch]"
+        >
+          <Pasaje segmentos={e.puente} />
+        </p>
+
+        {/* Qué se hace. Vuelve a subir a tinta y a escala de título: después del
+            puente, es lo único que el visitante necesita retener. */}
+        <p
+          data-reveal
+          className="mt-2xl max-w-[36ch] font-serif text-title-3 text-ink md:ml-[30%] md:max-w-[40ch]"
         >
           <Pasaje segmentos={e.cierre} />
         </p>
 
-        {/* El colofón: qué hace el estudio, sin rótulo. Una lista rotulada sería
-            un menú de servicios; sin rótulo es la línea de créditos de un
-            impreso — está para quien la busca. */}
+        {/* El colofón: qué se construye, sin rótulo. Una lista rotulada sería un
+            menú de servicios; sin rótulo es la línea de créditos de un impreso. */}
         <p
           data-reveal
-          className="mt-3xl max-w-[56ch] font-mono text-meta text-muted md:ml-[30%]"
+          className="mt-lg max-w-[64ch] font-mono text-meta text-muted md:ml-[30%]"
         >
           {e.oficios}
+        </p>
+
+        {/* El remate: la filosofía, después de la lista y no antes. Puesta
+            arriba sonaría a promesa; acá cierra lo que ya se dijo. */}
+        <p
+          data-reveal
+          className="mt-2xl max-w-[42ch] font-serif text-body text-muted md:ml-[30%] md:max-w-[50ch]"
+        >
+          <Pasaje segmentos={e.remate} />
         </p>
       </div>
     </section>

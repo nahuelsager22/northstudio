@@ -25,19 +25,19 @@ const lineaUmbral: Segmento[] = [
 ];
 
 /**
- * El estudio — dos líneas.
+ * El estudio — cinco tiempos.
  *
- * Eran cuatro bloques: cómo observa, por qué dos personas del mismo rubro
- * necesitan sitios distintos, qué queda al final, y el colofón. Todo eso decía
- * cuánto observa el estudio. Quedaron una idea y su consecuencia.
+ * La tesis, el puente, qué se hace, qué se construye y el remate. El salto de la
+ * tesis a "sitios web pensados desde cero" era abrupto: una frase sobre personas
+ * seguida de una sobre entregables, sin nada que las una. El puente y el remate
+ * existen para eso, y de paso le devuelven densidad a la mitad de atrás del
+ * recorrido, que había quedado más vacía que calma.
  *
- * Lo que se fue y por qué:
- * · "Antes de proponer nada, el estudio observa" — anunciaba la atención. Si hay
- *   que decir que se observa, es que no se nota.
- * · "Dos personas con la misma profesión rara vez necesitan el mismo sitio" —
- *   era el andamio de la idea que venía después; la idea se sostiene sola.
- * · "un sitio propio, que podés actualizar y hacer crecer sin que pierda
- *   coherencia" — describía un entregable. Es cierto y es lo de menos.
+ * Sobre cómo están escritos: la idea de que la identidad no es una capa visual
+ * sino coherencia se dice **desde el lado de la persona** —cómo escribís, qué
+ * mostrás, cuánto espacio dejás— y no desde el lado del oficio. Nombrar logo y
+ * paleta para decir que no alcanzan sería el estudio hablando de diseño, y de
+ * paso un golpe a cómo trabajan otros.
  */
 const pasajeEstudio: Segmento[] = [
   { texto: "Lo que vuelve memorable a alguien es " },
@@ -45,10 +45,27 @@ const pasajeEstudio: Segmento[] = [
   { texto: " lo que hace." },
 ];
 
+/** El puente: qué es una identidad, dicho sin nombrar una sola pieza de diseño. */
+const puenteEstudio: Segmento[] = [
+  {
+    texto:
+      "Eso se nota en cómo escribís, en qué elegís mostrar, en cuánto espacio dejás. Un sitio se construye igual: la identidad no está en una pieza, está en que ",
+  },
+  { texto: "todo diga lo mismo", enfasis: true },
+  { texto: "." },
+];
+
 const cierreEstudio: Segmento[] = [
   { texto: "Sitios web pensados desde cero para representar " },
   { texto: "una identidad", enfasis: true },
   { texto: "." },
+];
+
+/** El remate: la filosofía, sin volver a enumerar el proceso. */
+const remateEstudio: Segmento[] = [
+  { texto: "Cada decisión busca lo mismo: que la experiencia se sienta tan " },
+  { texto: "propia", enfasis: true },
+  { texto: " como la persona que representa." },
 ];
 
 /**
@@ -103,7 +120,9 @@ export const es = {
   estudio: {
     nombre: "El estudio",
     pasaje: pasajeEstudio,
+    puente: puenteEstudio,
     cierre: cierreEstudio,
+    remate: remateEstudio,
     /**
      * El colofón. Responde "¿qué hacen?" en dos segundos para quien lo necesita
      * y es invisible para quien no. Sin etiqueta: una lista rotulada sería un
