@@ -6,7 +6,7 @@ const ASTRO =
 
 /**
  * Firma completa: cordón + destello + "North Studio", una sola escena
- * (art-direction.md §6.3). `fill="currentColor"` hereda el color del tema.
+ * (docs/marca.md). `fill="currentColor"` hereda el color del tema.
  *
  * `sinAstro` omite la estrella para que pueda dibujarse aparte, en su propia
  * capa, y moverse a otro ritmo (`AstroDeLaFirma` + `FirmaViva`). Las dos capas

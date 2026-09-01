@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/i18n/locales";
 /**
  * Bloque `texto` — el relato honesto del proyecto.
  *
- * Serif a medida de lectura (60–68ch, art-direction.md §1.5) y entrada desde el
+ * Serif a medida de lectura (60–68ch, docs/sistema-visual.md) y entrada desde el
  * margen: es una columna editorial, no un ancho de pantalla. Los párrafos se
  * separan en el dato con una línea en blanco, como se escribe en cualquier
  * lado; la interfaz no obliga a estructurar la prosa en un array.
@@ -14,7 +14,7 @@ import type { Locale } from "@/lib/i18n/locales";
  * gobernaba el copy del recorrido (el tipo `Segmento`, donde el énfasis vive en
  * el dato y no en el markup), traída a la prosa: escribir un caso no debería
  * obligar a partir un párrafo en fragmentos para poder acentuar una palabra.
- * Itálica y nada más — el sistema no tiene negrita (art-direction.md §1.3).
+ * Itálica y nada más — el sistema no tiene negrita (docs/sistema-visual.md).
  */
 export function Texto({
   bloque,

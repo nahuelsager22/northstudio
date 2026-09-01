@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 /**
- * Marca compacta: cordón + destello, sin nombre (art-direction.md §6.3).
+ * Marca compacta: cordón + destello, sin nombre (docs/marca.md).
  * `fill="currentColor"` hereda el color del tema — sin variantes claro/oscuro.
  */
 export function Mark(props: SVGProps<SVGSVGElement>) {

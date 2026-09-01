@@ -8,7 +8,7 @@ import type { Locale } from "@/lib/i18n/locales";
  * la voz del contacto no obliga a tocar ni la validación ni el envío.
  */
 
-/** Los tres campos. No hay un cuarto: cada campo ausente es una decisión (experience-architecture.md §7). */
+/** Los tres campos. No hay un cuarto: cada campo ausente es una decisión (docs/contacto.md). */
 export const CAMPOS = ["nombre", "email", "mensaje"] as const;
 
 export type Campo = (typeof CAMPOS)[number];

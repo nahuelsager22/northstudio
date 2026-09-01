@@ -37,7 +37,7 @@ function mergeWithFallback<T extends object>(base: T, override: DeepPartial<T>):
 /**
  * ES es la fuente de verdad. EN se compone sobre ES: toda clave que falte
  * en `en` cae silenciosamente en el valor de `es` (nunca un hueco ni un
- * "translation missing" — experience-architecture.md §6).
+ * "translation missing" — docs/contenido.md · i18n).
  */
 export function getDictionary(locale: Locale): Dictionary {
   if (locale === "en") {

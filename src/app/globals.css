@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 /*
- * Tokens — traducción directa de art-direction.md.
+ * Tokens del sistema visual. Qué significa cada uno: docs/sistema-visual.md.
  * Los valores de color viven en :root / prefers-color-scheme / [data-theme]
- * y se exponen a Tailwind vía @theme inline (§7 del handoff).
+ * y se exponen a Tailwind vía @theme inline.
  */
 
 /*
@@ -33,8 +33,7 @@
  * las estrellas no tienen dónde brillar. La profundidad de un cielo no viene de
  * apagar la luz sino de bajar el fondo hasta que lo poco que brilla se note.
  *
- * No es negro absoluto a propósito: `#000` es vacío, no noche (art-direction
- * §2.2). El croma frío es lo que lo mantiene atmósfera y no ausencia.
+ * No es negro absoluto a propósito: `#000` es vacío, no noche. El croma frío es lo que lo mantiene atmósfera y no ausencia.
  *
  * `muted` sube un punto para compensar: sobre un fondo más profundo, el mismo
  * gris se hunde. La hairline baja, porque una línea que en un gris se leía como
@@ -71,7 +70,7 @@
 }
 
 @theme inline {
-  /* Color — §2 */
+  /* Color */
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
@@ -79,7 +78,7 @@
   --color-hairline: var(--hairline);
   --color-polar: var(--polar);
 
-  /* Tipografía — §1 */
+  /* Tipografía */
   --font-serif: var(--font-newsreader), Georgia, "Times New Roman", "Noto Serif", serif;
   --font-sans: var(--font-mona-sans), -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
@@ -124,7 +123,7 @@
   --text-meta--letter-spacing: 0.02em;
   --text-meta--font-weight: 400;
 
-  /* Espacio — §3.2, escala base-8 */
+  /* Espacio — escala base-8 */
   --spacing-3xs: 0.25rem;
   --spacing-2xs: 0.5rem;
   --spacing-xs: 0.75rem;
@@ -150,7 +149,7 @@
      Sin esto, la sección aterriza debajo de la nav fija. */
   --spacing-anchor: 7rem;
 
-  /* Motion — §4.3, duraciones lentas y una sola curva ease-out sin rebote */
+  /* Motion — duraciones lentas y una sola curva ease-out sin rebote */
   --duration-fast: 400ms;
   --duration-base: 550ms;
   --duration-slow: 700ms;
@@ -209,7 +208,7 @@
      `border-hairline` del campo vive en la capa de utilidades y le ganaría a
      cualquier regla declarada acá. */
 
-  /* El material del objeto editorial (art-direction.md §5.3): un grano tonal
+  /* El material del objeto editorial (docs/sistema-visual.md · Material): un grano tonal
      apenas perceptible para que el papel no sea una superficie clínica. Es
      textura, no efecto — si se nota como ruido, sobra. No se mueve, no
      intercepta el cursor y no participa de ningún estado. */
@@ -252,7 +251,7 @@
 }
 
 /*
- * Vocabulario de movimiento — uno solo para todo el sitio (art-direction.md §4).
+ * Vocabulario de movimiento — uno solo para todo el sitio (docs/sistema-visual.md · Motion).
  * Nada de esto se anuncia: si el visitante lo nota *como animación*, falló.
  */
 @layer components {
@@ -375,7 +374,7 @@
 }
 
 /*
- * Momento 4 · clima de un proyecto (experience-architecture.md §5.3).
+ * Clima de un proyecto (docs/contenido.md · El cuerpo).
  *
  * El matiz vive *dentro* del sistema del estudio: modula el aire entre bloques
  * y, como mucho, deja que el único punto de orientación de la página tome el
@@ -439,7 +438,7 @@
 }
 
 /*
- * El cielo (art-direction.md — la excepción atmosférica).
+ * El cielo (docs/sistema-visual.md — la excepción atmosférica).
  *
  * Existe **solo en modo Noche**. En Papel no hay nada, y esa ausencia es la
  * decisión que convierte el recurso en criterio: el papel no tiene cielo. Se

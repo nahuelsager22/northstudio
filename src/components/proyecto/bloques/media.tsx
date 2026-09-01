@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/locales";
  * Bloque `media` — una imagen o un video a plena atención.
  *
  * "Plena atención" no es "pantalla completa": el margen sigue enmarcando
- * (art-direction.md §3.1). Lo que cambia es que nada la acompaña — el medio
+ * (docs/sistema-visual.md · Espacio). Lo que cambia es que nada la acompaña — el medio
  * ocupa su propio momento.
  *
  * Las sangrías alternan entre medios consecutivos porque varias imágenes con

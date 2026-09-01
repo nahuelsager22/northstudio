@@ -76,7 +76,7 @@ export function Estudio({ dict }: { dict: Dictionary }) {
   );
 }
 
-/** El énfasis vive en el dato (art-direction.md §1.5): itálica, nunca negrita. */
+/** El énfasis vive en el dato (docs/sistema-visual.md): itálica, nunca negrita. */
 export function Pasaje({ segmentos }: { segmentos: readonly Segmento[] }) {
   return (
     <>

@@ -4,7 +4,7 @@ import type { es } from "./es";
 
 /**
  * Paralelo de `es`. Cualquier clave ausente cae en fallback silencioso
- * a español (experience-architecture.md §6) — nunca "translation missing".
+ * a español (docs/contenido.md · i18n) — nunca "translation missing".
  *
  * Misma voz vigente que en español: del estudio, cercana, cálida y profesional.
  */

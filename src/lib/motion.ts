@@ -1,5 +1,5 @@
 /**
- * Fundación de motion — sin librerías (ver project-journal.md, Bloque 5a).
+ * Fundación de motion — sin librerías (ver docs/sistema-visual.md · Motion).
  *
  * Un solo vocabulario en todo el sitio, definido en `globals.css`:
  *   1. recepción   — fundido + ascenso de pocos píxeles, lento, una sola vez;

@@ -18,7 +18,7 @@ const visibles: Proyecto[] =
     ? proyectos.filter((proyecto) => !proyecto.esEnsayo)
     : proyectos;
 
-/** Solo `publicado`; nunca un borrador (project-journal.md, principio 9). */
+/** Solo `publicado`; nunca un borrador (docs/contenido.md · Visibilidad de un borrador). */
 export function listarProyectosPublicados(): Proyecto[] {
   return visibles
     .filter((proyecto) => proyecto.estado === "publicado")

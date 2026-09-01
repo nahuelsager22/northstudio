@@ -1,5 +1,5 @@
 /**
- * Esquema de proyecto (experience-architecture.md §5).
+ * Esquema de proyecto (docs/contenido.md).
  * Núcleo de metadatos estables + cuerpo de bloques tipados ordenables.
  * Sumar un trabajo = sumar un dato; la interfaz no cambia.
  */
@@ -16,7 +16,7 @@ export type TipoMedia = "imagen" | "video";
 
 export type Media = {
   src: string;
-  /** Obligatorio — la accesibilidad es una forma de atención (art-direction.md §2.3). */
+  /** Obligatorio — la accesibilidad es una forma de atención (docs/sistema-visual.md · Accesibilidad). */
   alt: CampoLocalizado;
   credito?: string;
   tipo: TipoMedia;
@@ -74,7 +74,7 @@ export type BloqueProyecto =
   | BloqueDato
   | BloquePausa;
 
-/** Guiño de matiz dentro del sistema visual — nunca un tema nuevo (experience-architecture.md §5.3). */
+/** Guiño de matiz dentro del sistema visual — nunca un tema nuevo (docs/contenido.md · El cuerpo). */
 export type Clima = {
   acentoPolar?: boolean;
   ritmo?: "pausado" | "regular";
@@ -100,7 +100,7 @@ export type Proyecto = {
   /**
    * Qué hizo North Studio. Honesto, sin inflar.
    *
-   * Traducible: `experience-architecture.md` §6 lo daba por compartido entre
+   * Traducible: el modelo de i18n lo daba por compartido entre
    * idiomas ("rol como estructura"), y con contenido real se vio que no lo es —
    * "Arquitectura técnica e implementación" no se lee en inglés. Un metadato que
    * es una frase pertenece a los campos traducibles, no a los compartidos.

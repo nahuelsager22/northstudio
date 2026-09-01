@@ -207,7 +207,7 @@ export function SiteNav({
                   >
                     {/* El punto polar reemplaza al número. Marca dónde estás sin
                         prometer una estructura: es el uso de orientación que
-                        art-direction.md §2.3 autoriza, y el único del recorrido. */}
+                        docs/sistema-visual.md autoriza, y el único del recorrido. */}
                     <span
                       aria-hidden="true"
                       className={[

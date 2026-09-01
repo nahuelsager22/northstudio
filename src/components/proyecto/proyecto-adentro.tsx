@@ -5,7 +5,7 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/locales";
 
 /**
- * Momento 4 · Un proyecto por dentro (experience-architecture.md §1).
+ * Un proyecto por dentro (docs/recorrido.md · Rutas).
  *
  * Una mini-experiencia que representa a **otra** identidad. Todo lo que hay acá
  * está al servicio de eso: la apertura dice quién es y qué se hizo sin inflar

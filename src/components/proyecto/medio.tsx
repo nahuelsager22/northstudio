@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/locales";
  * dos medios tienen que compartir altura para poder compararse (el bloque
  * `par`). Ahí entra `foco`, que decide qué sobrevive.
  *
- * El video nunca arranca solo (art-direction.md §4.2): llega con sus controles
+ * El video nunca arranca solo (docs/sistema-visual.md · Motion): llega con sus controles
  * y espera. El ritmo lo marca quien recorre.
  */
 export function Medio({

@@ -8,7 +8,7 @@ import type { BloqueProyecto } from "@/lib/content/types";
 import type { Locale } from "@/lib/i18n/locales";
 
 /**
- * El cuerpo de un proyecto (experience-architecture.md §5.2).
+ * El cuerpo de un proyecto (docs/contenido.md).
  *
  * La interfaz sabe interpretar cada tipo de bloque; el orden, la cantidad y la
  * combinación los define el dato. Acá no hay ninguna decisión sobre *qué*

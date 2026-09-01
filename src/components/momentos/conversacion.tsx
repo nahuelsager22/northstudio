@@ -4,7 +4,7 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/locales";
 
 /**
- * Momento 5 · La conversación — contacto, pertenencia (experience-architecture.md §1).
+ * Momento 5 · La conversación — el cierre del recorrido (docs/recorrido.md).
  *
  * El cierre del recorrido y el pico emocional del arco. No capta: recibe. Un
  * formulario de captación existe para *calificar* a quien escribe; este existe

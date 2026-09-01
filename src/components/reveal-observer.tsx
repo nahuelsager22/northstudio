@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { REVEAL_ROOT_MARGIN } from "@/lib/motion";
 
 /**
- * Recepción (art-direction.md §4.1): al aparecer por primera vez, un contenido
+ * Recepción (docs/sistema-visual.md · Motion): al aparecer por primera vez, un contenido
  * se asienta. Un único observer para toda la página; cada elemento se revela
  * una sola vez y deja de observarse. No renderiza nada ni envuelve el markup,
  * así que los momentos siguen siendo componentes de servidor: basta con marcar
@@ -22,7 +22,7 @@ export function RevealObserver() {
     };
 
     // Honrar la configuración del visitante es la forma más literal de prestar
-    // atención (art-direction.md §4.3): sin movimiento, el contenido ya está.
+    // atención (docs/sistema-visual.md · Motion): sin movimiento, el contenido ya está.
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       !("IntersectionObserver" in window)

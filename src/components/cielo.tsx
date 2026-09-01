@@ -98,54 +98,214 @@ const AREA_POR_ESTRELLA = 26000;
 const MAX_ESTRELLAS = 140;
 
 /**
- * La constelación.
+ * La constelación NS.
  *
- * Dos letras dibujadas con estrellas: la N y la S. No están señaladas, no tienen
- * etiqueta y nadie las anuncia — a simple vista son once puntos más del cielo,
- * apenas más brillantes que sus vecinos.
+ * Forma una N y una S, como la de Rockstar forma una R: una figura reconocible
+ * detrás de las estrellas. Pero es una pieza editorial, no la ilustración de una
+ * constelación — y eso son cinco decisiones, no una cantidad de estrellas:
  *
- * Las líneas que las unen aparecen **solo si alguien se queda mirando ahí**: hay
- * que acercar el puntero y, sobre todo, quedarse quieto. Un barrido rápido no la
- * revela; moverse despacio, sí. Es la diferencia exacta entre buscar algo y estar
- * prestando atención, y este sitio existe para recompensar lo segundo.
+ * - **Las dos letras están en el mismo renglón y no se tocan.** Ni un trazo ni
+ *   una estrella las une. Son dos partes de un sistema, no una figura cerrada:
+ *   lo que las relaciona es el eje que comparten y el vacío que hay entre ellas.
+ * - **Mismo tamaño, distinta inclinación.** Las dos miden lo mismo y pesan lo
+ *   mismo; ninguna es secundaria. Pero la N cae 14° y la S 22°, y esos ocho
+ *   grados de diferencia son los que impiden que el renglón se lea compuesto:
+ *   dos letras exactamente paralelas son tipografía.
+ * - **Las dos se pueden reconstruir enteras.** Ninguna estrella de una letra
+ *   queda sin trazo. La irregularidad la sostienen las magnitudes, no los trazos
+ *   que faltan.
+ * - **La protagonista no es de ninguna de las dos.** La estrella más brillante
+ *   del cielo está en el hueco, sola. Es la que sostiene la composición y la que
+ *   revela la constelación cuando el puntero la toca.
+ * - **Un trazo es tan tenue como sus estrellas.** La opacidad de cada línea sale
+ *   de la magnitud de sus dos extremos, así que las partes tenues de la figura
+ *   se apagan enteras. Sin eso todas las líneas pesan igual y la cosa vuelve a
+ *   ser unir los puntos.
  *
- * Coordenadas en el espacio 0–1 de un cuadro propio, que después se ancla arriba
- * a la derecha. La N es tres trazos; la S, una curva de seis puntos.
+ * Los esqueletos viven cada uno en su propio cuadro de alto 1 y derecho, para
+ * poder editarlos pensando en la letra. La composición los apoya después.
  */
-const CONSTELACION: { puntos: [number, number][]; trazos: [number, number][] }[] = [
-  {
-    // N — astil izquierdo, diagonal, astil derecho.
-    puntos: [
-      [0, 1],
-      [0, 0],
-      [0.62, 1],
-      [0.62, 0],
-    ],
-    trazos: [
-      [0, 1],
-      [1, 2],
-      [2, 3],
-    ],
-  },
-  {
-    // S — seis puntos que la insinúan sin cerrarla del todo.
-    puntos: [
-      [1.32, 0.12],
-      [1.0, 0.03],
-      [0.92, 0.42],
-      [1.34, 0.58],
-      [1.28, 0.97],
-      [0.94, 0.88],
-    ],
-    trazos: [
-      [0, 1],
-      [1, 2],
-      [2, 3],
-      [3, 4],
-      [4, 5],
-    ],
-  },
+type Traza = {
+  puntos: [number, number][];
+  trazos: [number, number][];
+  /** Una magnitud por punto: 0 = apenas visible · 3 = la protagonista. */
+  magnitudes: number[];
+};
+
+/** La N: astiles que no son paralelos y una diagonal quebrada en tres tramos. */
+const TRAZA_N: Traza = {
+  puntos: [
+    [0.06, 1.0], // 0 · pie izquierdo
+    [0.03, 0.62], // 1 · astil izquierdo, la que lo desalinea
+    [0.0, 0.16], // 2 · vértice de arriba
+    [0.2, 0.5], // 3 · diagonal, primer quiebre
+    [0.45, 0.78], // 4 · diagonal, segundo quiebre
+    [0.66, 1.03], // 5 · pie derecho
+    [0.71, 0.58], // 6 · astil derecho, medio
+    [0.74, 0.12], // 7 · vértice de arriba a la derecha
+  ],
+  trazos: [
+    [0, 1],
+    [1, 2],
+    [2, 3],
+    [3, 4],
+    [4, 5],
+    [5, 6],
+    [6, 7],
+  ],
+  magnitudes: [1, 0, 2, 1, 0, 2, 1, 2],
+};
+
+/** La S: nueve estrellas y un solo cambio de signo del giro, en la cintura. */
+const TRAZA_S: Traza = {
+  puntos: [
+    [0.506, 0.082], // 0 · terminal de arriba
+    [0.287, 0.0], // 1 · cresta
+    [0.109, 0.082], // 2 · bucle alto
+    [0.0, 0.282], // 3 · extremo izquierdo
+    [0.041, 0.364], // 4 · la doble
+    [0.274, 0.553], // 5 · cintura
+    [0.465, 0.882], // 6 · extremo derecho
+    [0.246, 1.0], // 7 · curva de abajo
+    [0.027, 0.964], // 8 · terminal de abajo
+  ],
+  trazos: [
+    [0, 1],
+    [1, 2],
+    [2, 3],
+    [3, 4],
+    [4, 5],
+    [5, 6],
+    [6, 7],
+    [7, 8],
+  ],
+  magnitudes: [0, 1, 1, 1, 0, 2, 1, 1, 0],
+};
+
+/** Dónde se apoya cada letra. Mismo tamaño, ocho grados de diferencia. */
+const COMPOSICION = [
+  { traza: TRAZA_N, escala: 1, giro: -14, x: 0, y: 0.34 },
+  { traza: TRAZA_S, escala: 1, giro: -22, x: 1.16, y: 0.1 },
 ];
+
+/** La protagonista: en el hueco, y de ninguna de las dos letras. */
+const SUELTAS: [number, number, number][] = [[0.98, 0.62, 3]];
+
+function componer() {
+  const puntos: { x: number; y: number; m: number }[] = [];
+  const trazos: [number, number][] = [];
+
+  for (const parte of COMPOSICION) {
+    const base = puntos.length;
+    const radianes = (parte.giro * Math.PI) / 180;
+    const co = Math.cos(radianes);
+    const si = Math.sin(radianes);
+
+    parte.traza.puntos.forEach(([px, py], i) => {
+      const x = px * parte.escala;
+      const y = py * parte.escala;
+      puntos.push({
+        x: parte.x + x * co - y * si,
+        y: parte.y + x * si + y * co,
+        m: parte.traza.magnitudes[i] ?? 1,
+      });
+    });
+
+    for (const [a, b] of parte.traza.trazos) trazos.push([base + a, base + b]);
+  }
+
+  for (const [x, y, m] of SUELTAS) puntos.push({ x, y, m });
+  return { puntos, trazos };
+}
+
+const FIGURA = componer();
+/** La protagonista es la única de magnitud 3. */
+const ASTRO = FIGURA.puntos.findIndex((p) => p.m === 3);
+
+/** Por magnitud: radio, cuánta tinta, y cuánto pesa un trazo que sale de ahí. */
+const RADIO_CONSTELACION = [0.85, 1.15, 1.55, 2.3];
+const ALFA_CONSTELACION = [0.42, 0.78, 0.92, 1];
+const PESO_TRAZO = [0.34, 0.8, 1, 1];
+
+/**
+ * El polvo.
+ *
+ * No es una textura ni un fondo lleno de estrellas: es **densidad**. Alrededor
+ * de la constelación el cielo tiene más granos que en cualquier otro lado, y eso
+ * hace que el ojo se detenga ahí antes de saber por qué. Tres reglas lo
+ * mantienen del lado de la atmósfera:
+ *
+ * - **Siempre por debajo de la estrella más tenue del campo.** Radio menor a un
+ *   píxel y opacidad de 0,07 a 0,22: uno solo no se ve, todos juntos sí.
+ * - **No toca las letras.** Se rechaza cualquier grano que caiga a menos de ocho
+ *   píxeles de una estrella de la figura o a menos de cinco de un trazo. Sin eso
+ *   el polvo se mezcla con la N y la S y las ensucia.
+ * - **Se siembra en una elipse centrada en la figura**, con caída hacia afuera,
+ *   así la concentración tiene forma de cielo y no de recuadro.
+ *
+ * Es la única excepción local a la densidad baja del campo (un punto cada
+ * ~26.000 px²): acá hay más, y es a propósito.
+ */
+const POLVO = {
+  cantidad: 58,
+  /** Cuánto más grande que la figura es la nube. */
+  alcance: 1.42,
+  margenEstrella: 8,
+  margenTrazo: 5,
+};
+
+/** Distancia de un punto a un segmento; la usa el rechazo del polvo. */
+function distanciaASegmento(
+  px: number,
+  py: number,
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number
+) {
+  const vx = bx - ax;
+  const vy = by - ay;
+  const largo = vx * vx + vy * vy;
+  const t =
+    largo === 0
+      ? 0
+      : Math.max(0, Math.min(1, ((px - ax) * vx + (py - ay) * vy) / largo));
+  return Math.hypot(px - (ax + vx * t), py - (ay + vy * t));
+}
+
+/**
+ * Cuándo se ve.
+ *
+ * Antes había que acercar el puntero **y quedarse quieto** hasta que la quietud
+ * se acumulara. Era una idea linda y una interacción mala: tardaba varios
+ * segundos, se perdía con cualquier movimiento y casi nadie llegaba a verla. Un
+ * detalle que nadie ve no existe.
+ *
+ * Ahora son dos caminos y ninguno exige buscar:
+ *
+ * - **Se revela sola** cada 13–20 s, con una envolvente propia —entra, sostiene,
+ *   se apaga— para que sea algo que pasa en la página y no algo que el visitante
+ *   tenga que conseguir.
+ * - **La protagonista la abre al toque.** Es la estrella más brillante, respira
+ *   apenas, y el puntero sobre ella revela la constelación entera de inmediato.
+ *
+ * Con `prefers-reduced-motion` no hay ciclo ni respiración: las líneas quedan
+ * puestas a media tinta. El detalle existe igual, sin que nada se mueva.
+ */
+const CICLO = { entrada: 900, sosten: 3200, salida: 1600 };
+const ESPERA_REVELACION = { minima: 13000, variable: 7000 };
+/** El radio en píxeles alrededor de la protagonista que abre la figura. */
+const RADIO_ASTRO = 30;
+/** Cuánto se ve con movimiento reducido: puesta, pero sin llamar. */
+const REVELADO_QUIETO = 0.55;
+
+function envolventeRevelacion(ms: number) {
+  if (ms < 0) return 0;
+  const entra = Math.min(1, ms / CICLO.entrada);
+  const desde = CICLO.entrada + CICLO.sosten;
+  const sale = ms < desde ? 1 : 1 - (ms - desde) / CICLO.salida;
+  return Math.max(0, Math.min(entra, sale));
+}
 
 export function Cielo() {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -167,10 +327,17 @@ export function Cielo() {
     let tinta = "#fff";
 
     /** Geometría de la constelación en píxeles, recalculada al medir. */
-    let constelacion: { x: number; y: number }[][] = [];
-    /** 0 = invisible; sube mientras el puntero se queda cerca y quieto. */
+    let constelacion: { x: number; y: number; m: number }[] = [];
+    /** 0 = invisible; 1 = la figura entera. */
     let revelado = 0;
-    let quietud = 0;
+    /** Cuándo arrancó el ciclo que se revela solo. */
+    let revelacionDesde = -Infinity;
+    let proximaRevelacion = 0;
+    /** El puntero sobre la protagonista, suavizado. */
+    let sobreElAstro = 0;
+    /** El polvo alrededor de la figura, resembrado al medir. */
+    let polvo: { x: number; y: number; r: number; a: number; fase: number }[] =
+      [];
 
     // El puntero mueve las capas a ritmos distintos: eso es profundidad. El
     // objetivo se persigue con suavizado para que nunca haya un salto.
@@ -196,16 +363,83 @@ export function Cielo() {
      * cartel.
      */
     function ubicarConstelacion() {
-      const escala = Math.min(ancho, alto) * (ancho < 640 ? 0.2 : 0.16);
-      const origenX = ancho - escala * 2.15;
-      const origenY = alto * (ancho < 640 ? 0.14 : 0.2);
+      // La figura pasó a ser ancha (1,88 × 1,31) al igualar el tamaño de las
+      // dos letras: con la escala anterior se comía el margen y el polvo se iba
+      // por el borde derecho.
+      const escala = Math.min(ancho, alto) * (ancho < 640 ? 0.185 : 0.155);
 
-      constelacion = CONSTELACION.map((letra) =>
-        letra.puntos.map(([x, y]) => ({
-          x: origenX + x * escala,
-          y: origenY + y * escala,
-        }))
-      );
+      // El cuadro se mide sobre la composición ya armada: las letras están
+      // giradas, y el margen derecho tiene que ser el mismo en todos los casos.
+      const xs = FIGURA.puntos.map((p) => p.x);
+      const ys = FIGURA.puntos.map((p) => p.y);
+      const izquierda = Math.min(...xs);
+      const arriba = Math.min(...ys);
+      const anchoCuadro = Math.max(...xs) - izquierda;
+
+      const origenX = ancho - escala * (anchoCuadro + 0.95);
+      const origenY = alto * (ancho < 640 ? 0.13 : 0.19);
+
+      constelacion = FIGURA.puntos.map((p) => ({
+        x: origenX + (p.x - izquierda) * escala,
+        y: origenY + (p.y - arriba) * escala,
+        m: p.m,
+      }));
+
+      sembrarPolvo();
+    }
+
+    /**
+     * Se resiembra con cada medición, igual que el campo: el polvo pertenece a
+     * la sesión, no al archivo.
+     */
+    function sembrarPolvo() {
+      const xs = constelacion.map((p) => p.x);
+      const ys = constelacion.map((p) => p.y);
+      const centroX = (Math.min(...xs) + Math.max(...xs)) / 2;
+      const centroY = (Math.min(...ys) + Math.max(...ys)) / 2;
+      const semiX = ((Math.max(...xs) - Math.min(...xs)) / 2) * POLVO.alcance;
+      const semiY = ((Math.max(...ys) - Math.min(...ys)) / 2) * POLVO.alcance;
+
+      polvo = [];
+      let intentos = 0;
+      while (polvo.length < POLVO.cantidad && intentos < POLVO.cantidad * 40) {
+        intentos += 1;
+        const angulo = Math.random() * Math.PI * 2;
+        // Exponente cerca de 0,5: reparte por área en vez de amontonar al centro.
+        const radio = Math.pow(Math.random(), 0.55);
+        const x = centroX + Math.cos(angulo) * radio * semiX;
+        const y = centroY + Math.sin(angulo) * radio * semiY;
+
+        let choca = false;
+        for (const p of constelacion) {
+          if (Math.hypot(x - p.x, y - p.y) < POLVO.margenEstrella) {
+            choca = true;
+            break;
+          }
+        }
+        if (!choca) {
+          for (const [desde, hasta] of FIGURA.trazos) {
+            const a = constelacion[desde];
+            const b = constelacion[hasta];
+            if (!a || !b) continue;
+            if (
+              distanciaASegmento(x, y, a.x, a.y, b.x, b.y) < POLVO.margenTrazo
+            ) {
+              choca = true;
+              break;
+            }
+          }
+        }
+        if (choca) continue;
+
+        polvo.push({
+          x,
+          y,
+          r: 0.4 + Math.random() * 0.55,
+          a: 0.07 + Math.random() * 0.15,
+          fase: Math.random() * Math.PI * 2,
+        });
+      }
     }
 
     function sembrar() {
@@ -312,98 +546,128 @@ export function Cielo() {
     }
 
     /**
-     * ¿Está alguien mirando la constelación?
+     * Cuánto se ve, este cuadro.
      *
-     * Dos condiciones a la vez: el puntero cerca, y el puntero **quieto**. La
-     * quietud se acumula cuadro a cuadro y se pierde de golpe con cualquier
-     * movimiento brusco, así que barrer la pantalla no la revela. Hay que
-     * detenerse — que es justo lo que nadie hace de casualidad.
+     * El ciclo automático y el puntero sobre la protagonista no se suman: gana
+     * el mayor de los dos. Así el hover puede abrirla en medio de un ciclo que
+     * se estaba apagando, sin que nada dé un salto.
      */
-    function actualizarRevelado(px: number, py: number, movimiento: number) {
+    function actualizarRevelado(t: number, px: number, py: number) {
       if (quieto.matches || constelacion.length === 0) {
-        revelado = 0;
+        revelado = quieto.matches ? REVELADO_QUIETO : 0;
         return;
       }
 
-      const centro = centroDeConstelacion();
-      const distancia = Math.hypot(px - centro.x, py - centro.y);
-      const radio = Math.min(ancho, alto) * 0.34;
-
-      quietud =
-        movimiento > 2.2 ? 0 : Math.min(1, quietud + (distancia < radio ? 0.012 : 0));
-
-      const objetivo = distancia < radio ? quietud : 0;
-      revelado += (objetivo - revelado) * (objetivo > revelado ? 0.02 : 0.05);
-    }
-
-    function centroDeConstelacion() {
-      let sx = 0;
-      let sy = 0;
-      let n = 0;
-      for (const letra of constelacion) {
-        for (const p of letra) {
-          sx += p.x;
-          sy += p.y;
-          n += 1;
-        }
+      if (t > proximaRevelacion) {
+        revelacionDesde = t;
+        proximaRevelacion =
+          t +
+          CICLO.entrada +
+          CICLO.sosten +
+          CICLO.salida +
+          ESPERA_REVELACION.minima +
+          Math.random() * ESPERA_REVELACION.variable;
       }
-      return n === 0 ? { x: 0, y: 0 } : { x: sx / n, y: sy / n };
+
+      const astro = constelacion[ASTRO];
+      const cerca =
+        astro !== undefined &&
+        Math.hypot(px - astro.x, py - astro.y) < RADIO_ASTRO;
+      sobreElAstro +=
+        ((cerca ? 1 : 0) - sobreElAstro) * (cerca ? 0.14 : 0.05);
+
+      revelado = Math.max(
+        envolventeRevelacion(t - revelacionDesde),
+        sobreElAstro
+      );
     }
 
-    function pintarConstelacion(desplazX: number, desplazY: number) {
+    function pintarConstelacion(t: number, desplazX: number, desplazY: number) {
       if (constelacion.length === 0) return;
 
-      // Las estrellas de la constelación están siempre, apenas más presentes que
-      // el resto. Nadie las va a contar; lo único que se percibe es que ahí el
-      // cielo tiene un poco más de peso.
+      // El polvo va primero: es lo más lejos que hay en esta zona del cielo.
       ctx!.fillStyle = tinta;
-      for (const letra of constelacion) {
-        for (const p of letra) {
-          ctx!.globalAlpha = 0.5 + revelado * 0.45;
+      for (const d of polvo) {
+        const titileo = quieto.matches
+          ? 1
+          : 0.88 + Math.sin(t * 0.0006 + d.fase) * 0.12;
+        ctx!.globalAlpha = d.a * titileo;
+        ctx!.beginPath();
+        ctx!.arc(d.x + desplazX, d.y + desplazY, d.r, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+
+      // El halo de la protagonista: tres anillos, no un degradado. Un degradado
+      // queda en `fillStyle` y el cuadro siguiente pinta las estrellas con él
+      // —el bug que ya costó una corrección con el cometa—, y además esto se
+      // apaga solo cuando la figura está revelada: si ya se ve, no hace falta
+      // seguir señalándola.
+      const astro = constelacion[ASTRO];
+      if (astro) {
+        const respiro = quieto.matches
+          ? 0.7
+          : 0.72 + Math.sin(t * 0.0011) * 0.28;
+        const señal = respiro * (1 - revelado * 0.75);
+        ctx!.fillStyle = tinta;
+        for (const [radio, alfa] of [
+          [8.5, 0.05],
+          [5.6, 0.07],
+          [3.4, 0.09],
+        ]) {
+          ctx!.globalAlpha = alfa! * señal;
           ctx!.beginPath();
-          ctx!.arc(p.x + desplazX, p.y + desplazY, 1.25, 0, Math.PI * 2);
+          ctx!.arc(astro.x + desplazX, astro.y + desplazY, radio!, 0, Math.PI * 2);
           ctx!.fill();
         }
       }
 
+      // Las estrellas de la constelación están siempre. Sin revelar son un
+      // cúmulo suelto más del cielo; lo único que se destaca es la protagonista.
+      ctx!.fillStyle = tinta;
+      for (const p of constelacion) {
+        ctx!.globalAlpha =
+          (0.5 + revelado * 0.45) * (ALFA_CONSTELACION[p.m] ?? 1);
+        ctx!.beginPath();
+        ctx!.arc(
+          p.x + desplazX,
+          p.y + desplazY,
+          RADIO_CONSTELACION[p.m] ?? 1.15,
+          0,
+          Math.PI * 2
+        );
+        ctx!.fill();
+      }
+
       if (revelado <= 0.01) return;
 
-      ctx!.globalAlpha = revelado * 0.16;
       ctx!.strokeStyle = tinta;
       ctx!.lineWidth = 0.75;
       ctx!.lineCap = "round";
-      CONSTELACION.forEach((letra, i) => {
-        const puntos = constelacion[i];
-        if (!puntos) return;
-        for (const [desde, hasta] of letra.trazos) {
-          const a = puntos[desde];
-          const b = puntos[hasta];
-          if (!a || !b) continue;
-          ctx!.beginPath();
-          ctx!.moveTo(a.x + desplazX, a.y + desplazY);
-          ctx!.lineTo(b.x + desplazX, b.y + desplazY);
-          ctx!.stroke();
-        }
-      });
+      for (const [desde, hasta] of FIGURA.trazos) {
+        const a = constelacion[desde];
+        const b = constelacion[hasta];
+        if (!a || !b) continue;
+        // Tan tenue como sus estrellas.
+        const peso = ((PESO_TRAZO[a.m] ?? 1) + (PESO_TRAZO[b.m] ?? 1)) / 2;
+        ctx!.globalAlpha = revelado * 0.18 * peso;
+        ctx!.beginPath();
+        ctx!.moveTo(a.x + desplazX, a.y + desplazY);
+        ctx!.lineTo(b.x + desplazX, b.y + desplazY);
+        ctx!.stroke();
+      }
       ctx!.globalAlpha = 1;
     }
 
     function pintar(t: number) {
       ctx!.clearRect(0, 0, ancho, alto);
 
-      const antesX = puntero.sx;
-      const antesY = puntero.sy;
       puntero.sx += (puntero.x - puntero.sx) * 0.045;
       puntero.sy += (puntero.y - puntero.sy) * 0.045;
-      const movimiento =
-        Math.hypot(puntero.sx - antesX, puntero.sy - antesY) *
-        Math.min(ancho, alto) *
-        0.5;
 
       actualizarRevelado(
-        ((puntero.x + 1) / 2) * ancho,
-        ((puntero.y + 1) / 2) * alto,
-        movimiento
+        t,
+        ((puntero.x + 1) / 2) * ancho + puntero.sx * 3.0,
+        ((puntero.y + 1) / 2) * alto + puntero.sy * 3.0
       );
 
       // Se reafirma cada cuadro: el halo del cometa deja un degradado en
@@ -433,7 +697,7 @@ export function Cielo() {
       }
 
       // La constelación va en la capa media: es cielo, no adorno encima de él.
-      pintarConstelacion(puntero.sx * 3.0, puntero.sy * 3.0);
+      pintarConstelacion(t, puntero.sx * 3.0, puntero.sy * 3.0);
 
       if (!quieto.matches) {
         if (!fugaz && t > proximaFugaz) {
@@ -496,6 +760,8 @@ export function Cielo() {
     }
 
     medir();
+    // Ni la fugaz ni la constelación aparecen al entrar: esto no viene a saludar.
+    proximaRevelacion = performance.now() + 6000;
     programarFugaz(performance.now());
     arrancar();
 

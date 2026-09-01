@@ -8,7 +8,7 @@ import "@/app/globals.css";
 
 /**
  * Shell compartido por los dos root layouts (ES sin prefijo, EN bajo /en —
- * ver experience-architecture.md §3). Cada grupo de rutas define su propio
+ * ver docs/recorrido.md · Rutas). Cada grupo de rutas define su propio
  * <html lang>, por eso esto no es un layout.tsx: es la pieza que ambos importan.
  */
 export function RootShell({

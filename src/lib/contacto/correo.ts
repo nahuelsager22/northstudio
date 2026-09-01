@@ -22,7 +22,7 @@ import type { Correo, MensajeParaEnviar } from "./tipos";
  * fuera del sitio.
  */
 
-/** Fallbacks hex de la paleta OKLCH (art-direction.md §2). Un cliente de correo no entiende oklch(). */
+/** Fallbacks hex de la paleta OKLCH (docs/sistema-visual.md · Color). Un cliente de correo no entiende oklch(). */
 const PAPEL = {
   bg: "#FAF9F6",
   surface: "#F4F2EE",

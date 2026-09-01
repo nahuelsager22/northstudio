@@ -6,7 +6,7 @@
  *
  * Deliberadamente sin dependencias ni almacenamiento externo: es una defensa
  * proporcional al problema. Su alcance real —una instancia, memoria viva— está
- * documentado en `project-journal.md`: no pretende ser una barrera dura, solo
+ * documentado en `docs/contacto.md`: no pretende ser una barrera dura, solo
  * evitar que un mismo origen dispare envíos en cadena.
  */
 
