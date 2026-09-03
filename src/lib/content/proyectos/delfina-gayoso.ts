@@ -46,7 +46,6 @@ export const delfinaGayoso: Proyecto = {
     { es: "Estrategia y Discovery", en: "Strategy and Discovery" },
     { es: "Arquitectura de experiencia y UX", en: "Experience architecture and UX" },
     { es: "Dirección creativa y de arte", en: "Creative and art direction" },
-    { es: "Identidad digital", en: "Digital identity" },
     {
       es: "Arquitectura técnica e implementación",
       en: "Technical architecture and implementation",
@@ -81,10 +80,10 @@ export const delfinaGayoso: Proyecto = {
       contenido: {
         es: `Delfina comparte una manera de cocinar que se siente simple y cotidiana.
 
-Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro, sin tecnicismos, con la certeza de que cualquiera puede.`,
+Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro y sin tecnicismos, aunque detrás haya oficio.`,
         en: `Delfina shares a way of cooking that feels simple and everyday.
 
-The way she *teaches* makes cooking feel much closer. No rush, no jargon, and the certainty that anyone can.`,
+The way she *teaches* makes cooking feel much closer. No rush and no jargon, even with real craft behind it.`,
       },
     },
     { tipo: "pausa", tamaño: "rest-lg" },
@@ -94,18 +93,13 @@ The way she *teaches* makes cooking feel much closer. No rush, no jargon, and th
       tipo: "dato",
       etiqueta: { es: "En un mismo lugar", en: "All in one place" },
       valor: {
-        es: "Recetas, marcas, contenido y formas de trabajar juntas",
-        en: "Recipes, brands, content, and ways of working together",
+        es: "Contenido, marcas, clases, ebooks y formas de trabajar juntos",
+        en: "Content, brands, classes, ebooks, and ways of working together",
       },
     },
-    {
-      tipo: "texto",
-      contenido: {
-        // Pendiente de revisión con el proyecto terminado: este párrafo se
-        // reescribe cuando estén cerradas las decisiones reales de arte.
-        es: `La dirección de arte viene de una cocina de todos los días: un verde salvia, una serif de trazo fino, fotografía sin estilizar. El mismo tono con el que ella enseña.`,
-        en: `The art direction comes from an everyday kitchen: a sage green, a fine-stroked serif, unstyled photography. The same tone she teaches in.`,
-      },
-    },
+    // El párrafo de dirección de arte se eliminó ("un verde salvia, una serif de
+    // trazo fino, fotografía sin estilizar"): enumeraba decisiones sin decir qué
+    // consiguen, y "fotografía sin estilizar" describe una ausencia. El caso
+    // cierra en el dato, que es lo último que aporta algo.
   ],
 };

@@ -19,8 +19,9 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
  * es lo que hace que el gesto pertenezca a este sitio y no a cualquiera.
  *
  * Ambas figuras se renderizan siempre y el CSS muestra la que corresponde (ver
- * globals.css) — así el servidor no tiene que adivinar el `prefers-color-scheme`
- * del visitante y no hay parpadeo ni desajuste de hidratación.
+ * globals.css) — así el servidor no tiene que adivinar nada y no hay parpadeo ni
+ * desajuste de hidratación. Con Noche como default, la que se ve al entrar es
+ * siempre el sol: el destino que se ofrece es el papel.
  */
 export function ThemeToggle({
   labels,
@@ -32,12 +33,12 @@ export function ThemeToggle({
   function alternar() {
     const root = document.documentElement;
     const explicito = root.getAttribute("data-theme");
+    // Sin atributo explícito se está en Noche: es el default del sitio, no lo
+    // que prefiera el sistema. Preguntárselo al sistema devolvería "papel" para
+    // alguien que está mirando una pantalla oscura, y el primer click no haría
+    // nada visible.
     const actual: Theme =
-      explicito === "papel" || explicito === "noche"
-        ? explicito
-        : window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "noche"
-          : "papel";
+      explicito === "papel" || explicito === "noche" ? explicito : "noche";
 
     setTheme(actual === "papel" ? "noche" : "papel");
   }

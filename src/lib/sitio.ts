@@ -23,6 +23,18 @@ export const urlDelSitio: string = (() => {
   return "http://localhost:3000";
 })();
 
+/**
+ * Dónde encontrar al estudio fuera del formulario. Vive acá y no en los
+ * diccionarios porque no se traduce: un handle y una dirección son la misma
+ * cadena en los dos idiomas, y duplicarlas sería crear dos fuentes de verdad
+ * para un dato que sólo puede tener una.
+ */
+export const redes = {
+  instagram: "northstudio.ar",
+  instagramUrl: "https://instagram.com/northstudio.ar",
+  email: "northstudio@northstudio.com.ar",
+} as const;
+
 function sinBarra(valor: string): string {
   return valor.replace(/\/+$/, "");
 }

@@ -53,10 +53,13 @@ export function SiteNav({
   conIndice?: boolean;
 }) {
   const [alTope, setAlTope] = useState(true);
+  /** Qué superficie está pasando por debajo del encabezado. */
+  const [superficie, setSuperficie] = useState<string | null>(null);
   const [activa, setActiva] = useState<SeccionId | null>(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
   const panel = useRef<HTMLDivElement>(null);
   const disparador = useRef<HTMLButtonElement>(null);
+  const velo = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let pendiente = 0;
@@ -72,6 +75,106 @@ export function SiteNav({
     window.addEventListener("scroll", alScrollear, { passive: true });
     return () => {
       window.removeEventListener("scroll", alScrollear);
+      if (pendiente) cancelAnimationFrame(pendiente);
+    };
+  }, []);
+
+  /**
+   * De qué color es el lugar donde está apoyado el encabezado.
+   *
+   * ~~Antes se buscaba la superficie *pintada* más cercana y se usaba su `--bg`.~~
+   * Sobre una transición no hay ninguna —son doce rem de degradado—, así que la
+   * nav se quedaba con el color del plano anterior y aparecía como una capa
+   * aparte apoyada encima del recorrido. Ese era el problema, y no se arreglaba
+   * con más superficies.
+   *
+   * Ahora cada tramo vertical declara sus cuatro paradas de color (`--z0..--z3`
+   * en globals.css) y acá se evalúa **en qué punto del tramo cae la altura del
+   * encabezado**. Lo que se entrega son las dos paradas que rodean ese punto y
+   * cuánto hay entre ellas; la mezcla la hace `color-mix` en CSS. No hay
+   * aritmética de color en JavaScript: la nav sólo mide dónde está.
+   *
+   * Las paradas son las mismas con las que se dibuja el degradado, así que el
+   * color que calcula la nav y el que se ve en pantalla son una sola definición.
+   */
+  useEffect(() => {
+    /** Dónde se mira: la altura a la que el velo todavía es casi opaco. */
+    const BANDA = 22;
+    /** Las posiciones de las cuatro paradas dentro de una zona. */
+    const PARADAS = [0, 0.55, 0.78, 1];
+    /** Índice seguro: las cuatro posiciones son constantes, el índice no. */
+    const parada = (k: number) => PARADAS[k] ?? 0;
+
+    let pendiente = 0;
+    let zonas: HTMLElement[] = [];
+
+    const recolectar = () => {
+      zonas = Array.from(document.querySelectorAll<HTMLElement>("[data-zona]"));
+    };
+
+    const revisar = () => {
+      if (pendiente) return;
+      pendiente = requestAnimationFrame(() => {
+        pendiente = 0;
+        const nodo = velo.current;
+        if (!nodo) return;
+
+        let zona: HTMLElement | null = null;
+        let avance = 0;
+        for (const candidata of zonas) {
+          const caja = candidata.getBoundingClientRect();
+          if (caja.top <= BANDA && caja.bottom > BANDA && caja.height > 0) {
+            zona = candidata;
+            avance = Math.min(Math.max((BANDA - caja.top) / caja.height, 0), 1);
+          }
+        }
+
+        // Fuera del recorrido —la página de un caso— no hay zonas: el velo cae
+        // al fondo del tema, que es exactamente lo que hay detrás.
+        if (!zona) {
+          nodo.style.removeProperty("--nav-a");
+          nodo.style.removeProperty("--nav-b");
+          nodo.style.removeProperty("--nav-t");
+          setSuperficie(null);
+          return;
+        }
+
+        let i = 0;
+        while (i < PARADAS.length - 2 && avance > parada(i + 1)) i += 1;
+        const tramo = parada(i + 1) - parada(i);
+
+        const estilo = getComputedStyle(zona);
+        nodo.style.setProperty("--nav-a", estilo.getPropertyValue(`--z${i}`).trim());
+        nodo.style.setProperty(
+          "--nav-b",
+          estilo.getPropertyValue(`--z${i + 1}`).trim()
+        );
+        nodo.style.setProperty("--nav-t", String((avance - parada(i)) / tramo));
+
+        // La tinta no se mezcla: salta una vez, a mitad del tramo, con la
+        // transición de color que ya tiene todo el sitio. Un valor intermedio
+        // entre dos tintas opuestas no se lee sobre ninguno de los dos fondos —
+        // el fondo puede ser continuo, el contraste no puede.
+        setSuperficie(
+          (avance < 0.5 ? zona.dataset.tintaA : zona.dataset.tintaB) ??
+            zona.dataset.superficie ??
+            null
+        );
+      });
+    };
+
+    const alRedimensionar = () => {
+      recolectar();
+      revisar();
+    };
+
+    recolectar();
+    revisar();
+    window.addEventListener("scroll", revisar, { passive: true });
+    window.addEventListener("resize", alRedimensionar);
+    return () => {
+      window.removeEventListener("scroll", revisar);
+      window.removeEventListener("resize", alRedimensionar);
       if (pendiente) cancelAnimationFrame(pendiente);
     };
   }, []);
@@ -150,6 +253,7 @@ export function SiteNav({
     <>
       <header
         data-abierto={menuAbierto ? "" : undefined}
+        data-superficie={superficie ?? undefined}
         className={[
           "fixed inset-x-0 top-0 z-20 isolate transition-colors duration-[var(--duration-base)] ease-[var(--ease-out-calm)]",
           // Al tope el encabezado tiene la tinta del lugar; una vez que hay
@@ -162,20 +266,17 @@ export function SiteNav({
         {/*
           El velo.
           La nav no tiene fondo propio ni banda: sería una placa apoyada encima
-          del recorrido. Lo que tiene es el **mismo fondo del lugar disolviéndose**
-          —opaco arriba, nada abajo—, así que hereda la atmósfera sobre la que se
-          apoya en vez de taparla. Lo que pasa por debajo se intuye y no se lee,
-          que era lo que faltaba: sin esto, el verde a sangre del trabajo cruzaba
-          entero por detrás de las palabras.
-          Nada de blur ni de glass: es el color del sitio, nada más.
+          del recorrido. Lo que tiene es el **color exacto que hay detrás en esa
+          altura** disolviéndose hacia abajo, calculado cuadro a cuadro por el
+          efecto de arriba. Así el encabezado pertenece al mismo plano que está
+          cruzando, también en el medio de una transición, y lo que pasa por
+          debajo se intuye sin leerse.
+          Nada de blur ni de glass: es el color del lugar, nada más.
         */}
         <div
+          ref={velo}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[7.5rem]"
-          style={{
-            background:
-              "linear-gradient(to bottom, var(--bg) 0%, color-mix(in oklab, var(--bg) 82%, transparent) 34%, color-mix(in oklab, var(--bg) 38%, transparent) 66%, transparent 100%)",
-          }}
+          className="velo-nav pointer-events-none absolute inset-x-0 top-0 -z-10 h-[7.5rem]"
         />
 
         <div className="mx-auto flex w-full max-w-[92rem] items-center justify-between gap-md px-md py-sm sm:px-xl">

@@ -7,7 +7,32 @@
  */
 
 /*
- * Modo claro — "Papel".
+ * Modo oscuro — "Noche". **Es el tema por defecto del sitio.**
+ *
+ * Antes el tema lo decidía `prefers-color-scheme` y Noche era la mitad que
+ * había que descubrir. Ahora North Studio se abre de noche siempre, y Papel es
+ * una elección. *Lo que se paga:* se deja de respetar la preferencia del
+ * sistema, que es una decisión de identidad tomada con el costo sobre la mesa —
+ * el toggle sigue estando y lo que el visitante elige se recuerda.
+ *
+ * L 0.115 con una traza fría (croma 0.018, hacia el azul). A 0.18 no era una
+ * noche: era el gris de una interfaz oscura, y sobre un gris las estrellas no
+ * tienen dónde brillar. La profundidad de un cielo no viene de apagar la luz
+ * sino de bajar el fondo hasta que lo poco que brilla se note.
+ *
+ * No es negro absoluto a propósito: `#000` es vacío, no noche. El croma frío es lo que lo mantiene atmósfera y no ausencia.
+ */
+:root {
+  --bg: oklch(0.115 0.018 265);
+  --surface: oklch(0.155 0.018 265);
+  --ink: oklch(0.93 0.006 85);
+  --muted: oklch(0.70 0.010 258);
+  --hairline: oklch(0.26 0.014 262);
+  --polar: oklch(0.74 0.07 250);
+}
+
+/*
+ * Modo claro — "Papel". Ya no es el default: sólo entra si el visitante lo pide.
  *
  * El fondo bajó de L 0.98 a 0.955. A 0.98 el papel era nieve al sol: en una
  * pantalla brillante deslumbraba, y un lugar que deslumbra no se puede mirar
@@ -16,41 +41,6 @@
  * lo que cambió es cuánta luz devuelve. `surface` y `hairline` bajan con él para
  * conservar las mismas distancias: el sistema se mueve entero o no se mueve.
  */
-:root {
-  --bg: oklch(0.955 0.006 85);
-  --surface: oklch(0.935 0.006 85);
-  --ink: oklch(0.22 0.008 60);
-  --muted: oklch(0.46 0.006 60);
-  --hairline: oklch(0.875 0.006 82);
-  --polar: oklch(0.55 0.06 250);
-}
-
-/*
- * Modo oscuro — "Noche".
- *
- * Bajó de L 0.18 a 0.115 y ganó una traza fría (croma 0.018, hacia el azul).
- * A 0.18 no era una noche: era el gris de una interfaz oscura, y sobre un gris
- * las estrellas no tienen dónde brillar. La profundidad de un cielo no viene de
- * apagar la luz sino de bajar el fondo hasta que lo poco que brilla se note.
- *
- * No es negro absoluto a propósito: `#000` es vacío, no noche. El croma frío es lo que lo mantiene atmósfera y no ausencia.
- *
- * `muted` sube un punto para compensar: sobre un fondo más profundo, el mismo
- * gris se hunde. La hairline baja, porque una línea que en un gris se leía como
- * susurro sobre este fondo se leía como raya.
- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: oklch(0.115 0.018 265);
-    --surface: oklch(0.155 0.018 265);
-    --ink: oklch(0.93 0.006 85);
-    --muted: oklch(0.70 0.010 258);
-    --hairline: oklch(0.26 0.014 262);
-    --polar: oklch(0.74 0.07 250);
-  }
-}
-
-/* Mecanismo de toggle (sin UI todavía): un data-theme explícito gana sobre el sistema. */
 :root[data-theme="papel"] {
   --bg: oklch(0.955 0.006 85);
   --surface: oklch(0.935 0.006 85);
@@ -149,6 +139,13 @@
      Sin esto, la sección aterriza debajo de la nav fija. */
   --spacing-anchor: 7rem;
 
+  /* El alto real del encabezado fijo. Existe porque hay dos escenas que ocupan
+     la pantalla entera (el formulario y el pie) y "centrado en 100svh" no es lo
+     mismo que "centrado en lo que se ve": la nav flota sobre los primeros
+     3.5rem, así que una composición centrada en el viewport queda alta. Se
+     compensa como padding superior de la escena, no como margen del contenido. */
+  --spacing-nav: 3.5rem;
+
   /* Motion — duraciones lentas y una sola curva ease-out sin rebote */
   --duration-fast: 400ms;
   --duration-base: 550ms;
@@ -165,7 +162,7 @@
   }
 
   html {
-    color-scheme: light dark;
+    color-scheme: dark light;
     /* `auto` a propósito: el suavizado del recorrido lo administra Lenis
        (src/components/scroll-suave.tsx). Dejar aquí `smooth` haría que un ancla
        se animara dos veces —el navegador y Lenis peleando por el mismo scroll—
@@ -218,22 +215,15 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.028;
+    opacity: 0.03;
+    mix-blend-mode: screen;
     transition: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
   }
 
   /* En noche el grano tiene que aclarar, no oscurecer: sobre un fondo casi negro
-     un grano oscuro no existe. */
-  /* Sobre el negro profundo, el mismo grano en `screen` levanta el fondo y le
-     roba contraste a las estrellas. Menos grano, más cielo. */
-  @media (prefers-color-scheme: dark) {
-    body::before {
-      opacity: 0.03;
-      mix-blend-mode: screen;
-    }
-  }
-
+     un grano oscuro no existe. Y como Noche es el default, ese tratamiento se
+     declara arriba; Papel lo revierte. */
   :root[data-theme="papel"] body::before {
     opacity: 0.028;
     mix-blend-mode: normal;
@@ -418,18 +408,9 @@
   display: none;
 }
 
-[data-theme-target="noche"] {
+/* Por defecto se está en Noche, así que el destino que se ofrece es Papel. */
+[data-theme-target="papel"] {
   display: inline-flex;
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-theme-target="noche"] {
-    display: none;
-  }
-
-  [data-theme-target="papel"] {
-    display: inline;
-  }
 }
 
 :root[data-theme="papel"] [data-theme-target="noche"],
@@ -446,18 +427,6 @@
  * capa no tenga que preguntarle a React en qué modo está.
  */
 [data-cielo] {
-  opacity: 0;
-  visibility: hidden;
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-cielo] {
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-:root[data-theme="noche"] [data-cielo] {
   opacity: 1;
   visibility: visible;
 }
@@ -470,6 +439,350 @@
 :root[data-theme="papel"] [data-theme-target="papel"],
 :root[data-theme="noche"] [data-theme-target="noche"] {
   display: none;
+}
+
+/*
+ * La atmósfera del recorrido — un descenso, no tres bloques.
+ *
+ * ~~Antes: tres superficies puestas una debajo de otra (noche → papel blanco →
+ * arcilla), cada una con su paleta y un degradado plano o un filo entre ellas.~~
+ *
+ * El problema medible no era ninguno de los tres colores: era que **no había
+ * relación entre ellos**. Matices 265 → 85 → 45, luminancias 0.115 → 0.93 →
+ * 0.33; un papel casi blanco y neutro entre dos planos con temperatura. Tres
+ * decisiones que no se conocían, y por eso el recorrido se leía como una pila de
+ * secciones y no como una página.
+ *
+ * Ahora hay **una sola composición vertical**, y es un lugar visto desde el mismo
+ * sitio a lo largo del día:
+ *
+ *     cielo  →  (brasa)  →  arena  →  (terracota)  →  tierra  →  (brasa)  →  cielo
+ *
+ * Lo que conecta los planos son los pasos, y los pasos son color: entre la noche
+ * y la arena hay un amanecer, entre la arena y la arcilla hay una terracota,
+ * entre la arcilla y la noche vuelve a haber brasa. Ninguna zona limita con otra
+ * sin que el color las presente primero.
+ *
+ * Tres decisiones detrás de eso:
+ *
+ * 1. **El blanco se fue.** El plano claro dejó de ser el papel del tema (neutro,
+ *    L 0.93, matiz 85) y pasó a ser **arena**: la misma familia cálida de la
+ *    arcilla, aclarada. Arena y tierra son ahora el mismo color a dos alturas —
+ *    la relación cromática que faltaba entre el medio y el final.
+ * 2. **La arena no cambia con el tema, igual que la tierra.** La mitad de abajo
+ *    del recorrido es material del estudio; el cielo es lo único que el tema
+ *    gobierna. Antes el plano del medio era "lo opuesto al cielo" y se daba
+ *    vuelta con él: dos superficies dependientes del tema para una sola idea.
+ * 3. **El recorrido cierra donde abrió.** El pie vuelve al cielo. Ver
+ *    `components/pie.tsx`.
+ *
+ * **Una superficie sigue siendo una paleta chica, no un color de fondo.** Cada
+ * bloque redeclara los seis tokens (y su espejo `--color-*`, porque
+ * `@theme inline` resuelve `--color-ink: var(--ink)` en `:root` y lo que se
+ * hereda es el valor ya resuelto). Por eso un plano de arena vive dentro de un
+ * sitio de noche sin que ninguna clase de texto sepa dónde está.
+ */
+
+/* El cielo: el fondo del tema. No se pinta — se deja ver, para que el canvas de
+   estrellas quede detrás. Existe como superficie para que la nav y los tokens
+   sepan nombrarlo. */
+[data-superficie="cielo"] {
+  --bg: oklch(0.115 0.018 265);
+  --surface: oklch(0.155 0.018 265);
+  --ink: oklch(0.93 0.006 85);
+  --muted: oklch(0.70 0.010 258);
+  --hairline: oklch(0.26 0.014 262);
+  --polar: oklch(0.74 0.07 250);
+
+  --color-bg: oklch(0.115 0.018 265);
+  --color-surface: oklch(0.155 0.018 265);
+  --color-ink: oklch(0.93 0.006 85);
+  --color-muted: oklch(0.70 0.010 258);
+  --color-hairline: oklch(0.26 0.014 262);
+  --color-polar: oklch(0.74 0.07 250);
+}
+
+:root[data-theme="papel"] [data-superficie="cielo"] {
+  --bg: oklch(0.955 0.006 85);
+  --surface: oklch(0.935 0.006 85);
+  --ink: oklch(0.22 0.008 60);
+  --muted: oklch(0.46 0.006 60);
+  --hairline: oklch(0.875 0.006 82);
+  --polar: oklch(0.55 0.06 250);
+
+  --color-bg: oklch(0.955 0.006 85);
+  --color-surface: oklch(0.935 0.006 85);
+  --color-ink: oklch(0.22 0.008 60);
+  --color-muted: oklch(0.46 0.006 60);
+  --color-hairline: oklch(0.875 0.006 82);
+  --color-polar: oklch(0.55 0.06 250);
+}
+
+/*
+ * La arena — el momento de luz del recorrido, y la arcilla vista de día.
+ *
+ * L 0.905 con croma 0.028 en matiz 66: no es blanco ni papel neutro. Tiene la
+ * temperatura de la tierra (matiz 45) corrida apenas hacia la luz, así que
+ * cuando la arcilla llega después no aparece como un color nuevo sino como el
+ * mismo color en sombra. La tinta es un pardo oscuro y no un negro: sobre arena,
+ * un gris neutro se ve sucio.
+ */
+[data-superficie="arena"] {
+  --bg: oklch(0.905 0.028 66);
+  --surface: oklch(0.875 0.030 66);
+  --ink: oklch(0.235 0.020 50);
+  --muted: oklch(0.445 0.022 52);
+  --hairline: oklch(0.815 0.030 64);
+  --polar: oklch(0.48 0.085 250);
+
+  --color-bg: oklch(0.905 0.028 66);
+  --color-surface: oklch(0.875 0.030 66);
+  --color-ink: oklch(0.235 0.020 50);
+  --color-muted: oklch(0.445 0.022 52);
+  --color-hairline: oklch(0.815 0.030 64);
+  --color-polar: oklch(0.48 0.085 250);
+}
+
+/* La tierra — el suelo donde se habla. El mismo color en los dos temas. */
+[data-superficie="tierra"] {
+  --bg: oklch(0.33 0.068 45);
+  --surface: oklch(0.38 0.066 45);
+  --ink: oklch(0.96 0.014 80);
+  --muted: oklch(0.80 0.035 62);
+  --hairline: oklch(0.45 0.055 48);
+  --polar: oklch(0.88 0.05 250);
+
+  --color-bg: oklch(0.33 0.068 45);
+  --color-surface: oklch(0.38 0.066 45);
+  --color-ink: oklch(0.96 0.014 80);
+  --color-muted: oklch(0.80 0.035 62);
+  --color-hairline: oklch(0.45 0.055 48);
+  --color-polar: oklch(0.88 0.05 250);
+}
+
+.superficie {
+  position: relative;
+  background-color: var(--bg);
+  /* Y la tinta, no sólo el fondo: `body` resolvió su `color` con los tokens de
+     la raíz, así que cualquier texto que no declare el suyo entraría a la
+     superficie con la tinta del tema y no con la de la superficie. */
+  color: var(--color-ink);
+}
+
+/*
+ * Las zonas — cómo la nav sabe de qué color es el lugar donde está apoyada.
+ *
+ * Cada tramo vertical del recorrido (una superficie, una transición, el cielo
+ * abierto del umbral) declara **cuatro paradas de color**: el que tiene arriba,
+ * dos intermedias y el que tiene abajo. Son las mismas paradas con las que se
+ * dibuja el degradado, así que el modelo que lee la nav y lo que se ve en
+ * pantalla son la misma cosa y no dos definiciones que hay que mantener juntas.
+ *
+ * En un plano liso las cuatro son iguales y no hace falta escribir nada: el
+ * valor por defecto es su propio fondo.
+ */
+[data-zona] {
+  --z0: var(--bg);
+  --z1: var(--bg);
+  --z2: var(--bg);
+  --z3: var(--bg);
+}
+
+/*
+ * El paso de una zona a otra.
+ *
+ * ~~Antes: un degradado recto de doce rem hacia el color siguiente, o un filo
+ * entre dos planos opacos.~~ El degradado recto entre dos colores lejanos pasa
+ * por el punto muerto que hay entre ellos, y el filo es literalmente el corte
+ * que se quería evitar. Los dos leían como "acá termina una sección".
+ *
+ * Ahora una transición tiene dos capas y las dos son composición:
+ *
+ * 1. **La atmósfera.** Un degradado de cuatro paradas que no va directo: pasa
+ *    por un intermedio cálido —brasa, terracota— que es el que hace que los dos
+ *    planos parezcan pertenecer a la misma escena. Es lo que faltaba: dos
+ *    colores se relacionan por lo que hay entre ellos.
+ * 2. **La onda.** El plano siguiente no entra como una línea recta: entra como
+ *    una curva asimétrica que lo sube dentro del anterior. Es la idea prestada
+ *    del sitio de Delfina, y acá tiene un motivo propio — un horizonte no es
+ *    horizontal.
+ *
+ * La regla de composición no cambió: **el paso ocurre dentro del silencio entre
+ * dos momentos, nunca cruzando una línea de texto.** La transición *es* ese
+ * silencio ahora — un bloque propio en el flujo, no el padding de nadie— y por
+ * eso cada momento puede empezar en su contenido y un ancla sigue aterrizando
+ * bien.
+ */
+.transicion {
+  position: relative;
+  /* Un píxel montada sobre el plano anterior. El borde entre dos cajas puede
+     caer en una fracción de píxel (medido: 847.30) y entonces las dos lo pintan
+     a medias: por esa décima se ve el fondo del documento, que es la noche, como
+     una línea oscura cruzando la arena. Como la primera parada del degradado es
+     el color del plano de arriba, montarlo no tapa nada. */
+  margin-top: -1px;
+  height: var(--spacing-4xl);
+  background-repeat: no-repeat;
+  /* Las cuatro paradas, en las mismas posiciones que lee la nav: el degradado
+     que se ve y el modelo con el que el encabezado calcula su color son una
+     sola definición. La última llega al color de destino antes del borde, así
+     que la onda recorta una forma sobre un fondo que ya se le está pareciendo
+     —el filo queda nítido en la cresta y se disuelve en los valles— y en el
+     borde inferior no hay ningún salto que corregir. */
+  background-image: linear-gradient(
+    to bottom,
+    var(--g0) 0%,
+    var(--z1) 55%,
+    var(--z2) 78%,
+    var(--z3) 100%
+  );
+}
+
+@media (width >= 48rem) {
+  .transicion {
+    height: var(--spacing-5xl);
+  }
+}
+
+/* La onda va apoyada en el borde inferior y desbordada un píxel: entre dos
+   colores llenos, medio píxel de redondeo se ve como una línea. */
+.transicion-onda {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  display: block;
+  width: 100%;
+  height: clamp(2.5rem, 6vw, 5rem);
+  fill: var(--z3);
+}
+
+/*
+ * Del cielo a la arena: el amanecer.
+ *
+ * La primera parada del degradado es transparente y no el color del cielo, y esa
+ * es la diferencia entre que las estrellas **se apaguen** y que se tapen: el
+ * canvas está fijo detrás, y una atmósfera que se va cerrando encima es
+ * exactamente lo que hace un amanecer. Para la nav, en cambio, el color de esa
+ * primera parada es el del cielo: es lo que se ve.
+ */
+[data-transicion="arena"] {
+  --z0: var(--bg);
+  --g0: transparent;
+  --z1: oklch(0.28 0.055 42);
+  --z2: oklch(0.60 0.068 52);
+  --z3: oklch(0.905 0.028 66);
+}
+
+/* En Papel no hay noche que abrir: el paso es un papel entibiándose. */
+:root[data-theme="papel"] [data-transicion="arena"] {
+  --z1: oklch(0.935 0.016 74);
+  --z2: oklch(0.915 0.024 70);
+}
+
+/* De la arena a la tierra: el mismo color bajando de luz, por una terracota. */
+[data-transicion="tierra"] {
+  --z0: oklch(0.905 0.028 66);
+  --g0: var(--z0);
+  --z1: oklch(0.78 0.045 58);
+  --z2: oklch(0.545 0.072 50);
+  --z3: oklch(0.33 0.068 45);
+}
+
+/* De la tierra al cielo: el atardecer que cierra el recorrido donde abrió. */
+[data-transicion="cielo"] {
+  --z0: oklch(0.33 0.068 45);
+  --g0: var(--z0);
+  --z1: oklch(0.24 0.050 38);
+  --z2: oklch(0.175 0.035 30);
+  --z3: var(--bg);
+}
+
+:root[data-theme="papel"] [data-transicion="cielo"] {
+  --z1: oklch(0.62 0.045 55);
+  --z2: oklch(0.90 0.020 66);
+}
+
+/*
+ * El velo de la nav — el encabezado pertenece al plano que está cruzando.
+ *
+ * ~~Antes: el velo se pintaba con el `--bg` de la superficie pintada más cercana.~~
+ * Sobre una transición —doce rem de amanecer— no había ninguna, así que la nav
+ * conservaba el color del plano anterior y se veía como una capa aparte apoyada
+ * encima del recorrido. Que era, exactamente, el problema.
+ *
+ * Ahora `site-nav.tsx` evalúa el color de la zona **en la altura del encabezado**
+ * y lo entrega en tres valores: las dos paradas que rodean ese punto y cuánto hay
+ * entre ellas. El `color-mix` se hace acá, en CSS, así que no hay aritmética de
+ * color en JavaScript: la nav sólo mide dónde está.
+ *
+ * El velo no es una banda ni un vidrio: es ese color disolviéndose hacia abajo.
+ * Lo que pasa por debajo se intuye y no se lee.
+ */
+.velo-nav {
+  --nav-a: var(--bg);
+  --nav-b: var(--bg);
+  --nav-t: 0;
+  --nav-fondo: color-mix(
+    in oklab,
+    var(--nav-b) calc(var(--nav-t) * 100%),
+    var(--nav-a)
+  );
+
+  background-image: linear-gradient(
+    to bottom,
+    var(--nav-fondo) 0%,
+    color-mix(in oklab, var(--nav-fondo) 82%, transparent) 34%,
+    color-mix(in oklab, var(--nav-fondo) 38%, transparent) 66%,
+    transparent 100%
+  );
+}
+
+/*
+ * Las dos escenas que ocupan la pantalla.
+ *
+ * El formulario y el pie dejaron de ser secciones comprimidas entre otras: cada
+ * una ocupa una pantalla propia y se compone dentro de ella. `svh` y no `vh`
+ * porque en un teléfono `vh` mide la ventana con la barra del navegador
+ * retraída: una escena de `100vh` empieza recortada y "una pantalla completa"
+ * deja de serlo justo donde más se nota.
+ *
+ * El `padding-top` es la otra mitad: centrar en `100svh` centra respecto de la
+ * ventana, no de lo que se ve, y la nav flota sobre los primeros 3.5rem. Sin
+ * esta compensación la composición queda alta — que es la diferencia entre tener
+ * `height: 100vh` y estar realmente centrado.
+ */
+.escena {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  /* Toda la compensación vive acá y no en el contenido: la escena centra en lo
+     que se ve, no en la ventana. El aire de arriba lleva el alto de la nav
+     sumado, así que el centro óptico baja media nav — que es exactamente lo que
+     hacía falta para que no quedara alto. Una escena no lleva padding vertical
+     propio: cualquier valor asimétrico que le sumen la descentra. Y como
+     `.escena` vive fuera de toda capa, le gana a cualquier utilidad de padding
+     vertical que se le agregue después — a propósito: el centrado de una escena
+     no se rompe por descuido. */
+  padding-top: calc(var(--spacing-nav) + var(--spacing-xl));
+  padding-bottom: var(--spacing-xl);
+}
+
+/* En una pantalla chica el mismo aire deja de ser aire y empieza a empujar el
+   contenido fuera de la pantalla: una escena que no entra deja de ser una
+   escena. Los milímetros se agrandan recién cuando hay lugar. */
+@media (width >= 48rem) {
+  .escena {
+    padding-top: calc(var(--spacing-nav) + var(--spacing-2xl));
+    padding-bottom: var(--spacing-2xl);
+  }
+}
+
+/* Una escena completa aterriza a ras: el retiro que necesita una sección normal
+   (para no quedar debajo de la nav) acá dejaría siete rem de la zona anterior
+   asomando arriba. La escena ya se retira sola, por dentro. */
+.escena[id] {
+  scroll-margin-top: 0;
 }
 
 /* Guard global: honrar prefers-reduced-motion es la forma más literal de prestar atención (art-direction §4.3) */

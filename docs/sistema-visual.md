@@ -63,7 +63,26 @@ Paleta silenciosa en OKLCH, seis tokens, dos temas compuestos por separado (no u
 | `hairline` | `oklch(0.875 0.006 82)` | `oklch(0.26 0.014 262)` |
 | `polar` | `oklch(0.55 0.06 250)` | `oklch(0.74 0.07 250)` |
 
-- **Sin blanco ni negro puros.** `#FFF` es la perfección clínica y `#000` es vacío, no noche.
+- **Noche es el tema por defecto.** El sitio se abre de noche siempre y Papel es una elección, que se recuerda. Ya no manda `prefers-color-scheme`: es una decisión de identidad tomada con el costo sobre la mesa —se deja de respetar la preferencia del sistema— porque el cielo era la mitad de la atmósfera y sólo lo veía quien tuviera el sistema en oscuro.
+- **El recorrido es una atmósfera, no un fondo.** El sitio no tiene un color de fondo ni tres puestos uno debajo del otro: tiene **un descenso de color y una vuelta**, y ese descenso es el ritmo.
+
+  ```
+  cielo  →  (brasa)  →  arena  →  (terracota)  →  tierra  →  (brasa)  →  cielo
+  ```
+
+  Es un lugar visto desde el mismo sitio a lo largo del día: se abre de noche, amanece, se pisa tierra y vuelve a caer la noche.
+
+- **Lo que conecta dos planos es lo que hay entre ellos.** Ninguna zona limita con otra sin que un color intermedio las presente primero. Un degradado recto entre dos colores lejanos pasa por el punto muerto que hay entre ellos, y ese punto muerto es exactamente lo que se lee como corte. Las brasas y la terracota de las transiciones no son decoración: son la relación.
+- **Las tres superficies.** `cielo` es el fondo del tema (con estrellas si es Noche) y sostiene el umbral, el trabajo **y el pie**; `arena` —`oklch(0.905 0.028 66)`— sostiene el estudio; `tierra` —`oklch(0.33 0.068 45)`— sostiene la conversación. **Arena y tierra son iguales en los dos temas:** la mitad de abajo del recorrido es material del estudio y el tema gobierna sólo el cielo.
+- **El plano claro es arena y no papel.** Es la arcilla aclarada, no un blanco neutro: arena y tierra son el mismo color a dos alturas. Un claro neutro entre dos planos con temperatura es el bloque que no pertenece a nada.
+- **Una superficie no es un color de fondo: es una paleta chica.** Cada bloque `[data-superficie]` redeclara los seis tokens (y su espejo `--color-*`, porque `@theme inline` resuelve `--color-ink: var(--ink)` en `:root` y lo que se hereda es el valor ya resuelto). Por eso un plano de arena vive dentro de un sitio de noche sin que ninguna clase de texto sepa dónde está.
+- **Una transición es una pieza, no un borde.** `components/transicion.tsx`: un bloque propio en el flujo con dos capas —la atmósfera (un degradado de cuatro paradas que pasa por el intermedio cálido) y la onda (una curva asimétrica que sube el plano siguiente dentro del anterior)—. Un horizonte no es horizontal, y una recta a todo el ancho de la ventana es lo que hace que un cambio de fondo se lea como el final de un bloque. Las curvas se alternan: la misma onda tres veces sería un separador.
+- **El cambio de plano ocurre en el silencio, nunca cruzando una línea de texto.** La transición **es** ese silencio: no se le suma al `padding-bottom` de nadie, lo reemplaza. Por eso cada momento vuelve a empezar en su contenido y un ancla sigue aterrizando bien.
+- **Del cielo se sale por transparencia.** La primera parada del amanecer es `transparent` y no el color del cielo: el canvas de estrellas está fijo detrás, y una atmósfera que se cierra encima las **apaga** en vez de taparlas.
+- **La nav calcula el color que tiene detrás, cuadro a cuadro.** Cada tramo declara sus cuatro paradas (`--z0..--z3`) y el encabezado evalúa en qué punto del tramo cae su altura; la mezcla la hace `color-mix` en CSS. Las paradas son las mismas con las que se dibuja el degradado, así que el color que calcula la nav y el que se ve son una sola definición. La tinta es lo único que no se mezcla: salta una vez, a mitad del tramo — el fondo puede ser continuo, el contraste no puede.
+- **Los planos van lisos.** Se probó darle grano a cada superficie y la junta entre dos secciones del mismo color se veía: cada una teje el ruido desde su propio origen. El material sigue en el grano del `body`; sobre un campo de color pleno la riqueza la da el color.
+- **Dos escenas ocupan una pantalla: el formulario y el pie** (`.escena`). `100svh` y no `100vh` —en un teléfono `vh` mide la ventana con la barra retraída—, y el alto de la nav descontado del centro óptico: centrar en la ventana no es centrar en lo que se ve.
+- **Sin blanco ni negro puros.**- **Sin blanco ni negro puros.**- **Sin blanco ni negro puros.** `#FFF` es la perfección clínica y `#000` es vacío, no noche.
 - **El acento polar es orientación, no color de marca.** Aparece en exactamente dos lugares: el anillo de foco y el punto que marca la sección activa en la nav. Si se vuelve frecuente deja de ser la estrella.
 - **Los seis tokens se mueven juntos o no se mueven.** Bajar el fondo sin bajar `surface` y `hairline` cambia las distancias del sistema, no su luz.
 - **La transición de tema alcanza a todo lo que cambia de valor con el tema** (`background-color`, `color`, `border-color`, `outline-color`, `fill`), y explícitamente **no** al anillo de foco: un indicador que tarda 400 ms llega tarde para quien navega con teclado.

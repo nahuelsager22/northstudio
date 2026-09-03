@@ -166,7 +166,7 @@ export function ConversacionFormulario({
                 // autocompletado. Es lo que le da a un teléfono el teclado con
                 // arroba, y quitarlo sí sería fricción real.
                 type="email"
-                className="mt-2xl sm:mt-0"
+                className="mt-xl sm:mt-0"
               />
             </div>
 
@@ -314,7 +314,7 @@ function CampoProyecto({
   }, []);
 
   return (
-    <div className="group mt-2xl">
+    <div className="group mt-xl sm:mt-2xl">
       <label htmlFor={id} className={ETIQUETA}>
         {etiqueta}
       </label>

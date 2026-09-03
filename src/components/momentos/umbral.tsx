@@ -19,7 +19,14 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
  */
 export function Umbral({ dict }: { dict: Dictionary }) {
   return (
-    <section className="flex min-h-svh flex-col justify-center px-md pt-[16svh] pb-rest sm:px-xl">
+    // Sin `.superficie`: el cielo no se pinta, se deja ver — el canvas de
+    // estrellas está fijo detrás. `data-zona` es lo que le dice a la nav de qué
+    // color es el lugar donde está apoyada (globals.css).
+    <section
+      data-zona
+      data-superficie="cielo"
+      className="flex min-h-svh flex-col justify-center px-md pt-[16svh] pb-rest sm:px-xl"
+    >
       <div className="mx-auto w-full max-w-[92rem]">
         <div className="md:ml-[8%]">
           {/* La recepción se marca por unidad y no por bloque: la firma y la

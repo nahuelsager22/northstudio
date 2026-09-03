@@ -3,6 +3,7 @@ import { SiteNav } from "@/components/site-nav";
 import { RevealObserver } from "@/components/reveal-observer";
 import { ScrollSuave } from "@/components/scroll-suave";
 import { Cielo } from "@/components/cielo";
+import { Pie } from "@/components/pie";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/locales";
 
@@ -41,6 +42,11 @@ export function SiteShell({
           tema en cualquier punto del recorrido tiene que revelarlo igual. */}
       <Cielo />
       <main className="relative">{children}</main>
+      {/* El pie es del lugar entero, no de una ruta: un caso también termina
+          en algún lado. Y como cierra volviendo al cielo, no necesita saber qué
+          había arriba: en el recorrido llega por una transición, y en un caso
+          —que transcurre entero bajo el cielo— simplemente continúa. */}
+      <Pie dict={dict} />
       <RevealObserver />
       <ScrollSuave />
     </>

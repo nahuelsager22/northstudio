@@ -16,6 +16,7 @@ El orden importa y es el resultado de una corrección: **primero se muestra, des
 | 2 | El trabajo | `momentos/trabajo.tsx` | **Impacto** | `#trabajo` |
 | 3 | El estudio | `momentos/estudio.tsx` | Respiración | `#estudio` |
 | 4 | La conversación | `momentos/conversacion.tsx` | Cierre | `#contacto` |
+| — | El pie | `components/pie.tsx` | Colofón | — |
 
 **① El umbral.** Pantalla completa, la firma completa y una línea que dice qué hace el estudio. La firma no está centrada ni arriba: se apoya por debajo del centro óptico y desplazada del margen, así entrar es bajar la vista. La transición al momento siguiente es el vacío que sigue — ni flecha ni "scroll para descubrir". Para que ese vacío se lea como decisión y no como final, la página tiene que ser *visiblemente* más alta que la ventana.
 
@@ -31,11 +32,29 @@ Si no hay proyectos publicados, el momento se contrae a una línea honesta, **si
 
 **③ El estudio.** Cinco tiempos y ninguna etiqueta: tesis, puente, qué se hace, colofón de lo que se construye, y remate. Llega **después** del trabajo a propósito — una frase sobre uno mismo se sostiene cuando confirma algo que el visitante ya vio, y suena a promesa cuando lo antecede.
 
-**④ La conversación.** Invitación de una línea y el formulario. Vuelve al margen del umbral: el recorrido cierra donde abrió. Después del formulario no hay nada — sin footer de enlaces, sin "seguinos".
+**④ La conversación.** Invitación de una línea y el formulario, en una **escena de una pantalla**: contenido centrado, sin restos del momento anterior ni asomo del pie. Dejó de estar comprimida entre dos secciones, que era lo que le sacaba el peso al pico emocional del arco.
 
-**Un momento más, en ruta propia: un proyecto por dentro.** Ver `docs/contenido.md`.
+**El pie.** Otra escena de una pantalla, y **vuelve al cielo**: el recorrido abre bajo las estrellas y cierra bajo las mismas. Se compone al centro —el único momento centrado de un sitio construido sobre márgenes asimétricos, y por eso se lee como cierre— con la jerarquía de un colofón: dos rótulos chicos en versalitas, la firma grande en el medio, mucho aire entre las tres. Instagram y el correo van cada uno debajo de la palabra que lo nombra: son el valor de un rótulo, no una línea de contacto suelta. Sigue sin haber "seguinos", menú de enlaces ni copyright.
 
----
+### El descenso
+
+El recorrido no cambia de fondo: **desciende**. El detalle del sistema está en `docs/sistema-visual.md`; acá, qué zona es cada cosa y en qué orden llegan.
+
+| Zona | Superficie |
+|---|---|
+| Umbral y trabajo | `cielo` — el fondo del tema, con estrellas si es Noche |
+| *transición* | el amanecer: brasa, y la arena sube por una onda |
+| El estudio | `arena` — la arcilla aclarada, igual en los dos temas |
+| *transición* | terracota, y la arcilla sube por una onda |
+| La conversación | `tierra` — una escena de una pantalla |
+| *transición* | brasa otra vez, y vuelve el cielo |
+| El pie | `cielo` — otra escena de una pantalla, con estrellas |
+
+Las transiciones se declaran en la portada (`app/(es)/page.tsx`), en el orden del recorrido y no dentro de cada momento: una transición pertenece a los dos lados y a ninguno. **Cada una es el silencio entre dos momentos**, así que las secciones que la rodean terminan y empiezan en su contenido.
+
+El trabajo abre con el título de su sección ("Con quién trabajamos") y el proyecto vive adentro: el título es más chico que el nombre de la persona, porque la sección presenta y la persona protagoniza.
+
+La página de un caso transcurre entera bajo el cielo. Como el pie también cierra en el cielo, ahí no hay transición ninguna: continúa.
 
 ## 2. Navegación
 

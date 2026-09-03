@@ -25,34 +25,18 @@ const lineaUmbral: Segmento[] = [
 ];
 
 /**
- * El estudio — cinco tiempos.
+ * El estudio — cuatro tiempos.
  *
- * La tesis, el puente, qué se hace, qué se construye y el remate. El salto de la
- * tesis a "sitios web pensados desde cero" era abrupto: una frase sobre personas
- * seguida de una sobre entregables, sin nada que las una. El puente y el remate
- * existen para eso, y de paso le devuelven densidad a la mitad de atrás del
- * recorrido, que había quedado más vacía que calma.
- *
- * Sobre cómo están escritos: la idea de que la identidad no es una capa visual
- * sino coherencia se dice **desde el lado de la persona** —cómo escribís, qué
- * mostrás, cuánto espacio dejás— y no desde el lado del oficio. Nombrar logo y
- * paleta para decir que no alcanzan sería el estudio hablando de diseño, y de
- * paso un golpe a cómo trabajan otros.
+ * La tesis, qué se hace, qué se construye y el remate. **El puente se eliminó**
+ * ("eso se nota en cómo escribís, en qué elegís mostrar…"): explicaba con tres
+ * ejemplos una idea que la tesis ya deja entender, y explicar de más suena
+ * rebuscado. El salto de la tesis a "sitios web pensados desde cero" queda más
+ * seco a propósito — la tesis se sostiene sin nota al pie.
  */
 const pasajeEstudio: Segmento[] = [
   { texto: "Lo que vuelve memorable a alguien es " },
   { texto: "cómo vive", enfasis: true },
   { texto: " lo que hace." },
-];
-
-/** El puente: qué es una identidad, dicho sin nombrar una sola pieza de diseño. */
-const puenteEstudio: Segmento[] = [
-  {
-    texto:
-      "Eso se nota en cómo escribís, en qué elegís mostrar, en cuánto espacio dejás. Un sitio se construye igual: la identidad no está en una pieza, está en que ",
-  },
-  { texto: "todo diga lo mismo", enfasis: true },
-  { texto: "." },
 ];
 
 const cierreEstudio: Segmento[] = [
@@ -63,8 +47,8 @@ const cierreEstudio: Segmento[] = [
 
 /** El remate: la filosofía, sin volver a enumerar el proceso. */
 const remateEstudio: Segmento[] = [
-  { texto: "Cada decisión busca lo mismo: que la experiencia se sienta tan " },
-  { texto: "propia", enfasis: true },
+  { texto: "Buscamos que la experiencia se sienta tan " },
+  { texto: "única", enfasis: true },
   { texto: " como la persona que representa." },
 ];
 
@@ -116,11 +100,18 @@ export const es = {
   trabajo: {
     nombre: "Trabajo",
     vacio: "El primer proyecto está por publicarse.",
+    /**
+     * El título de la sección, arriba de los proyectos. No dice "Clientes" —eso
+     * los convierte en una categoría— ni "Confían en North Studio", que es
+     * pedirle al visitante un juicio que le toca a él. Es una frase y no una
+     * etiqueta, y va más chica que el nombre de la persona: la sección
+     * presenta, la persona protagoniza.
+     */
+    clientes: "Con quién trabajamos",
   },
   estudio: {
     nombre: "El estudio",
     pasaje: pasajeEstudio,
-    puente: puenteEstudio,
     cierre: cierreEstudio,
     remate: remateEstudio,
     /**
@@ -172,6 +163,20 @@ export const es = {
       limite: "Ya llegaron tus mensajes. Dejá pasar unos minutos.",
       envio: "Algo falló de nuestro lado. Probá de nuevo en un rato.",
     },
+  },
+  /**
+   * El pie. Durante todo el proyecto el recorrido cerró sin nada después del
+   * formulario, y estaba bien argumentado: el último silencio cerraba como se
+   * cierra un libro. Pero un sitio de un estudio que no dice dónde encontrarlo
+   * le hace trabajo al visitante que quiere seguir la conversación por otro
+   * lado. Dos datos, en registro de notación, sin "seguinos" ni enlaces de
+   * cortesía: es un colofón, no un menú.
+   */
+  pie: {
+    nombre: "Pie de página",
+    instagram: "Instagram",
+    /** "Correo" y no "Email": el pie está todo en la voz, y el mono se fue. */
+    email: "Correo",
   },
   project: {
     /** Se muestra en la propia página: un borrador no finge estar publicado. */

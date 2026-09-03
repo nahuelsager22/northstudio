@@ -15,11 +15,18 @@ import type { Locale } from "@/lib/i18n/locales";
  * después se lee como confirmación.
  *
  * Es también el punto de mayor intensidad. Por eso:
- * - **sin etiqueta de sección arriba.** Un rótulo "Trabajo" antes de una imagen
- *   a sangre le baja el volumen a lo único que tenía que subirlo;
- * - **la portada rompe el marco.** Un proyecto destacado se muestra a todo el
- *   ancho de la ventana, no dentro del paspartú. Es la única vez en todo el
- *   sitio que algo desborda el margen — y como es la única, significa;
+ * - **abre con un título de sección, y el proyecto vive adentro.** ~~Antes no
+ *   había rótulo: la nav ya nombraba el momento.~~ El costo de esa economía era
+ *   que el trabajo publicado flotaba — una portada y un nombre, sin nada que
+ *   dijera que esa persona es alguien para quien el estudio trabajó. El título
+ *   es una frase ("Con quién trabajamos") y no una etiqueta, y **es más chico
+ *   que el nombre de la persona**: la sección presenta, la persona protagoniza;
+ * - **la portada va dentro de un marco.** ~~Antes rompía el paspartú y se
+ *   mostraba a todo el ancho de la ventana.~~ Ahora es una pieza apoyada en la
+ *   composición: un paspartú de `surface` con hairline alrededor de la imagen,
+ *   como una lámina montada. A sangre, la captura de un sitio ajeno no leía
+ *   como obra sino como fondo — y el marco es además lo que la vuelve un objeto
+ *   dentro de la página en vez de una interrupción de la página;
  * - **el nombre entra sobre el margen editorial**, en display, después de la
  *   imagen: el trabajo se ve antes de saber de quién es.
  *
@@ -55,7 +62,9 @@ export function Trabajo({
       <section
         id={ANCLA_TRABAJO}
         aria-label={dict.trabajo.nombre}
-        className="px-md pb-rest-lg sm:px-xl"
+        data-zona
+        data-superficie="cielo"
+        className="px-md pb-2xl sm:px-xl"
       >
         <div className="mx-auto w-full max-w-[92rem]">
           <p
@@ -70,13 +79,30 @@ export function Trabajo({
   }
 
   return (
-    <section id={ANCLA_TRABAJO} aria-label={dict.trabajo.nombre} className="pb-rest-lg">
-      <ul>
+    // El último momento bajo el cielo abierto. El silencio que lo separa del
+    // estudio ya no es su `padding-bottom`: es la transición que viene después
+    // (`components/transicion.tsx`), donde el amanecer apaga las estrellas.
+    <section
+      id={ANCLA_TRABAJO}
+      aria-label={dict.trabajo.nombre}
+      data-zona
+      data-superficie="cielo"
+      className="pb-2xl"
+    >
+      <div className="mx-auto w-full max-w-[92rem] px-md sm:px-xl">
+        <h2
+          data-reveal
+          className="font-serif text-title-2 text-muted md:ml-[6%] md:text-title-1"
+        >
+          {dict.trabajo.clientes}
+        </h2>
+      </div>
+
+      <ul className="mt-2xl">
         {proyectos.map((proyecto, indice) => {
           // La lista anuncia; no ficha. El año alcanza para situar el trabajo:
           // la lista de roles completa vive adentro del proyecto.
           const meta = proyecto.año?.toString();
-          const aSangre = Boolean(proyecto.destacado && proyecto.portada);
 
           return (
             <li key={proyecto.slug} className={espacioAntes(proyecto, indice)}>
@@ -84,24 +110,33 @@ export function Trabajo({
                 {proyecto.portada ? (
                   // La portada en su proporción natural, sin recorte: recortar
                   // la captura de un trabajo ajeno le come la composición que la
-                  // captura venía a mostrar.
+                  // captura venía a mostrar. El paspartú es lo que la monta en
+                  // la página — el destacado abre más, el resto entra.
                   <figure
                     data-reveal
-                    className={
-                      aSangre
-                        ? "overflow-hidden"
-                        : "mx-auto w-full max-w-[92rem] overflow-hidden px-md sm:px-xl md:ml-[22%] md:max-w-[34rem]"
-                    }
+                    className="mx-auto w-full max-w-[92rem] px-md sm:px-xl"
                   >
-                    <Image
-                      src={proyecto.portada.src}
-                      alt={resolverCampo(proyecto.portada.alt, locale)}
-                      width={proyecto.portada.ancho}
-                      height={proyecto.portada.alto}
-                      sizes={aSangre ? "100vw" : "(min-width: 768px) 34rem, 100vw"}
-                      className="h-auto w-full"
-                      priority={indice === 0}
-                    />
+                    <div
+                      className={
+                        proyecto.destacado
+                          ? "border bg-surface p-sm sm:p-md md:ml-[6%] md:mr-[8%]"
+                          : "border bg-surface p-2xs sm:p-sm md:ml-[22%] md:max-w-[34rem]"
+                      }
+                    >
+                      <Image
+                        src={proyecto.portada.src}
+                        alt={resolverCampo(proyecto.portada.alt, locale)}
+                        width={proyecto.portada.ancho}
+                        height={proyecto.portada.alto}
+                        sizes={
+                          proyecto.destacado
+                            ? "(min-width: 768px) 78vw, 100vw"
+                            : "(min-width: 768px) 34rem, 100vw"
+                        }
+                        className="h-auto w-full"
+                        priority={indice === 0}
+                      />
+                    </div>
                   </figure>
                 ) : null}
 

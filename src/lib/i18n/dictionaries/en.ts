@@ -21,15 +21,6 @@ const studioPassage: Segmento[] = [
   { texto: " what they do." },
 ];
 
-const studioBridge: Segmento[] = [
-  {
-    texto:
-      "You can see it in how you write, in what you choose to show, in how much room you leave. A site is built the same way: an identity isn't in one piece, it's in ",
-  },
-  { texto: "everything saying the same thing", enfasis: true },
-  { texto: "." },
-];
-
 const studioClosing: Segmento[] = [
   { texto: "Websites built from the ground up to represent " },
   { texto: "an identity", enfasis: true },
@@ -37,8 +28,8 @@ const studioClosing: Segmento[] = [
 ];
 
 const studioCoda: Segmento[] = [
-  { texto: "Every decision is after the same thing: an experience that feels as " },
-  { texto: "much yours", enfasis: true },
+  { texto: "We want the experience to feel as " },
+  { texto: "singular", enfasis: true },
   { texto: " as the person it represents." },
 ];
 
@@ -74,11 +65,11 @@ export const en: DeepPartial<typeof es> = {
   trabajo: {
     nombre: "Work",
     vacio: "The first project is on its way.",
+    clientes: "Who we work with",
   },
   estudio: {
     nombre: "The studio",
     pasaje: studioPassage,
-    puente: studioBridge,
     cierre: studioClosing,
     remate: studioCoda,
     oficios: "Websites · Landing pages · Portfolios · Digital experiences",
@@ -104,6 +95,11 @@ export const en: DeepPartial<typeof es> = {
       limite: "Your messages already arrived. Give it a few minutes.",
       envio: "Something failed on our end. Try again in a while.",
     },
+  },
+  pie: {
+    nombre: "Footer",
+    instagram: "Instagram",
+    email: "Email",
   },
   project: {
     borrador: "Draft — not published yet",

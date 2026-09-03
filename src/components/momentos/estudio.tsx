@@ -11,10 +11,15 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
  * explicaba el proceso en cuatro etapas y la ficha que enumeraba con quién,
  * cuántos y qué incluye.
  *
- * Queda una respiración: dos pasajes, una frase sobre qué queda al final (lo
- * único que no se puede mostrar) y un colofón en registro de notación para quien
- * necesite saber qué hace el estudio. Sin etiqueta de sección: la nav ya lo
- * nombra, e imprimirlo acá sería un sitio leyéndose su propio índice.
+ * Queda una respiración: la tesis, qué se hace, el colofón en registro de
+ * notación y el remate. Sin etiqueta de sección: la nav ya lo nombra, e
+ * imprimirlo acá sería un sitio leyéndose su propio índice.
+ *
+ * **El puente se eliminó** ("eso se nota en cómo escribís, en qué elegís
+ * mostrar…"): explicaba con tres ejemplos algo que la tesis ya deja entender.
+ * El salto a "sitios web pensados desde cero" queda más seco, y ese es el
+ * costo aceptado: una tesis que se explica suena menos segura que una que se
+ * apoya sola.
  *
  * Es el momento de respiración del recorrido: entra hondo desde el margen (24%),
  * la voz baja en el segundo pasaje y el colofón casi no se ve.
@@ -26,7 +31,9 @@ export function Estudio({ dict }: { dict: Dictionary }) {
     <section
       id="estudio"
       aria-label={e.nombre}
-      className="px-md pb-rest-lg sm:px-xl"
+      data-zona
+      data-superficie="arena"
+      className="superficie px-md pt-2xl pb-2xl sm:px-xl"
     >
       <div className="mx-auto w-full max-w-[92rem]">
         <p
@@ -36,17 +43,8 @@ export function Estudio({ dict }: { dict: Dictionary }) {
           <Pasaje segmentos={e.pasaje} />
         </p>
 
-        {/* El puente: de la persona al trabajo. Cuerpo en `muted` — es la voz
-            bajando el tono para explicar una idea, no una afirmación nueva. */}
-        <p
-          data-reveal
-          className="mt-xl max-w-[42ch] font-serif text-body text-muted md:ml-[30%] md:max-w-[52ch]"
-        >
-          <Pasaje segmentos={e.puente} />
-        </p>
-
-        {/* Qué se hace. Vuelve a subir a tinta y a escala de título: después del
-            puente, es lo único que el visitante necesita retener. */}
+        {/* Qué se hace. Es lo único que el visitante necesita retener, y ahora
+            llega directo después de la tesis. */}
         <p
           data-reveal
           className="mt-2xl max-w-[36ch] font-serif text-title-3 text-ink md:ml-[30%] md:max-w-[40ch]"

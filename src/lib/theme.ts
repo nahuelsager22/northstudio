@@ -4,7 +4,8 @@ export const THEME_STORAGE_KEY = "north-studio-theme";
 
 /**
  * Runs before paint (see ThemeScript) to apply a stored theme override.
- * Without a stored value, `prefers-color-scheme` in globals.css governs the theme.
+ * Without a stored value the site opens in Noche: it is the default declared on
+ * `:root` in globals.css, not a system preference.
  */
 export const themeInitScript = `
 (function () {
