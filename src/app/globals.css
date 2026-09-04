@@ -447,47 +447,52 @@
  * ~~Antes: tres superficies con un degradado de doce rem entre cada dos.~~ El
  * degradado hacía dos trabajos a la vez y ninguno del todo: presentaba los
  * colores (que hacía falta, porque no se conocían) y disolvía el borde (que ya
- * hacía la onda). Con la onda funcionando, el degradado era la mitad artificial
+ * hacía el paso). Con el paso funcionando, el degradado era la mitad artificial
  * del sistema: un lugar no tiene un fundido entre el cielo y el suelo.
  *
- * Ahora el recorrido es **color plano → onda → color plano**, y la única
- * transición visual es la onda.
+ * Ahora el recorrido es **color plano → corte → color plano**, y la única
+ * transición visual es la diagonal.
  *
  * Eso obliga a que la relación esté en los colores mismos y no en lo que hay
- * entre ellos. La paleta anterior no la tenía: matices 265 → 66 → 45 con cromas
- * 0.018 / 0.028 / 0.068, un plano casi blanco y una arcilla saturada. Dos de las
- * tres decisiones eran de otra familia.
+ * entre ellos, y con un corte recto la exigencia sube todavía un poco más: una
+ * curva se lee sola —su forma es la noticia— mientras que una diagonal leve no
+ * tiene más noticia que el escalón de color. Lo que separa dos planos son los
+ * planos.
  *
- * Las tres del recorrido de ahora salen de un mismo material:
+ * Los cuatro del recorrido:
  *
  *     cielo   oklch(0.115 0.018 265)   la noche — no se toca, es el ancla
- *     liquen  oklch(0.775 0.032 134)   #AEBBA6 · el verde gris de la piedra
- *     tierra  oklch(0.325 0.033  66)   #403122 · el pardo profundo del suelo
+ *     bosque  oklch(0.274 0.017 163)   #202A25 · el verde que ya casi es negro
+ *     piedra  oklch(0.700 0.025  91)   #A49E8D · el caqui de la cal y el lino
+ *     tierra  oklch(0.303 0.016  43)   #362C28 · el pardo profundo del suelo
  *
- * Tres cosas que las vuelven una atmósfera y no tres elecciones:
+ * Tres cosas que los vuelven una atmósfera y no cuatro elecciones:
  *
- * 1. **Nada está saturado.** Los tres cromas caben entre 0.018 y 0.033. La
- *    terracota anterior (0.068) era el doble que todo lo demás, y eso —no su
- *    matiz— es lo que la hacía sonar a plantilla. Un color sofisticado es casi
- *    siempre un color que se contuvo.
- * 2. **El matiz hace un solo arco.** 265 → 134 → 66: azul, verde, pardo. Cada
- *    paso baja por el mismo lado de la rueda, así que ningún par de vecinos
- *    tiene que cruzar el punto muerto del medio. El único salto grande (66 → 265,
- *    de la tierra a la noche) ocurre entre dos colores oscuros, donde el matiz
- *    casi no se lee.
- * 3. **La luz sube y baja como en un día.** 0.115 → 0.775 → 0.325 → 0.115. El
- *    plano claro bajó de 0.905 a 0.775: seguía teniendo el blanco encima, y a
- *    esa altura ya no era "el momento de luz" sino una hoja. Ciento treinta
- *    puntos menos de luminancia son la diferencia entre un color y un papel.
+ * 1. **Nada está saturado.** Los cuatro cromas caben entre 0.016 y 0.025.
+ *    ~~Antes se llegaba a 0.049.~~ Un color sofisticado es casi siempre un color
+ *    que se contuvo, y en campos grandes y planos un croma de 0.02 se ve
+ *    perfectamente: la superficie hace el trabajo que en una muestra chica hay
+ *    que hacer con saturación.
+ * 2. **El matiz hace un solo arco, y ahora parejo.** 265 → 163 → 91 → 43: azul,
+ *    verde, caqui, pardo. ~~Antes el bosque y el plano claro eran 140 y 134 —seis
+ *    grados, el mismo verde dos veces— y había tres verdes en cuatro planos.~~
+ *    Cada paso baja por el mismo lado de la rueda y ninguno repite al anterior.
+ * 3. **Cada plano habla con el color de otro.** La voz baja del bosque es la
+ *    piedra y la de la piedra es el bosque; la de la tierra vuelve a ser la
+ *    piedra. Un plano cuya tipografía secundaria está escrita con el color de
+ *    otro plano no puede leerse como un bloque pegado: el que viene ya se está
+ *    hablando en el que se está.
  *
- * Y el verde oscuro de la referencia (#2C4027) no quedó afuera: **es la voz baja
- * del liquen**. El plano claro y su tinta secundaria son el mismo color a dos
- * alturas — la relación que antes no existía entre ninguna parte del recorrido.
+ * Lo que esta paleta cuesta, dicho: la piedra a L 0.700 es un tono medio, y
+ * sobre un tono medio la tinta no pasa de ~7.2:1 por más negra que se la ponga
+ * (medido: 7.45 con negro puro). Alcanza de sobra —AA en todo, AAA en títulos—
+ * pero es el techo de contraste más bajo de la página, y es el precio de que el
+ * momento de luz sea un material y no un papel.
  *
  * **Una superficie sigue siendo una paleta chica, no un color de fondo.** Cada
  * bloque redeclara los seis tokens (y su espejo `--color-*`, porque
  * `@theme inline` resuelve `--color-ink: var(--ink)` en `:root` y lo que se
- * hereda es el valor ya resuelto). Por eso un plano de liquen vive dentro de un
+ * hereda es el valor ya resuelto). Por eso un plano de piedra vive dentro de un
  * sitio de noche sin que ninguna clase de texto sepa dónde está.
  */
 
@@ -495,9 +500,9 @@
    las superficies los usan para pintarse y las transiciones para saber a qué
    color van. Un color del recorrido no se escribe dos veces. */
 :root {
-  --c-bosque: oklch(0.347 0.049 140);
-  --c-liquen: oklch(0.775 0.032 134);
-  --c-tierra: oklch(0.325 0.033 66);
+  --c-bosque: oklch(0.274 0.017 163);
+  --c-piedra: oklch(0.7 0.025 91);
+  --c-tierra: oklch(0.303 0.016 43);
 }
 
 /* El cielo: el fondo del tema. No se pinta — se deja ver, para que el canvas de
@@ -536,90 +541,104 @@
 }
 
 /*
- * El bosque — el plano del trabajo. Dark Spruce, #2C4027, sin retocar.
+ * El bosque — el plano del trabajo. #202A25, sin retocar.
  *
- * ~~Antes el trabajo transcurría sobre el cielo, igual que el umbral.~~ Era el
- * único momento del recorrido que no tenía plano propio, y se notaba en dos
- * cosas: el salto del cielo al liquen era el más grande de la página (0.115 →
- * 0.775 de un solo paso) y el trabajo —que es el punto de mayor intensidad— no
- * tenía ningún lugar donde ocurrir.
+ * ~~Antes era Dark Spruce, #2C4027 · oklch(0.347 0.049 140).~~ Ese verde estaba
+ * bien elegido pero era un verde presente: a croma 0.049 el plano del trabajo
+ * *anunciaba* su color. Éste es el mismo lugar dos alturas más abajo y con un
+ * tercio del croma — un verde que ya casi es negro, y que por eso se comporta
+ * como fondo: lo que se ve en el momento del trabajo son las láminas, no el
+ * plano donde están apoyadas.
  *
- * Entra sin forzar nada porque ya estaba adentro: es el mismo verde que el
- * liquen dos alturas más abajo (matiz 140 contra 134), y era el color con el que
- * el liquen escribe su voz baja. Ahora se devuelven el gesto — **la voz baja del
- * bosque es #B2BFAC, que es el liquen.** El plano que viene ya se está hablando
- * en el anterior.
+ * Lo que cuesta y se acepta: contra la noche el escalón queda en ΔL 0.159 (1.38:1
+ * medido), el más chico de la página. **Lo carga la textura, no el color** —
+ * arriba del corte hay estrellas y abajo no, y eso se lee aunque los dos valores
+ * estén cerca. Es además el único paso donde el cielo está arriba, así que es el
+ * único que puede permitírselo. En Papel no existe el problema: ahí el escalón
+ * es de 0.68.
  *
- * Y lo que ordena el recorrido entero: bosque y tierra están a la misma altura
- * de luz (0.347 y 0.325), un verde y un pardo. El día sube y baja simétrico —
- * noche, bosque, luz, tierra, noche— y los dos planos oscuros son la misma
- * profundidad vista desde dos temperaturas.
+ * Su voz baja es la piedra (#A49E8D, 5.53:1), y la de la piedra es él: el plano
+ * que viene ya se está hablando en el anterior.
  */
 [data-superficie="bosque"] {
   --bg: var(--c-bosque);
-  --surface: oklch(0.398 0.047 140);
-  --ink: oklch(0.955 0.011 128);
-  --muted: oklch(0.790 0.030 135);
-  --hairline: oklch(0.455 0.042 140);
+  --surface: oklch(0.325 0.018 163);
+  --ink: oklch(0.955 0.008 120);
+  --muted: var(--c-piedra);
+  --hairline: oklch(0.4 0.018 163);
   --polar: oklch(0.86 0.05 250);
 
   --color-bg: var(--c-bosque);
-  --color-surface: oklch(0.398 0.047 140);
-  --color-ink: oklch(0.955 0.011 128);
-  --color-muted: oklch(0.790 0.030 135);
-  --color-hairline: oklch(0.455 0.042 140);
+  --color-surface: oklch(0.325 0.018 163);
+  --color-ink: oklch(0.955 0.008 120);
+  --color-muted: var(--c-piedra);
+  --color-hairline: oklch(0.4 0.018 163);
   --color-polar: oklch(0.86 0.05 250);
 }
 
 /*
- * El liquen — el momento de luz, y lo único vivo entre el cielo y el suelo.
+ * La piedra — el momento de luz, y lo único claro entre el cielo y el suelo.
  *
- * ~~Antes: arena, L 0.905.~~ Era la arcilla aclarada, y esa relación estaba
- * bien; el problema era la altura. A 0.905 el plano seguía leyéndose como papel
- * blanco tibio, que es exactamente lo que la iteración anterior quería sacar.
+ * ~~Antes se llamaba liquen y era #AEBBA6, un verde gris.~~ El nombre cambió con
+ * el color y no al revés: a matiz 91 esto ya no es un liquen, es cal, lino,
+ * piedra caliza. Un nombre que describe otra cosa que la que hay es el principio
+ * de un sistema que deja de explicarse solo.
  *
- * Ahora es un verde gris de piedra del norte (#AEBBA6): tiene color, no lo
- * anuncia, y su tinta y su voz baja son el mismo verde a dos alturas más
- * profundas — la secundaria es literalmente #2C4027. Un plano cuya tipografía
- * está escrita con su propio color no puede leerse como un bloque pegado.
+ * Y el cambio de color tiene un motivo que no es el gusto: el recorrido tenía
+ * tres verdes en cuatro planos —bosque 140, liquen 134, seis grados de
+ * diferencia— y el arco de matices se detenía justo en el medio. Un caqui cálido
+ * lo destraba: azul, verde, caqui, pardo, cada paso descendiendo. El momento de
+ * luz deja de ser el bosque aclarado y pasa a ser **el único plano cálido con
+ * luz**, que es lo que el estudio tiene que decir de sí mismo en esa parte.
+ *
+ * Su tinta es un pardo casi negro y su voz baja es el bosque: la piedra escribe
+ * con los dos planos oscuros que tiene arriba y abajo.
  */
-[data-superficie="liquen"] {
-  --bg: var(--c-liquen);
-  --surface: oklch(0.735 0.034 134);
-  --ink: oklch(0.255 0.048 141);
-  --muted: oklch(0.347 0.049 140);
-  --hairline: oklch(0.66 0.033 134);
-  --polar: oklch(0.40 0.095 250);
+[data-superficie="piedra"] {
+  --bg: var(--c-piedra);
+  --surface: oklch(0.655 0.025 91);
+  --ink: oklch(0.17 0.015 74);
+  --muted: var(--c-bosque);
+  --hairline: oklch(0.58 0.024 91);
+  --polar: oklch(0.4 0.095 250);
 
-  --color-bg: var(--c-liquen);
-  --color-surface: oklch(0.735 0.034 134);
-  --color-ink: oklch(0.255 0.048 141);
-  --color-muted: oklch(0.347 0.049 140);
-  --color-hairline: oklch(0.66 0.033 134);
-  --color-polar: oklch(0.40 0.095 250);
+  --color-bg: var(--c-piedra);
+  --color-surface: oklch(0.655 0.025 91);
+  --color-ink: oklch(0.17 0.015 74);
+  --color-muted: var(--c-bosque);
+  --color-hairline: oklch(0.58 0.024 91);
+  --color-polar: oklch(0.4 0.095 250);
 }
 
 /*
  * La tierra — el suelo donde se habla. El mismo color en los dos temas.
  *
- * ~~Antes: oklch(0.33 0.068 45), una terracota.~~ Misma luminancia, la mitad de
- * croma y veinte grados hacia el olivo: el pardo profundo de la referencia
- * (#403122). No se oscureció ni se aclaró nada — sólo se le sacó el naranja, que
- * era lo único que sonaba a decisión de plantilla.
+ * ~~Antes: #403122 · oklch(0.325 0.033 66).~~ Dos puntos más oscura, la mitad de
+ * croma y veintitrés grados hacia el rojo: #362C28. El movimiento es el mismo
+ * que hizo el bosque —bajar la voz— y por la misma razón: el suelo es donde se
+ * escribe y se manda un mensaje, y un fondo que se hace notar en un formulario
+ * es un fondo que estorba.
+ *
+ * Sigue casi a la misma altura de luz que el bosque (0.303 contra 0.274): dos
+ * profundidades iguales vistas desde dos temperaturas, un verde y un pardo, con
+ * el momento de luz entre medio. El día sube y baja simétrico.
+ *
+ * Su voz baja también es la piedra: el plano claro es el hilo que atraviesa los
+ * dos oscuros.
  */
 [data-superficie="tierra"] {
   --bg: var(--c-tierra);
-  --surface: oklch(0.375 0.032 66);
-  --ink: oklch(0.945 0.014 92);
-  --muted: oklch(0.775 0.026 80);
-  --hairline: oklch(0.44 0.030 66);
+  --surface: oklch(0.355 0.017 43);
+  --ink: oklch(0.945 0.01 85);
+  --muted: var(--c-piedra);
+  --hairline: oklch(0.43 0.017 43);
   --polar: oklch(0.86 0.05 250);
 
   --color-bg: var(--c-tierra);
-  --color-surface: oklch(0.375 0.032 66);
-  --color-ink: oklch(0.945 0.014 92);
-  --color-muted: oklch(0.775 0.026 80);
-  --color-hairline: oklch(0.44 0.030 66);
+  --color-surface: oklch(0.355 0.017 43);
+  --color-ink: oklch(0.945 0.01 85);
+  --color-muted: var(--c-piedra);
+  --color-hairline: oklch(0.43 0.017 43);
   --color-polar: oklch(0.86 0.05 250);
 }
 
@@ -636,15 +655,15 @@
  * Un plano tiene que poder leerse como plano.
  *
  * El estudio medía menos que una pantalla, así que en ningún momento del scroll
- * el liquen llenaba el cuadro: siempre había una onda arriba o abajo, y un color
+ * la piedra llenaba el cuadro: siempre había un corte arriba o abajo, y un color
  * que nunca se ve solo no es un plano — es una franja entre dos bordes.
  *
  * La regla es una pantalla **más la altura de una transición**: esa altura de
- * sobra es, literalmente, el tramo de scroll en el que no hay ninguna onda a la
+ * sobra es, literalmente, el tramo de scroll en el que no hay ningún corte a la
  * vista. El contenido no se centra a propósito —un ancla tiene que aterrizar en
  * lo que se vino a leer y no en el vacío de arriba—, así que el aire sobrante
  * queda del lado de abajo, que es donde el recorrido lo pide: se termina de leer
- * la sección, se ve el color solo, recién después llega la onda.
+ * la sección, se ve el color solo, recién después llega el corte.
  */
 .plano {
   min-height: calc(100svh + var(--spacing-4xl));
@@ -673,10 +692,11 @@
  *
  * En una transición las tres primeras son la de origen y la última la de
  * destino, porque eso es exactamente lo que pasa ahora que no hay degradado: el
- * plano de arriba llega entero hasta la onda. La nav cruza ese último tramo
- * mezclando y no saltando, y eso no es una licencia: la onda es una curva, así
- * que a lo ancho de la ventana el borde está a alturas distintas y el color que
- * hay detrás del encabezado *es* una mezcla de los dos.
+ * plano de arriba llega entero hasta el corte. La nav cruza ese último tramo
+ * mezclando y no saltando, y eso no es una licencia — con una diagonal es más
+ * literal que nunca: el borde está a una altura distinta en cada punto del
+ * ancho, así que el color que hay detrás del encabezado *es*, mientras dura el
+ * paso, una mezcla de los dos.
  */
 [data-zona] {
   --z0: var(--bg);
@@ -686,28 +706,29 @@
 }
 
 /*
- * El paso de un plano a otro: la onda, y nada más.
+ * El paso de un plano a otro: el corte, y nada más.
  *
- * ~~Antes había dos capas: una atmósfera en degradado y una onda encima.~~ La
- * onda sola alcanza, y sin el degradado la paleta se lee como decisión en vez de
- * como interpolación.
+ * ~~Antes el paso era una onda.~~ El porqué del cambio está en `transicion.tsx`
+ * y es de identidad, no de forma: una onda es un motivo y un motivo se hereda —
+ * era también la firma del primer sitio de cliente publicado. Una diagonal no
+ * dibuja nada; es una decisión de compaginación, y esa sí es del estudio.
  *
- * Un bloque de transición es entonces un rectángulo del color de origen con la
- * onda del color de destino apoyada abajo. Sigue siendo **el silencio entre dos
+ * Un bloque de transición es entonces un rectángulo del color de origen con una
+ * cuña del color de destino apoyada abajo. Sigue siendo **el silencio entre dos
  * momentos** —no se le suma al padding de nadie, lo reemplaza—, así que cada
  * sección vuelve a empezar en su contenido y un ancla aterriza bien.
  *
- * Dos modos, y la diferencia es de qué lado está el cielo:
+ * Dos rellenos, y la diferencia es de qué lado del paso está el cielo:
  *
- * - `sube`: el plano que llega asciende dentro del anterior, y la onda se pinta
- *   con el color de destino. Cuando el origen es el cielo, el bloque no se pinta:
- *   las estrellas se ven hasta la curva.
- * - `revela`: el que llega es el cielo, y el cielo no se pinta. Entonces se pinta
- *   lo contrario —la masa del plano de origen, con la onda como su borde
- *   inferior— y **debajo de la curva no hay nada**: el canvas fijo aparece a
- *   través de la onda. ~~Antes la onda final se rellenaba con el negro del cielo
- *   y debajo quedaba un bloque opaco: una banda de noche sin estrellas contra un
- *   pie que sí las tiene.~~ Ese corte recto era eso — no un color mal elegido,
+ * - `destino`: el plano que llega entra desde abajo, y la cuña se pinta con su
+ *   color. Cuando el origen es el cielo el bloque no se pinta: las estrellas se
+ *   ven hasta el corte.
+ * - `origen`: el que llega es el cielo, y el cielo no se pinta. Entonces se pinta
+ *   lo contrario —la masa del plano de origen, con el corte como su borde
+ *   inferior— y **debajo de la diagonal no hay nada**: el canvas fijo aparece a
+ *   través del corte. ~~Antes la onda final se rellenaba con el negro del cielo y
+ *   debajo quedaba un bloque opaco: una banda de noche sin estrellas contra un
+ *   pie que sí las tiene.~~ Aquel corte recto era eso — no un color mal elegido,
  *   sino pintar un fondo que no había que pintar.
  */
 .transicion {
@@ -722,9 +743,15 @@
      arriba de la transición, que es del color del plano anterior. */
   margin-top: -0.25rem;
   height: var(--spacing-4xl);
-  /* Cuánto mide la onda. Vive como variable porque el modo `revela` necesita
-     saber dónde empieza para apoyarle la masa justo encima. */
-  --onda-alto: clamp(2.5rem, 6vw, 5rem);
+  /* Cuánto sube el corte de una punta a la otra. Como el SVG se estira sin
+     conservar proporción, esta altura *es* la subida en píxeles y el ángulo lo
+     decide el ancho de la ventana: 3.8° en un escritorio de 1440, 7.3° en un
+     teléfono de 375. Esa diferencia no es un descuido — un mismo ángulo daría un
+     sesgo invisible en el teléfono o un tajo en el escritorio; lo que se mantiene
+     constante es cuánto se corre el borde, que es lo que se percibe. Vive como
+     variable porque el relleno `origen` necesita saber dónde empieza para
+     apoyarle la masa justo encima. */
+  --corte-alto: clamp(3rem, 7vw, 6rem);
   background-color: var(--desde);
 }
 
@@ -734,43 +761,45 @@
   }
 }
 
-.transicion-onda {
+.transicion-corte {
   position: absolute;
   inset-inline: 0;
   display: block;
   width: 100%;
-  height: var(--onda-alto);
+  height: var(--corte-alto);
 }
 
 /* Desbordada un píxel hacia abajo: entre dos colores llenos, medio píxel de
    redondeo se ve como una línea. */
-[data-onda="sube"] .transicion-onda {
+[data-relleno="destino"] .transicion-corte {
   bottom: -1px;
   fill: var(--hasta);
 }
 
-/* En `revela` no hay nada abajo que tapar —es el cielo—, así que la onda se
-   apoya a ras: lo que desbordara sería un píxel de tierra sobre las estrellas. */
-.transicion[data-onda="revela"] {
+/* Con relleno `origen` no hay nada abajo que tapar —es el cielo—, así que el
+   corte se apoya a ras: lo que desbordara sería un píxel de tierra sobre las
+   estrellas. */
+.transicion[data-relleno="origen"] {
   background-color: transparent;
 }
 
-[data-onda="revela"] .transicion-onda {
+[data-relleno="origen"] .transicion-corte {
   bottom: 0;
   fill: var(--desde);
 }
 
-[data-onda="revela"] .transicion-masa {
+[data-relleno="origen"] .transicion-masa {
   position: absolute;
   inset-inline: 0;
   top: 0;
-  bottom: calc(var(--onda-alto) - 1px);
+  bottom: calc(var(--corte-alto) - 1px);
   background-color: var(--desde);
 }
 
 /* Del cielo al bosque: el cielo no se pinta, así que las estrellas siguen ahí
-   hasta la curva y el bosque sube desde abajo. Es el único paso del recorrido
-   donde se ve el fondo del tema por encima de la onda. */
+   hasta el corte y el bosque entra desde abajo. Es el único paso del recorrido
+   donde se ve el fondo del tema por encima de la diagonal — y es lo que hace
+   legible el escalón de color más chico de la página. */
 [data-paso="cielo-bosque"] {
   --desde: transparent;
   --hasta: var(--c-bosque);
@@ -780,30 +809,31 @@
   --z3: var(--c-bosque);
 }
 
-/* Del bosque al liquen: el mismo verde subiendo de luz. Es el paso más corto de
-   la paleta —seis grados de matiz— y por eso puede permitirse el salto de
-   luminancia más grande que queda en la página. */
-[data-paso="bosque-liquen"] {
+/* Del bosque a la piedra: el escalón más grande de la página (ΔL 0.426, 5.53:1)
+   y el único donde el corte se ve entero por sí solo. Es el centro del recorrido
+   y le corresponde ser el más nítido. */
+[data-paso="bosque-piedra"] {
   --desde: var(--c-bosque);
-  --hasta: var(--c-liquen);
+  --hasta: var(--c-piedra);
   --z0: var(--c-bosque);
   --z1: var(--c-bosque);
   --z2: var(--c-bosque);
-  --z3: var(--c-liquen);
+  --z3: var(--c-piedra);
 }
 
-/* Del liquen a la tierra: el mismo movimiento, entre dos colores opacos. */
-[data-paso="liquen-tierra"] {
-  --desde: var(--c-liquen);
+/* De la piedra a la tierra: el mismo movimiento en sentido inverso, y casi la
+   misma fuerza (ΔL 0.397). El descenso baja como subió. */
+[data-paso="piedra-tierra"] {
+  --desde: var(--c-piedra);
   --hasta: var(--c-tierra);
-  --z0: var(--c-liquen);
-  --z1: var(--c-liquen);
-  --z2: var(--c-liquen);
+  --z0: var(--c-piedra);
+  --z1: var(--c-piedra);
+  --z2: var(--c-piedra);
   --z3: var(--c-tierra);
 }
 
-/* Del bosque al cielo: el mismo corte, y sólo existe adentro de un caso. Lo
-   que abre un proyecto es el plano del que salió (`proyecto-adentro.tsx`). */
+/* Del bosque al cielo: sólo existe adentro de un caso. Lo que abre un proyecto
+   es el plano del que salió (`proyecto-adentro.tsx`). */
 [data-paso="bosque-cielo"] {
   --desde: var(--c-bosque);
   --hasta: var(--bg);
@@ -813,7 +843,7 @@
   --z3: var(--bg);
 }
 
-/* De la tierra al cielo: se pinta la tierra y se la corta con la onda. Lo que
+/* De la tierra al cielo: se pinta la tierra y se la corta en diagonal. Lo que
    queda debajo es el lugar mismo — el recorrido cierra donde abrió. */
 [data-paso="tierra-cielo"] {
   --desde: var(--c-tierra);
@@ -905,7 +935,7 @@
  *
  * El retiro por defecto de un ancla (`--spacing-anchor`, siete rem) existe para
  * que una sección no quede debajo de la nav fija. Pero un plano empieza donde
- * termina una onda: retirarse siete rem es aterrizar **dentro de la transición
+ * termina un corte: retirarse siete rem es aterrizar **dentro de la transición
  * anterior**, y lo que se ve arriba es el plano de antes — el resto de cielo que
  * asomaba al ir a "Estudio". El destino correcto es el borde del plano, y el
  * aire que hace falta para no quedar bajo la nav ya vive adentro, en el

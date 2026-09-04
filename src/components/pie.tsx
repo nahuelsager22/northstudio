@@ -15,7 +15,7 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
  * Ahora son tres decisiones:
  *
  * 1. **Vuelve al cielo.** El recorrido abre bajo las estrellas y cierra bajo las
- *    mismas: entre medio se pisa liquen y tierra. No se pinta —el canvas está
+ *    mismas: entre medio se pisan la piedra y la tierra. No se pinta —el canvas está
  *    fijo detrás y esta escena lo deja ver—, así que el cierre tiene la
  *    profundidad del comienzo y la constelación puede aparecer también acá. Es
  *    lo que le da sensación de cierre a un recorrido: volver, no terminar.

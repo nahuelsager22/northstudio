@@ -110,7 +110,7 @@ export function ProyectoAdentro({
 
       {/* Y el caso sale al cielo: el material se ve sobre el fondo neutro del
           lugar, y el pie —que también cierra en el cielo— continúa sin junta. */}
-      <Transicion desde="bosque" hacia="cielo" onda="amanecer" />
+      <Transicion desde="bosque" hacia="cielo" sesgo="derecha" />
 
       <div className="px-md sm:px-xl">
         <div className="mx-auto w-full max-w-[92rem]">

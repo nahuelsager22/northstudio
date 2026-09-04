@@ -24,7 +24,7 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
  * Es el momento de respiración del recorrido: entra hondo desde el margen (24%),
  * la voz baja en el segundo pasaje y el colofón casi no se ve.
  *
- * Y es el plano de luz: el liquen (`globals.css`). Lleva `.plano` porque su
+ * Y es el plano de luz: la piedra (`globals.css`). Lleva `.plano` porque su
  * contenido mide menos que una pantalla y sin una altura mínima el color nunca
  * llegaba a verse solo — siempre había una onda arriba o abajo, y un plano que
  * sólo se ve entre dos bordes no se lee como plano. El aire de sobra queda
@@ -39,7 +39,7 @@ export function Estudio({ dict }: { dict: Dictionary }) {
       id="estudio"
       aria-label={e.nombre}
       data-zona
-      data-superficie="liquen"
+      data-superficie="piedra"
       className="superficie plano px-md sm:px-xl"
     >
       <div className="mx-auto w-full max-w-[92rem]">

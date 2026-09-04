@@ -21,7 +21,7 @@ export default function EnHomePage() {
       conIndice
     >
       <Umbral dict={dict} />
-      <Transicion desde="cielo" hacia="bosque" onda="atardecer" />
+      <Transicion desde="cielo" hacia="bosque" sesgo="derecha" />
       <Trabajo
         dict={dict}
         locale="en"
@@ -31,12 +31,20 @@ export default function EnHomePage() {
       {/* Los pasos entre planos se declaran acá, en el orden del recorrido, y
           no dentro de cada momento: una transición pertenece a los dos lados y a
           ninguno. Cada una **es** el silencio entre dos momentos — por eso las
-          secciones que rodean vuelven a terminar en su contenido. */}
-      <Transicion desde="bosque" hacia="liquen" onda="amanecer" />
+          secciones que rodean vuelven a terminar en su contenido.
+
+          Y por eso el `sesgo` se escribe acá y no adentro de la transición: la
+          dirección de un corte no es una propiedad del corte, es su lugar en la
+          serie. Alternan —derecha, izquierda, derecha, izquierda— y lo que se ve
+          no son las diagonales sino los planos que quedan entre ellas: cada uno
+          se inclina hacia el lado contrario que el anterior. Cuatro paralelas
+          serían un patrón, y un patrón se lee como plantilla; alternadas, el
+          descenso tiene ritmo en vez de deriva. */}
+      <Transicion desde="bosque" hacia="piedra" sesgo="izquierda" />
       <Estudio dict={dict} />
-      <Transicion desde="liquen" hacia="tierra" onda="atardecer" />
+      <Transicion desde="piedra" hacia="tierra" sesgo="derecha" />
       <Conversacion dict={dict} locale="en" />
-      <Transicion desde="tierra" hacia="cielo" onda="amanecer" />
+      <Transicion desde="tierra" hacia="cielo" sesgo="izquierda" />
     </SiteShell>
   );
 }

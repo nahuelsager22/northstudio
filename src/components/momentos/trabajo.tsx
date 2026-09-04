@@ -17,7 +17,7 @@ import type { Locale } from "@/lib/i18n/locales";
  *
  * **Transcurre sobre el bosque** (`globals.css`), el Dark Spruce de la paleta.
  * ~~Antes compartía el cielo con el umbral.~~ Era el único momento del recorrido
- * sin plano propio, y se pagaba dos veces: el paso del cielo al liquen era el
+ * sin plano propio, y se pagaba dos veces: el paso del cielo a la piedra era el
  * salto de luz más grande de la página, y el momento de mayor intensidad no
  * tenía ningún lugar donde ocurrir. Ahora el recorrido baja parejo y el trabajo
  * pasa a ser lo primero que tiene color.

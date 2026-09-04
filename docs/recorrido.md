@@ -43,20 +43,20 @@ El recorrido no cambia de fondo: **desciende**. El detalle del sistema está en 
 | Zona | Superficie |
 |---|---|
 | El umbral | `cielo` — el fondo del tema, con estrellas si es Noche |
-| *transición* | el bosque sube por una onda, y las estrellas se ven hasta la curva |
-| El trabajo | `bosque` — #2C4027, Dark Spruce; un plano de una pantalla y media |
-| *transición* | el mismo verde sube de luz por otra onda |
-| El estudio | `liquen` — #AEBBA6; otro plano de una pantalla y media |
-| *transición* | la tierra sube por otra onda |
-| La conversación | `tierra` — #403122, una escena de una pantalla |
-| *transición* | la tierra se corta con la onda y debajo aparece el cielo |
+| *transición* | corte diagonal que sube a la **derecha**; las estrellas se ven hasta el corte |
+| El trabajo | `bosque` — #202A25, el verde que ya casi es negro; un plano de una pantalla y media |
+| *transición* | corte que sube a la **izquierda** — el escalón más grande del recorrido |
+| El estudio | `piedra` — #A49E8D, caqui de cal y lino; otro plano de una pantalla y media |
+| *transición* | corte que sube a la **derecha** |
+| La conversación | `tierra` — #362C28, una escena de una pantalla |
+| *transición* | corte que sube a la **izquierda**: se corta la tierra y debajo aparece el cielo |
 | El pie | `cielo` — otra escena de una pantalla, con estrellas |
 
 Las transiciones se declaran en la portada (`app/(es)/page.tsx`), en el orden del recorrido y no dentro de cada momento: una transición pertenece a los dos lados y a ninguno. **Cada una es el silencio entre dos momentos**, así que las secciones que la rodean terminan y empiezan en su contenido.
 
 El trabajo abre con el título de su sección ("Con quién trabajamos") y el proyecto vive adentro: el título es más chico que el nombre de la persona, porque la sección presenta y la persona protagoniza.
 
-**Un caso nace del plano del que salió:** su apertura transcurre sobre el bosque —se hace click en una lámina apoyada en el bosque y se llega a un nombre apoyado en el bosque— y baja al cielo por una onda, donde el material del proyecto se ve sobre el fondo neutro del lugar. Como el pie también cierra en el cielo, ahí no hay transición ninguna: continúa.
+**Un caso nace del plano del que salió:** su apertura transcurre sobre el bosque —se hace click en una lámina apoyada en el bosque y se llega a un nombre apoyado en el bosque— y baja al cielo por un corte, donde el material del proyecto se ve sobre el fondo neutro del lugar. Como el pie también cierra en el cielo, ahí no hay transición ninguna: continúa.
 
 ## 2. Navegación
 
