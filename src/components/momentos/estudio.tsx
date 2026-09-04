@@ -60,10 +60,18 @@ export function Estudio({ dict }: { dict: Dictionary }) {
         </p>
 
         {/* El colofón: qué se construye, sin rótulo. Una lista rotulada sería un
-            menú de servicios; sin rótulo es la línea de créditos de un impreso. */}
+            menú de servicios; sin rótulo es la línea de créditos de un impreso.
+
+            ~~Y estaba en mono.~~ Ahí estaba la otra mitad del "apagado": en una
+            página de tipografía cálida, una línea monoespaciada es lo único que
+            dice interfaz, y era el único elemento no serif de toda la sección. Un
+            colofón impreso se compone en la tipografía del texto, en chico — que
+            es lo que este comentario ya decía que era. La notación sigue viva
+            donde de verdad es notación: los rótulos del formulario, el año de la
+            lista, los epígrafes y las atribuciones. */}
         <p
           data-reveal
-          className="mt-lg max-w-[64ch] font-mono text-meta text-muted md:ml-[30%]"
+          className="mt-lg max-w-[64ch] font-serif text-meta text-muted md:ml-[30%]"
         >
           {e.oficios}
         </p>

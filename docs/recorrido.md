@@ -56,6 +56,8 @@ Las transiciones se declaran en la portada (`app/(es)/page.tsx`), en el orden de
 
 El trabajo abre con el título de su sección ("Con quién trabajamos") y el proyecto vive adentro: el título es más chico que el nombre de la persona, porque la sección presenta y la persona protagoniza.
 
+**Un caso presenta primero a la persona.** La apertura es el nombre, el descriptor y quién es, en prosa. Los créditos —el año y los roles del estudio— cruzan el corte y abren el cuerpo: son los créditos de un impreso, y van después de presentar la pieza. Un caso que empieza por lo que hizo el estudio invierte de quién es la página.
+
 **Un caso nace del plano del que salió:** su apertura transcurre sobre el bosque —se hace click en una lámina apoyada en el bosque y se llega a un nombre apoyado en el bosque— y baja al cielo por un corte, donde el material del proyecto se ve sobre el fondo neutro del lugar. Como el pie también cierra en el cielo, ahí no hay transición ninguna: continúa.
 
 ## 2. Navegación

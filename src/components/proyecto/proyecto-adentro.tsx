@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Cuerpo } from "./cuerpo";
+import { Prosa } from "./bloques/texto";
 import { Transicion } from "@/components/transicion";
 import { resolverCampo, type Proyecto } from "@/lib/content/types";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
@@ -9,16 +10,23 @@ import type { Locale } from "@/lib/i18n/locales";
  * Un proyecto por dentro (docs/recorrido.md · Rutas).
  *
  * Una mini-experiencia que representa a **otra** identidad. Todo lo que hay acá
- * está al servicio de eso: la apertura dice quién es y qué se hizo sin inflar
- * nada, el cuerpo lo interpreta según la secuencia que el proyecto eligió, y el
- * cierre devuelve al recorrido en vez de empujar al siguiente caso.
+ * está al servicio de eso: la apertura dice quién es, el cuerpo lo interpreta
+ * según la secuencia que el proyecto eligió, y el cierre devuelve al recorrido en
+ * vez de empujar al siguiente caso.
+ *
+ * **El orden narrativo se dio vuelta.** ~~Antes la apertura terminaba en la ficha
+ * técnica —el año y los cuatro roles del estudio— y la presentación de la persona
+ * llegaba recién después del corte.~~ Un caso que empieza por lo que hizo el
+ * estudio invierte de quién es la página. Ahora la apertura es el nombre, el
+ * descriptor y quién es; los créditos cruzan el corte y abren el cuerpo, que es
+ * donde van los créditos de un impreso: después de presentar la pieza, no antes.
  *
  * El método se demuestra, no se nombra: en ningún lugar de esta página el
  * estudio explica cómo trabaja. Se ve.
  *
  * **El caso nace del plano del que salió.** La apertura transcurre sobre el
- * bosque —el mismo Dark Spruce del momento del trabajo— y después baja al cielo
- * por una onda, con la misma gramática que la portada.
+ * bosque —el mismo del momento del trabajo— y después baja al cielo por un corte,
+ * con la misma gramática que la portada.
  *
  * Se consideró la alternativa: que la página del cliente tuviera un tratamiento
  * propio para marcar que se entró a otra experiencia. Se descartó por una
@@ -65,7 +73,7 @@ export function ProyectoAdentro({
 
   return (
     <article data-clima={clima}>
-      {/* La apertura: una pantalla de bosque, el nombre y la ficha. El retiro
+      {/* La apertura: una pantalla de bosque, el nombre y quién es. El retiro
           desde arriba es el mismo que tenía sobre el cielo — lo que cambió es el
           plano, no la composición. */}
       <section
@@ -93,16 +101,14 @@ export function ProyectoAdentro({
               </p>
             ) : null}
 
-            {ficha.length > 0 ? (
-              <p className="mt-2xl font-mono text-meta text-muted">
-                {ficha.join(" · ")}
-              </p>
-            ) : null}
-
-            {proyecto.colaboradores?.length ? (
-              <p className="mt-2xs font-mono text-meta text-muted">
-                {dict.project.con} {proyecto.colaboradores.join(" · ")}
-              </p>
+            {/* Quién es, antes que qué hicimos. Empieza sin el nombre porque el
+                nombre está justo arriba, en display: repetirlo sería leerle al
+                visitante lo que acaba de ver. */}
+            {proyecto.presentacion ? (
+              <Prosa
+                texto={resolverCampo(proyecto.presentacion, locale)}
+                className="mt-2xl max-w-[54ch] font-serif text-body text-ink"
+              />
             ) : null}
           </header>
         </div>
@@ -114,6 +120,33 @@ export function ProyectoAdentro({
 
       <div className="px-md sm:px-xl">
         <div className="mx-auto w-full max-w-[92rem]">
+          {/*
+            Los créditos, del otro lado del corte y sobre la columna del cuerpo.
+            Es la línea de créditos de un impreso: va después de presentar la
+            pieza y en la tipografía del texto, en chico.
+
+            ~~Estaba en mono.~~ Cuatro roles seguidos en monoespaciada leían como
+            la salida de una terminal, que es el único registro que esta página no
+            tiene en ninguna otra parte. Serif a tamaño de notación conserva
+            entero su carácter secundario —es lo más chico de la página— y la
+            devuelve al mismo universo que todo lo demás. La notación sigue siendo
+            mono donde de verdad lo es: el aviso de borrador, los epígrafes, las
+            atribuciones y los rótulos del formulario.
+          */}
+          {ficha.length > 0 ? (
+            <div data-reveal className="mt-3xl md:ml-[16%]">
+              <p className="max-w-[68ch] font-serif text-meta text-muted">
+                {ficha.join(" · ")}
+              </p>
+
+              {proyecto.colaboradores?.length ? (
+                <p className="mt-2xs font-serif text-meta text-muted">
+                  {dict.project.con} {proyecto.colaboradores.join(" · ")}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+
           {proyecto.cuerpo.length > 0 ? (
             <div className="mt-3xl">
               <Cuerpo bloques={proyecto.cuerpo} locale={locale} />

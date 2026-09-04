@@ -557,8 +557,11 @@
  * único que puede permitírselo. En Papel no existe el problema: ahí el escalón
  * es de 0.68.
  *
- * Su voz baja es la piedra (#A49E8D, 5.53:1), y la de la piedra es él: el plano
- * que viene ya se está hablando en el anterior.
+ * Su voz baja es la piedra (#A49E8D, 5.53:1). ~~Y la de la piedra era él.~~ Esa
+ * reciprocidad apuntaba para atrás —la piedra hablaba con el plano que ya había
+ * dejado— y además dejaba a la piedra sin jerarquía; ahora la piedra habla con la
+ * tierra, que es la que viene. **El plano que viene ya se está hablando en el
+ * anterior**, en los tres pasos y no en dos.
  */
 [data-superficie="bosque"] {
   --bg: var(--c-bosque);
@@ -591,21 +594,45 @@
  * luz deja de ser el bosque aclarado y pasa a ser **el único plano cálido con
  * luz**, que es lo que el estudio tiene que decir de sí mismo en esa parte.
  *
- * Su tinta es un pardo casi negro y su voz baja es el bosque: la piedra escribe
- * con los dos planos oscuros que tiene arriba y abajo.
+ * **Su voz baja es cálida, y ése era el arreglo.** ~~Antes era el bosque
+ * (`--c-bosque`), que a matiz 163 y croma 0.017 sobre un caqui es, sencillamente,
+ * gris.~~ El plano tenía color y su tipografía no: todo lo escrito encima era una
+ * marca neutra sobre un fondo cálido, y de ahí venía la sensación de apagado.
+ *
+ * Y había un número que lo decía. Contraste de la tinta contra el de la voz baja,
+ * plano por plano: cielo 2.17, bosque 2.35, tierra 2.27 — **piedra 1.30.** Era el
+ * único plano del sitio cuyas dos voces pesaban casi lo mismo, así que la sección
+ * no tenía jerarquía: su texto secundario sonaba casi tan fuerte como el primero.
+ *
+ * La causa es el fondo: sobre un tono medio la tinta no pasa de ~7.2:1, así que
+ * para que la voz baja siguiera siendo legible había que subirla hasta casi
+ * tocarla. **El plano está comprimido por los dos extremos.**
+ *
+ * El arreglo hace las dos cosas que se pueden hacer sin mover la piedra:
+ *
+ * 1. **Separa por temperatura y no por peso.** La voz baja pasa a ser un pardo
+ *    de la familia de la tierra (matiz 44), tres puntos de luz por encima de
+ *    ella. El plano queda escrito con **dos tintas** —un casi negro y un pardo
+ *    cálido—, que es exactamente cómo se imprime un papel cálido. La temperatura
+ *    no cuesta contraste.
+ * 2. **Abre la distancia hasta donde el fondo permite.** 4.57:1 — el mínimo AA
+ *    con margen— lleva la relación de 1.30 a 1.57. No llega a 2.2 y no puede: en
+ *    un tono medio no existen a la vez una jerarquía de dos voces y texto
+ *    corrido accesible en la segunda. Lo que falta se resuelve en la tipografía,
+ *    no en el valor (`momentos/estudio.tsx`).
  */
 [data-superficie="piedra"] {
   --bg: var(--c-piedra);
   --surface: oklch(0.655 0.025 91);
   --ink: oklch(0.17 0.015 74);
-  --muted: var(--c-bosque);
+  --muted: oklch(0.33 0.018 44);
   --hairline: oklch(0.58 0.024 91);
   --polar: oklch(0.4 0.095 250);
 
   --color-bg: var(--c-piedra);
   --color-surface: oklch(0.655 0.025 91);
   --color-ink: oklch(0.17 0.015 74);
-  --color-muted: var(--c-bosque);
+  --color-muted: oklch(0.33 0.018 44);
   --color-hairline: oklch(0.58 0.024 91);
   --color-polar: oklch(0.4 0.095 250);
 }
@@ -890,6 +917,33 @@
 }
 
 /*
+ * El menú abierto pertenece al plano que tiene detrás — también sobre el cielo.
+ *
+ * El panel declara la superficie que la nav está midiendo, así que `bg-bg` se
+ * resuelve con el color de ese plano y no con el del tema. ~~Antes el panel vivía
+ * fuera de toda superficie y `--color-bg` caía a la raíz: una caja negra sobre
+ * cualquier plano.~~
+ *
+ * Sobre el cielo eso no alcanza: **el cielo es color y estrellas**, y pintar sólo
+ * el color da un panel del color del cielo, que no es lo mismo. El canvas está
+ * fijo detrás de todo (z −10); mientras el menú está abierto sobre el cielo sube
+ * por encima del panel (z 10) y por debajo del encabezado (z 20). No se pinta
+ * ninguna transparencia: el fondo sigue siendo opaco, y las estrellas van encima.
+ *
+ * El velo se retira en ese estado por el mismo motivo por el que no se pinta
+ * sobre una transición: sería un degradado tapando justo las estrellas que se
+ * acaban de traer al frente. Lleva `!important` porque su opacidad la escribe el
+ * encabezado cuadro a cuadro como estilo en línea.
+ */
+:root[data-menu-cielo] [data-cielo] {
+  z-index: 11;
+}
+
+:root[data-menu-cielo] .velo-nav {
+  opacity: 0 !important;
+}
+
+/*
  * Las dos escenas que ocupan la pantalla.
  *
  * El formulario y el pie dejaron de ser secciones comprimidas entre otras: cada
@@ -928,6 +982,30 @@
     padding-top: calc(var(--spacing-nav) + var(--spacing-2xl));
     padding-bottom: var(--spacing-2xl);
   }
+}
+
+/*
+ * La escena que cierra el documento se mide con la ventana grande.
+ *
+ * `svh` es la ventana **con la barra del navegador desplegada**, y es lo correcto
+ * para una escena en medio del recorrido: garantiza que entre siempre. Pero la
+ * última escena tiene un problema que ninguna otra tiene — el final del scroll.
+ * Al llegar abajo del todo la barra se retrae, así que lo que se ve mide `lvh`, y
+ * el scroll máximo (alto del documento menos ventana) deja asomando arriba
+ * exactamente `lvh - svh` píxeles de lo anterior: **la cola de la tierra y su
+ * diagonal, contra un cierre que tenía que ser cielo entero.**
+ *
+ * Por eso el cierre —y sólo el cierre— se mide con `lvh`. No se movió el
+ * contenido ni el centrado: la escena crece y su contenido sigue centrado
+ * adentro, así que al final del scroll —que es cuando se la ve— la composición
+ * queda centrada exacta y el cielo llega a sangre. *Lo que cuesta:* si se para a
+ * mitad del pie con la barra desplegada, el contenido queda media barra bajo. Se
+ * acepta porque al pie se llega bajando, y bajando la barra está retraída.
+ *
+ * En un escritorio `lvh` y `svh` valen lo mismo, así que esto no existe ahí.
+ */
+.escena-cierre {
+  min-height: 100lvh;
 }
 
 /*

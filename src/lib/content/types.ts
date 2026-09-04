@@ -96,6 +96,18 @@ export type Proyecto = {
   persona: string;
   /** Qué es, dicho como identidad — no como rubro. Copy final, no se inventa. */
   descriptor?: CampoLocalizado;
+  /**
+   * Quién es y qué hace especial al proyecto, en prosa. Abre el caso, debajo del
+   * nombre.
+   *
+   * ~~Antes era el primer bloque del `cuerpo`, después de la ficha técnica.~~ Un
+   * caso que empieza por lo que hizo el estudio invierte de quién es la página:
+   * primero se presenta a la persona, después se acreditan los roles. Vive como
+   * campo propio y no como bloque porque su lugar es la apertura, del otro lado
+   * del corte — y porque un caso sin presentación es un caso incompleto, no un
+   * caso con un bloque menos. Misma escritura que un bloque `texto`.
+   */
+  presentacion?: CampoLocalizado;
   año?: number;
   /**
    * Qué hizo North Studio. Honesto, sin inflar.

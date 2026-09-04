@@ -41,6 +41,29 @@ export const delfinaGayoso: Proyecto = {
     es: "Una forma de enseñar que transforma la cocina en un lugar al que siempre dan ganas de volver.",
     en: "A way of teaching that turns the kitchen into a place you always want to come back to.",
   },
+  /**
+   * Quién es, en la apertura y debajo del nombre.
+   *
+   * Empieza sin "Delfina" a propósito: el nombre está justo arriba en display, y
+   * repetirlo es leerle al visitante lo que acaba de ver. En inglés el sujeto no
+   * se puede elidir, así que ahí sí aparece — la elisión es una decisión de esta
+   * lengua, no una regla del contenido.
+   *
+   * ~~"Sin apuro y sin tecnicismos, aunque detrás haya oficio."~~ El problema no
+   * era la idea sino el "aunque": conceder es tratar su oficio como la excepción
+   * a la sencillez, y de paso obliga a nombrarlo para defenderlo. **"Que es la
+   * parte difícil"** dice lo mismo al revés — la sencillez no ocurre a pesar del
+   * oficio, es el oficio— y no hace falta explicar nada. Se gana además el
+   * silencio: la frase es más corta que la que reemplaza.
+   */
+  presentacion: {
+    es: `Comparte una manera de cocinar que se siente simple y cotidiana.
+
+Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro y sin tecnicismos, que es la parte difícil.`,
+    en: `She shares a way of cooking that feels simple and everyday.
+
+The way she *teaches* makes cooking feel much closer. No rush and no jargon, which is the hard part.`,
+  },
   año: 2026,
   rol: [
     { es: "Estrategia y Discovery", en: "Strategy and Discovery" },
@@ -75,18 +98,8 @@ export const delfinaGayoso: Proyecto = {
    * (era el gracias-a-nosotros de siempre, con otro traje).
    */
   cuerpo: [
-    {
-      tipo: "texto",
-      contenido: {
-        es: `Delfina comparte una manera de cocinar que se siente simple y cotidiana.
-
-Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro y sin tecnicismos, aunque detrás haya oficio.`,
-        en: `Delfina shares a way of cooking that feels simple and everyday.
-
-The way she *teaches* makes cooking feel much closer. No rush and no jargon, even with real craft behind it.`,
-      },
-    },
-    { tipo: "pausa", tamaño: "rest-lg" },
+    // El cuerpo empieza en la imagen: la presentación subió a la apertura y los
+    // créditos la anteceden acá, escritos por la página.
     { tipo: "media", media: apertura },
     { tipo: "pausa" },
     {

@@ -23,13 +23,37 @@ export function Texto({
   bloque: BloqueTexto;
   locale: Locale;
 }) {
-  const parrafos = resolverCampo(bloque.contenido, locale)
+  return (
+    <Prosa
+      texto={resolverCampo(bloque.contenido, locale)}
+      className="max-w-[64ch] font-serif text-body text-ink md:ml-[16%]"
+    />
+  );
+}
+
+/**
+ * La misma gramática de prosa, disponible fuera del cuerpo.
+ *
+ * Existe porque la presentación de un proyecto dejó de vivir en el cuerpo y pasó
+ * a la apertura (`proyecto-adentro.tsx`): es el mismo texto escrito de la misma
+ * manera —párrafos separados por una línea en blanco, énfasis entre asteriscos—
+ * puesto en otro lugar de la página. Duplicar el intérprete habría sido tener dos
+ * reglas de escritura para la misma prosa.
+ */
+export function Prosa({
+  texto,
+  className,
+}: {
+  texto: string;
+  className?: string;
+}) {
+  const parrafos = texto
     .split(/\n\s*\n/)
     .map((parrafo) => parrafo.trim())
     .filter(Boolean);
 
   return (
-    <div className="max-w-[64ch] font-serif text-body text-ink md:ml-[16%]">
+    <div className={className}>
       {parrafos.map((parrafo, i) => (
         <p key={i} className={i > 0 ? "mt-md" : undefined}>
           {conEnfasis(parrafo)}

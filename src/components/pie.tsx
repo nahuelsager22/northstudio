@@ -19,9 +19,12 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
  *    fijo detrás y esta escena lo deja ver—, así que el cierre tiene la
  *    profundidad del comienzo y la constelación puede aparecer también acá. Es
  *    lo que le da sensación de cierre a un recorrido: volver, no terminar.
- * 2. **Ocupa una pantalla.** `.escena` (globals.css): `100svh`, contenido
- *    centrado y el alto de la nav descontado, para que no se vea nada de lo
- *    anterior ni el cierre quede comprimido contra el borde.
+ * 2. **Ocupa una pantalla, y la mide con la ventana grande.** `.escena`
+ *    (globals.css) centra el contenido y descuenta el alto de la nav;
+ *    `.escena-cierre` cambia `svh` por `lvh` porque ésta es la última escena del
+ *    documento. Con `svh` el final del scroll dejaba asomando arriba la cola de
+ *    la tierra —la barra del teléfono se retrae al llegar abajo y lo que se ve
+ *    pasa a medir más que la escena—, así que el cierre no llegaba a sangre.
  * 3. **Se compone al centro.** Todo el sitio está construido sobre márgenes
  *    asimétricos; el cierre es el único momento centrado, y esa es la razón por
  *    la que se lee como cierre. Un eje que aparece una sola vez y al final es
@@ -40,8 +43,16 @@ import type { Dictionary } from "@/lib/i18n/get-dictionary";
 /** Versalitas: el rótulo nombra, no habla. Es el registro de acción, en voz baja. */
 const ROTULO = "font-sans text-label uppercase text-muted";
 
-/** El dato, en la voz del sitio. Serif y no mono: no es un metadato, es una puerta. */
-const DATO = "font-serif text-title-3 text-ink";
+/**
+ * El dato, en la voz del sitio. Serif y no mono: no es un metadato, es una
+ * puerta.
+ *
+ * ~~Antes en `text-title-3`.~~ A esa altura los dos datos competían con la firma
+ * que tienen en el medio, que es lo único que el cierre tiene que dejar. En
+ * `text-body` siguen siendo puertas —serif, subrayado al pasar— y la firma vuelve
+ * a ser lo más grande de la escena.
+ */
+const DATO = "font-serif text-body text-ink";
 
 export function Pie({ dict }: { dict: Dictionary }) {
   return (
@@ -49,7 +60,7 @@ export function Pie({ dict }: { dict: Dictionary }) {
       aria-label={dict.pie.nombre}
       data-zona
       data-superficie="cielo"
-      className="escena px-md sm:px-xl"
+      className="escena escena-cierre px-md sm:px-xl"
     >
       <div className="mx-auto w-full max-w-[42rem] text-center">
         <div data-reveal>

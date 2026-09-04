@@ -268,6 +268,25 @@ export function SiteNav({
   }, []);
 
   /**
+   * El menú abierto sobre el cielo trae las estrellas al frente.
+   *
+   * El panel hereda el color del plano declarando su superficie, y eso alcanza
+   * en los tres planos pintados. En el cielo no: **el cielo es color y
+   * estrellas**, y pintar sólo el color da un panel del color del cielo. El
+   * canvas está fijo detrás de todo, así que lo único que hace falta es dejarlo
+   * pasar por encima del panel mientras dura ese estado (`globals.css`). El
+   * fondo sigue siendo opaco: no se ve el contenido, se ven las estrellas.
+   */
+  useEffect(() => {
+    const raiz = document.documentElement;
+    if (menuAbierto && superficie === "cielo") raiz.dataset.menuCielo = "";
+    else delete raiz.dataset.menuCielo;
+    return () => {
+      delete raiz.dataset.menuCielo;
+    };
+  }, [menuAbierto, superficie]);
+
+  /**
    * El logo, cuando ya estamos en el lugar.
    *
    * ~~Antes era un `<Link>` a la raíz y nada más:~~ estando en la portada, eso
@@ -313,7 +332,10 @@ export function SiteNav({
           // contenido debajo se retira a segundo plano sin irse. Sin banda y sin
           // regla: lo que lo separa del contenido es su propio silencio.
           alTope || menuAbierto ? "text-ink" : "text-muted",
-          menuAbierto ? "bg-bg" : "",
+          // ~~Y con el menú abierto se pintaba `bg-bg`.~~ Sobraba —el panel que
+          // tiene debajo ocupa la ventana entera y es opaco— y sobre el cielo
+          // molestaba: era una franja tapando las estrellas que el panel trae al
+          // frente. Un encabezado que no necesita fondo no lo lleva.
         ].join(" ")}
       >
         {/*
@@ -418,13 +440,22 @@ export function SiteNav({
       </header>
 
       {/* El panel móvil: el mismo lugar, ocupado por su índice. Fondo sólido,
-          composición asimétrica, los destinos en la voz del sitio. */}
+          composición asimétrica, los destinos en la voz del sitio.
+
+          **Declara la superficie que la nav está midiendo**, y por eso `bg-bg`,
+          `text-ink` y `text-muted` se resuelven con los tokens de ese plano.
+          ~~Antes el panel era hermano del encabezado, fuera de toda superficie,
+          y `--color-bg` caía a la raíz:~~ el menú se abría negro sobre el bosque,
+          sobre la piedra y sobre la tierra — la caja aparte que el resto del
+          sistema existe para no tener. Sobre una diagonal hereda el plano
+          predominante, que es el mismo criterio con el que la nav elige su tinta. */}
       {conIndice ? (
         <div
           id="menu-movil"
           ref={panel}
           inert={!menuAbierto}
           aria-hidden={!menuAbierto}
+          data-superficie={superficie ?? undefined}
           className={[
             "fixed inset-0 z-10 flex flex-col justify-center bg-bg px-md pt-[6rem] pb-xl transition-opacity duration-[var(--duration-base)] ease-[var(--ease-out-calm)] sm:px-xl lg:hidden",
             menuAbierto ? "opacity-100" : "pointer-events-none opacity-0",
