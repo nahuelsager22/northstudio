@@ -20,11 +20,11 @@ El orden importa y es el resultado de una corrección: **primero se muestra, des
 
 **① El umbral.** Pantalla completa, la firma completa y una línea que dice qué hace el estudio. La firma no está centrada ni arriba: se apoya por debajo del centro óptico y desplazada del margen, así entrar es bajar la vista. La transición al momento siguiente es el vacío que sigue — ni flecha ni "scroll para descubrir". Para que ese vacío se lea como decisión y no como final, la página tiene que ser *visiblemente* más alta que la ventana.
 
-**② El trabajo.** Lista editorial de proyectos publicados, no grilla de cards ni slider. Es el punto de mayor intensidad del recorrido, y por eso:
+**② El trabajo.** Lista editorial de proyectos publicados, no grilla de cards ni slider. Transcurre sobre el **bosque**, su plano propio. Es el punto de mayor intensidad del recorrido, y por eso:
 
 - **sin etiqueta de sección arriba** — un rótulo antes de una imagen a sangre le baja el volumen a lo único que tenía que subirlo;
-- **la portada de un proyecto destacado rompe el marco** y se muestra a todo el ancho de la ventana, fuera del paspartú. Es la única vez en todo el sitio que algo desborda el margen, y como es la única, significa;
-- **el nombre entra después de la imagen**, en display y sobre el margen editorial: el trabajo se ve antes de saber de quién es.
+- **la portada va como lámina y no como captura en una caja** — sin paspartú, con un keyline, compartiendo eje con el nombre y sin llegar al margen derecho: lo que dice que está puesta a propósito es el espacio que se le dejó al lado;
+- **el nombre entra después de la imagen**, en display y sobre el eje de la lámina: el trabajo se ve antes de saber de quién es.
 
 El ritmo de la lista sale del dato (`destacado`, `clima.ritmo`, el orden), no del capricho. La lista anuncia y no ficha: muestra persona, descriptor y año; la lista de roles completa vive dentro del proyecto.
 
@@ -42,19 +42,21 @@ El recorrido no cambia de fondo: **desciende**. El detalle del sistema está en 
 
 | Zona | Superficie |
 |---|---|
-| Umbral y trabajo | `cielo` — el fondo del tema, con estrellas si es Noche |
-| *transición* | el amanecer: brasa, y la arena sube por una onda |
-| El estudio | `arena` — la arcilla aclarada, igual en los dos temas |
-| *transición* | terracota, y la arcilla sube por una onda |
-| La conversación | `tierra` — una escena de una pantalla |
-| *transición* | brasa otra vez, y vuelve el cielo |
+| El umbral | `cielo` — el fondo del tema, con estrellas si es Noche |
+| *transición* | el bosque sube por una onda, y las estrellas se ven hasta la curva |
+| El trabajo | `bosque` — #2C4027, Dark Spruce; un plano de una pantalla y media |
+| *transición* | el mismo verde sube de luz por otra onda |
+| El estudio | `liquen` — #AEBBA6; otro plano de una pantalla y media |
+| *transición* | la tierra sube por otra onda |
+| La conversación | `tierra` — #403122, una escena de una pantalla |
+| *transición* | la tierra se corta con la onda y debajo aparece el cielo |
 | El pie | `cielo` — otra escena de una pantalla, con estrellas |
 
 Las transiciones se declaran en la portada (`app/(es)/page.tsx`), en el orden del recorrido y no dentro de cada momento: una transición pertenece a los dos lados y a ninguno. **Cada una es el silencio entre dos momentos**, así que las secciones que la rodean terminan y empiezan en su contenido.
 
 El trabajo abre con el título de su sección ("Con quién trabajamos") y el proyecto vive adentro: el título es más chico que el nombre de la persona, porque la sección presenta y la persona protagoniza.
 
-La página de un caso transcurre entera bajo el cielo. Como el pie también cierra en el cielo, ahí no hay transición ninguna: continúa.
+**Un caso nace del plano del que salió:** su apertura transcurre sobre el bosque —se hace click en una lámina apoyada en el bosque y se llega a un nombre apoyado en el bosque— y baja al cielo por una onda, donde el material del proyecto se ve sobre el fondo neutro del lugar. Como el pie también cierra en el cielo, ahí no hay transición ninguna: continúa.
 
 ## 2. Navegación
 
@@ -62,7 +64,9 @@ Nav persistente en `src/components/site-nav.tsx`, montada por `site-shell.tsx`.
 
 **No se esconde.** Está siempre, en `muted` y sin banda; recupera la tinta al llegar al tope. Un elemento que se va y vuelve pide ser mirado dos veces.
 
-**Lo que la separa del contenido es un velo, no una placa:** el mismo fondo del lugar disolviéndose en un degradado de 7,5 rem, opaco arriba y nada abajo. Hereda la atmósfera sobre la que se apoya en vez de taparla, y lo que pasa por debajo se intuye sin leerse. Sin blur ni glass — es el color del sitio. Sin esto, el verde a sangre del trabajo cruza entero por detrás de las palabras.
+**El logo vuelve arriba sin navegar.** Estando ya en el lugar, hace `preventDefault` y usa el mismo camino que los otros tres destinos: pedir la misma ruta remonta la página y salta al tope de golpe, que es la sensación de una recarga. Desde un caso sigue siendo un enlace de verdad.
+
+**Lo que la separa del contenido es un velo, no una placa:**
 
 **Los destinos son tres, sin numerar** (`src/lib/i18n/secciones.ts`): Trabajo · Estudio · Contacto. En serif, caja baja, 15 px — el encabezado corriente de una publicación, no una barra. La numeración anterior (`01 · 02 · 03`) prometía un método ordenado y convertía el índice en un catálogo de metodología.
 

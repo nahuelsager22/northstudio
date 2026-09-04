@@ -442,46 +442,63 @@
 }
 
 /*
- * La atmósfera del recorrido — un descenso, no tres bloques.
+ * La atmósfera del recorrido — un descenso, no una pila de planos.
  *
- * ~~Antes: tres superficies puestas una debajo de otra (noche → papel blanco →
- * arcilla), cada una con su paleta y un degradado plano o un filo entre ellas.~~
+ * ~~Antes: tres superficies con un degradado de doce rem entre cada dos.~~ El
+ * degradado hacía dos trabajos a la vez y ninguno del todo: presentaba los
+ * colores (que hacía falta, porque no se conocían) y disolvía el borde (que ya
+ * hacía la onda). Con la onda funcionando, el degradado era la mitad artificial
+ * del sistema: un lugar no tiene un fundido entre el cielo y el suelo.
  *
- * El problema medible no era ninguno de los tres colores: era que **no había
- * relación entre ellos**. Matices 265 → 85 → 45, luminancias 0.115 → 0.93 →
- * 0.33; un papel casi blanco y neutro entre dos planos con temperatura. Tres
- * decisiones que no se conocían, y por eso el recorrido se leía como una pila de
- * secciones y no como una página.
+ * Ahora el recorrido es **color plano → onda → color plano**, y la única
+ * transición visual es la onda.
  *
- * Ahora hay **una sola composición vertical**, y es un lugar visto desde el mismo
- * sitio a lo largo del día:
+ * Eso obliga a que la relación esté en los colores mismos y no en lo que hay
+ * entre ellos. La paleta anterior no la tenía: matices 265 → 66 → 45 con cromas
+ * 0.018 / 0.028 / 0.068, un plano casi blanco y una arcilla saturada. Dos de las
+ * tres decisiones eran de otra familia.
  *
- *     cielo  →  (brasa)  →  arena  →  (terracota)  →  tierra  →  (brasa)  →  cielo
+ * Las tres del recorrido de ahora salen de un mismo material:
  *
- * Lo que conecta los planos son los pasos, y los pasos son color: entre la noche
- * y la arena hay un amanecer, entre la arena y la arcilla hay una terracota,
- * entre la arcilla y la noche vuelve a haber brasa. Ninguna zona limita con otra
- * sin que el color las presente primero.
+ *     cielo   oklch(0.115 0.018 265)   la noche — no se toca, es el ancla
+ *     liquen  oklch(0.775 0.032 134)   #AEBBA6 · el verde gris de la piedra
+ *     tierra  oklch(0.325 0.033  66)   #403122 · el pardo profundo del suelo
  *
- * Tres decisiones detrás de eso:
+ * Tres cosas que las vuelven una atmósfera y no tres elecciones:
  *
- * 1. **El blanco se fue.** El plano claro dejó de ser el papel del tema (neutro,
- *    L 0.93, matiz 85) y pasó a ser **arena**: la misma familia cálida de la
- *    arcilla, aclarada. Arena y tierra son ahora el mismo color a dos alturas —
- *    la relación cromática que faltaba entre el medio y el final.
- * 2. **La arena no cambia con el tema, igual que la tierra.** La mitad de abajo
- *    del recorrido es material del estudio; el cielo es lo único que el tema
- *    gobierna. Antes el plano del medio era "lo opuesto al cielo" y se daba
- *    vuelta con él: dos superficies dependientes del tema para una sola idea.
- * 3. **El recorrido cierra donde abrió.** El pie vuelve al cielo. Ver
- *    `components/pie.tsx`.
+ * 1. **Nada está saturado.** Los tres cromas caben entre 0.018 y 0.033. La
+ *    terracota anterior (0.068) era el doble que todo lo demás, y eso —no su
+ *    matiz— es lo que la hacía sonar a plantilla. Un color sofisticado es casi
+ *    siempre un color que se contuvo.
+ * 2. **El matiz hace un solo arco.** 265 → 134 → 66: azul, verde, pardo. Cada
+ *    paso baja por el mismo lado de la rueda, así que ningún par de vecinos
+ *    tiene que cruzar el punto muerto del medio. El único salto grande (66 → 265,
+ *    de la tierra a la noche) ocurre entre dos colores oscuros, donde el matiz
+ *    casi no se lee.
+ * 3. **La luz sube y baja como en un día.** 0.115 → 0.775 → 0.325 → 0.115. El
+ *    plano claro bajó de 0.905 a 0.775: seguía teniendo el blanco encima, y a
+ *    esa altura ya no era "el momento de luz" sino una hoja. Ciento treinta
+ *    puntos menos de luminancia son la diferencia entre un color y un papel.
+ *
+ * Y el verde oscuro de la referencia (#2C4027) no quedó afuera: **es la voz baja
+ * del liquen**. El plano claro y su tinta secundaria son el mismo color a dos
+ * alturas — la relación que antes no existía entre ninguna parte del recorrido.
  *
  * **Una superficie sigue siendo una paleta chica, no un color de fondo.** Cada
  * bloque redeclara los seis tokens (y su espejo `--color-*`, porque
  * `@theme inline` resuelve `--color-ink: var(--ink)` en `:root` y lo que se
- * hereda es el valor ya resuelto). Por eso un plano de arena vive dentro de un
+ * hereda es el valor ya resuelto). Por eso un plano de liquen vive dentro de un
  * sitio de noche sin que ninguna clase de texto sepa dónde está.
  */
+
+/* Los dos colores del recorrido que no dependen del tema, escritos una sola vez:
+   las superficies los usan para pintarse y las transiciones para saber a qué
+   color van. Un color del recorrido no se escribe dos veces. */
+:root {
+  --c-bosque: oklch(0.347 0.049 140);
+  --c-liquen: oklch(0.775 0.032 134);
+  --c-tierra: oklch(0.325 0.033 66);
+}
 
 /* El cielo: el fondo del tema. No se pinta — se deja ver, para que el canvas de
    estrellas quede detrás. Existe como superficie para que la nav y los tokens
@@ -519,45 +536,91 @@
 }
 
 /*
- * La arena — el momento de luz del recorrido, y la arcilla vista de día.
+ * El bosque — el plano del trabajo. Dark Spruce, #2C4027, sin retocar.
  *
- * L 0.905 con croma 0.028 en matiz 66: no es blanco ni papel neutro. Tiene la
- * temperatura de la tierra (matiz 45) corrida apenas hacia la luz, así que
- * cuando la arcilla llega después no aparece como un color nuevo sino como el
- * mismo color en sombra. La tinta es un pardo oscuro y no un negro: sobre arena,
- * un gris neutro se ve sucio.
+ * ~~Antes el trabajo transcurría sobre el cielo, igual que el umbral.~~ Era el
+ * único momento del recorrido que no tenía plano propio, y se notaba en dos
+ * cosas: el salto del cielo al liquen era el más grande de la página (0.115 →
+ * 0.775 de un solo paso) y el trabajo —que es el punto de mayor intensidad— no
+ * tenía ningún lugar donde ocurrir.
+ *
+ * Entra sin forzar nada porque ya estaba adentro: es el mismo verde que el
+ * liquen dos alturas más abajo (matiz 140 contra 134), y era el color con el que
+ * el liquen escribe su voz baja. Ahora se devuelven el gesto — **la voz baja del
+ * bosque es #B2BFAC, que es el liquen.** El plano que viene ya se está hablando
+ * en el anterior.
+ *
+ * Y lo que ordena el recorrido entero: bosque y tierra están a la misma altura
+ * de luz (0.347 y 0.325), un verde y un pardo. El día sube y baja simétrico —
+ * noche, bosque, luz, tierra, noche— y los dos planos oscuros son la misma
+ * profundidad vista desde dos temperaturas.
  */
-[data-superficie="arena"] {
-  --bg: oklch(0.905 0.028 66);
-  --surface: oklch(0.875 0.030 66);
-  --ink: oklch(0.235 0.020 50);
-  --muted: oklch(0.445 0.022 52);
-  --hairline: oklch(0.815 0.030 64);
-  --polar: oklch(0.48 0.085 250);
+[data-superficie="bosque"] {
+  --bg: var(--c-bosque);
+  --surface: oklch(0.398 0.047 140);
+  --ink: oklch(0.955 0.011 128);
+  --muted: oklch(0.790 0.030 135);
+  --hairline: oklch(0.455 0.042 140);
+  --polar: oklch(0.86 0.05 250);
 
-  --color-bg: oklch(0.905 0.028 66);
-  --color-surface: oklch(0.875 0.030 66);
-  --color-ink: oklch(0.235 0.020 50);
-  --color-muted: oklch(0.445 0.022 52);
-  --color-hairline: oklch(0.815 0.030 64);
-  --color-polar: oklch(0.48 0.085 250);
+  --color-bg: var(--c-bosque);
+  --color-surface: oklch(0.398 0.047 140);
+  --color-ink: oklch(0.955 0.011 128);
+  --color-muted: oklch(0.790 0.030 135);
+  --color-hairline: oklch(0.455 0.042 140);
+  --color-polar: oklch(0.86 0.05 250);
 }
 
-/* La tierra — el suelo donde se habla. El mismo color en los dos temas. */
-[data-superficie="tierra"] {
-  --bg: oklch(0.33 0.068 45);
-  --surface: oklch(0.38 0.066 45);
-  --ink: oklch(0.96 0.014 80);
-  --muted: oklch(0.80 0.035 62);
-  --hairline: oklch(0.45 0.055 48);
-  --polar: oklch(0.88 0.05 250);
+/*
+ * El liquen — el momento de luz, y lo único vivo entre el cielo y el suelo.
+ *
+ * ~~Antes: arena, L 0.905.~~ Era la arcilla aclarada, y esa relación estaba
+ * bien; el problema era la altura. A 0.905 el plano seguía leyéndose como papel
+ * blanco tibio, que es exactamente lo que la iteración anterior quería sacar.
+ *
+ * Ahora es un verde gris de piedra del norte (#AEBBA6): tiene color, no lo
+ * anuncia, y su tinta y su voz baja son el mismo verde a dos alturas más
+ * profundas — la secundaria es literalmente #2C4027. Un plano cuya tipografía
+ * está escrita con su propio color no puede leerse como un bloque pegado.
+ */
+[data-superficie="liquen"] {
+  --bg: var(--c-liquen);
+  --surface: oklch(0.735 0.034 134);
+  --ink: oklch(0.255 0.048 141);
+  --muted: oklch(0.347 0.049 140);
+  --hairline: oklch(0.66 0.033 134);
+  --polar: oklch(0.40 0.095 250);
 
-  --color-bg: oklch(0.33 0.068 45);
-  --color-surface: oklch(0.38 0.066 45);
-  --color-ink: oklch(0.96 0.014 80);
-  --color-muted: oklch(0.80 0.035 62);
-  --color-hairline: oklch(0.45 0.055 48);
-  --color-polar: oklch(0.88 0.05 250);
+  --color-bg: var(--c-liquen);
+  --color-surface: oklch(0.735 0.034 134);
+  --color-ink: oklch(0.255 0.048 141);
+  --color-muted: oklch(0.347 0.049 140);
+  --color-hairline: oklch(0.66 0.033 134);
+  --color-polar: oklch(0.40 0.095 250);
+}
+
+/*
+ * La tierra — el suelo donde se habla. El mismo color en los dos temas.
+ *
+ * ~~Antes: oklch(0.33 0.068 45), una terracota.~~ Misma luminancia, la mitad de
+ * croma y veinte grados hacia el olivo: el pardo profundo de la referencia
+ * (#403122). No se oscureció ni se aclaró nada — sólo se le sacó el naranja, que
+ * era lo único que sonaba a decisión de plantilla.
+ */
+[data-superficie="tierra"] {
+  --bg: var(--c-tierra);
+  --surface: oklch(0.375 0.032 66);
+  --ink: oklch(0.945 0.014 92);
+  --muted: oklch(0.775 0.026 80);
+  --hairline: oklch(0.44 0.030 66);
+  --polar: oklch(0.86 0.05 250);
+
+  --color-bg: var(--c-tierra);
+  --color-surface: oklch(0.375 0.032 66);
+  --color-ink: oklch(0.945 0.014 92);
+  --color-muted: oklch(0.775 0.026 80);
+  --color-hairline: oklch(0.44 0.030 66);
+  --color-polar: oklch(0.86 0.05 250);
 }
 
 .superficie {
@@ -570,16 +633,50 @@
 }
 
 /*
+ * Un plano tiene que poder leerse como plano.
+ *
+ * El estudio medía menos que una pantalla, así que en ningún momento del scroll
+ * el liquen llenaba el cuadro: siempre había una onda arriba o abajo, y un color
+ * que nunca se ve solo no es un plano — es una franja entre dos bordes.
+ *
+ * La regla es una pantalla **más la altura de una transición**: esa altura de
+ * sobra es, literalmente, el tramo de scroll en el que no hay ninguna onda a la
+ * vista. El contenido no se centra a propósito —un ancla tiene que aterrizar en
+ * lo que se vino a leer y no en el vacío de arriba—, así que el aire sobrante
+ * queda del lado de abajo, que es donde el recorrido lo pide: se termina de leer
+ * la sección, se ve el color solo, recién después llega la onda.
+ */
+.plano {
+  min-height: calc(100svh + var(--spacing-4xl));
+  /* El aire de arriba tiene un segundo trabajo: **es el aterrizaje del ancla.**
+     Un plano se llega a ras (más abajo), así que lo que separa su primera línea
+     de la nav es exactamente este padding y nada más. Por eso no baja de 6rem:
+     la nav mide 3.5. */
+  padding-top: var(--spacing-3xl);
+  padding-bottom: var(--spacing-3xl);
+}
+
+@media (width >= 48rem) {
+  .plano {
+    padding-top: var(--spacing-4xl);
+    padding-bottom: var(--spacing-4xl);
+  }
+}
+
+/*
  * Las zonas — cómo la nav sabe de qué color es el lugar donde está apoyada.
  *
  * Cada tramo vertical del recorrido (una superficie, una transición, el cielo
- * abierto del umbral) declara **cuatro paradas de color**: el que tiene arriba,
- * dos intermedias y el que tiene abajo. Son las mismas paradas con las que se
- * dibuja el degradado, así que el modelo que lee la nav y lo que se ve en
- * pantalla son la misma cosa y no dos definiciones que hay que mantener juntas.
+ * abierto del umbral) declara **cuatro paradas de color**: la que tiene arriba,
+ * dos intermedias y la que tiene abajo. En un plano liso las cuatro son iguales
+ * y no hace falta escribir nada: el valor por defecto es su propio fondo.
  *
- * En un plano liso las cuatro son iguales y no hace falta escribir nada: el
- * valor por defecto es su propio fondo.
+ * En una transición las tres primeras son la de origen y la última la de
+ * destino, porque eso es exactamente lo que pasa ahora que no hay degradado: el
+ * plano de arriba llega entero hasta la onda. La nav cruza ese último tramo
+ * mezclando y no saltando, y eso no es una licencia: la onda es una curva, así
+ * que a lo ancho de la ventana el borde está a alturas distintas y el color que
+ * hay detrás del encabezado *es* una mezcla de los dos.
  */
 [data-zona] {
   --z0: var(--bg);
@@ -589,53 +686,46 @@
 }
 
 /*
- * El paso de una zona a otra.
+ * El paso de un plano a otro: la onda, y nada más.
  *
- * ~~Antes: un degradado recto de doce rem hacia el color siguiente, o un filo
- * entre dos planos opacos.~~ El degradado recto entre dos colores lejanos pasa
- * por el punto muerto que hay entre ellos, y el filo es literalmente el corte
- * que se quería evitar. Los dos leían como "acá termina una sección".
+ * ~~Antes había dos capas: una atmósfera en degradado y una onda encima.~~ La
+ * onda sola alcanza, y sin el degradado la paleta se lee como decisión en vez de
+ * como interpolación.
  *
- * Ahora una transición tiene dos capas y las dos son composición:
+ * Un bloque de transición es entonces un rectángulo del color de origen con la
+ * onda del color de destino apoyada abajo. Sigue siendo **el silencio entre dos
+ * momentos** —no se le suma al padding de nadie, lo reemplaza—, así que cada
+ * sección vuelve a empezar en su contenido y un ancla aterriza bien.
  *
- * 1. **La atmósfera.** Un degradado de cuatro paradas que no va directo: pasa
- *    por un intermedio cálido —brasa, terracota— que es el que hace que los dos
- *    planos parezcan pertenecer a la misma escena. Es lo que faltaba: dos
- *    colores se relacionan por lo que hay entre ellos.
- * 2. **La onda.** El plano siguiente no entra como una línea recta: entra como
- *    una curva asimétrica que lo sube dentro del anterior. Es la idea prestada
- *    del sitio de Delfina, y acá tiene un motivo propio — un horizonte no es
- *    horizontal.
+ * Dos modos, y la diferencia es de qué lado está el cielo:
  *
- * La regla de composición no cambió: **el paso ocurre dentro del silencio entre
- * dos momentos, nunca cruzando una línea de texto.** La transición *es* ese
- * silencio ahora — un bloque propio en el flujo, no el padding de nadie— y por
- * eso cada momento puede empezar en su contenido y un ancla sigue aterrizando
- * bien.
+ * - `sube`: el plano que llega asciende dentro del anterior, y la onda se pinta
+ *   con el color de destino. Cuando el origen es el cielo, el bloque no se pinta:
+ *   las estrellas se ven hasta la curva.
+ * - `revela`: el que llega es el cielo, y el cielo no se pinta. Entonces se pinta
+ *   lo contrario —la masa del plano de origen, con la onda como su borde
+ *   inferior— y **debajo de la curva no hay nada**: el canvas fijo aparece a
+ *   través de la onda. ~~Antes la onda final se rellenaba con el negro del cielo
+ *   y debajo quedaba un bloque opaco: una banda de noche sin estrellas contra un
+ *   pie que sí las tiene.~~ Ese corte recto era eso — no un color mal elegido,
+ *   sino pintar un fondo que no había que pintar.
  */
 .transicion {
   position: relative;
-  /* Un píxel montada sobre el plano anterior. El borde entre dos cajas puede
-     caer en una fracción de píxel (medido: 847.30) y entonces las dos lo pintan
-     a medias: por esa décima se ve el fondo del documento, que es la noche, como
-     una línea oscura cruzando la arena. Como la primera parada del degradado es
-     el color del plano de arriba, montarlo no tapa nada. */
-  margin-top: -1px;
+  /* Montada sobre el plano anterior. El borde entre dos cajas cae casi siempre
+     en una fracción de píxel (medido: 847.30 y −364.1375) y entonces las dos lo
+     pintan a medias: por esa décima se ve el fondo del documento por la junta,
+     como una línea cruzando el plano. **Un píxel de monta no alcanzaba:** con la
+     página escalada —zoom del navegador, pantalla a escala— un píxel CSS mide
+     menos de un píxel de la pantalla y la junta vuelve a aparecer. Cuatro cubren
+     hasta un cuarto de escala, y no cuestan nada: lo que se monta es la banda de
+     arriba de la transición, que es del color del plano anterior. */
+  margin-top: -0.25rem;
   height: var(--spacing-4xl);
-  background-repeat: no-repeat;
-  /* Las cuatro paradas, en las mismas posiciones que lee la nav: el degradado
-     que se ve y el modelo con el que el encabezado calcula su color son una
-     sola definición. La última llega al color de destino antes del borde, así
-     que la onda recorta una forma sobre un fondo que ya se le está pareciendo
-     —el filo queda nítido en la cresta y se disuelve en los valles— y en el
-     borde inferior no hay ningún salto que corregir. */
-  background-image: linear-gradient(
-    to bottom,
-    var(--g0) 0%,
-    var(--z1) 55%,
-    var(--z2) 78%,
-    var(--z3) 100%
-  );
+  /* Cuánto mide la onda. Vive como variable porque el modo `revela` necesita
+     saber dónde empieza para apoyarle la masa justo encima. */
+  --onda-alto: clamp(2.5rem, 6vw, 5rem);
+  background-color: var(--desde);
 }
 
 @media (width >= 48rem) {
@@ -644,62 +734,94 @@
   }
 }
 
-/* La onda va apoyada en el borde inferior y desbordada un píxel: entre dos
-   colores llenos, medio píxel de redondeo se ve como una línea. */
 .transicion-onda {
   position: absolute;
   inset-inline: 0;
-  bottom: -1px;
   display: block;
   width: 100%;
-  height: clamp(2.5rem, 6vw, 5rem);
-  fill: var(--z3);
+  height: var(--onda-alto);
 }
 
-/*
- * Del cielo a la arena: el amanecer.
- *
- * La primera parada del degradado es transparente y no el color del cielo, y esa
- * es la diferencia entre que las estrellas **se apaguen** y que se tapen: el
- * canvas está fijo detrás, y una atmósfera que se va cerrando encima es
- * exactamente lo que hace un amanecer. Para la nav, en cambio, el color de esa
- * primera parada es el del cielo: es lo que se ve.
- */
-[data-transicion="arena"] {
+/* Desbordada un píxel hacia abajo: entre dos colores llenos, medio píxel de
+   redondeo se ve como una línea. */
+[data-onda="sube"] .transicion-onda {
+  bottom: -1px;
+  fill: var(--hasta);
+}
+
+/* En `revela` no hay nada abajo que tapar —es el cielo—, así que la onda se
+   apoya a ras: lo que desbordara sería un píxel de tierra sobre las estrellas. */
+.transicion[data-onda="revela"] {
+  background-color: transparent;
+}
+
+[data-onda="revela"] .transicion-onda {
+  bottom: 0;
+  fill: var(--desde);
+}
+
+[data-onda="revela"] .transicion-masa {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  bottom: calc(var(--onda-alto) - 1px);
+  background-color: var(--desde);
+}
+
+/* Del cielo al bosque: el cielo no se pinta, así que las estrellas siguen ahí
+   hasta la curva y el bosque sube desde abajo. Es el único paso del recorrido
+   donde se ve el fondo del tema por encima de la onda. */
+[data-paso="cielo-bosque"] {
+  --desde: transparent;
+  --hasta: var(--c-bosque);
   --z0: var(--bg);
-  --g0: transparent;
-  --z1: oklch(0.28 0.055 42);
-  --z2: oklch(0.60 0.068 52);
-  --z3: oklch(0.905 0.028 66);
+  --z1: var(--bg);
+  --z2: var(--bg);
+  --z3: var(--c-bosque);
 }
 
-/* En Papel no hay noche que abrir: el paso es un papel entibiándose. */
-:root[data-theme="papel"] [data-transicion="arena"] {
-  --z1: oklch(0.935 0.016 74);
-  --z2: oklch(0.915 0.024 70);
+/* Del bosque al liquen: el mismo verde subiendo de luz. Es el paso más corto de
+   la paleta —seis grados de matiz— y por eso puede permitirse el salto de
+   luminancia más grande que queda en la página. */
+[data-paso="bosque-liquen"] {
+  --desde: var(--c-bosque);
+  --hasta: var(--c-liquen);
+  --z0: var(--c-bosque);
+  --z1: var(--c-bosque);
+  --z2: var(--c-bosque);
+  --z3: var(--c-liquen);
 }
 
-/* De la arena a la tierra: el mismo color bajando de luz, por una terracota. */
-[data-transicion="tierra"] {
-  --z0: oklch(0.905 0.028 66);
-  --g0: var(--z0);
-  --z1: oklch(0.78 0.045 58);
-  --z2: oklch(0.545 0.072 50);
-  --z3: oklch(0.33 0.068 45);
+/* Del liquen a la tierra: el mismo movimiento, entre dos colores opacos. */
+[data-paso="liquen-tierra"] {
+  --desde: var(--c-liquen);
+  --hasta: var(--c-tierra);
+  --z0: var(--c-liquen);
+  --z1: var(--c-liquen);
+  --z2: var(--c-liquen);
+  --z3: var(--c-tierra);
 }
 
-/* De la tierra al cielo: el atardecer que cierra el recorrido donde abrió. */
-[data-transicion="cielo"] {
-  --z0: oklch(0.33 0.068 45);
-  --g0: var(--z0);
-  --z1: oklch(0.24 0.050 38);
-  --z2: oklch(0.175 0.035 30);
+/* Del bosque al cielo: el mismo corte, y sólo existe adentro de un caso. Lo
+   que abre un proyecto es el plano del que salió (`proyecto-adentro.tsx`). */
+[data-paso="bosque-cielo"] {
+  --desde: var(--c-bosque);
+  --hasta: var(--bg);
+  --z0: var(--c-bosque);
+  --z1: var(--c-bosque);
+  --z2: var(--c-bosque);
   --z3: var(--bg);
 }
 
-:root[data-theme="papel"] [data-transicion="cielo"] {
-  --z1: oklch(0.62 0.045 55);
-  --z2: oklch(0.90 0.020 66);
+/* De la tierra al cielo: se pinta la tierra y se la corta con la onda. Lo que
+   queda debajo es el lugar mismo — el recorrido cierra donde abrió. */
+[data-paso="tierra-cielo"] {
+  --desde: var(--c-tierra);
+  --hasta: var(--bg);
+  --z0: var(--c-tierra);
+  --z1: var(--c-tierra);
+  --z2: var(--c-tierra);
+  --z3: var(--bg);
 }
 
 /*
@@ -778,10 +900,20 @@
   }
 }
 
-/* Una escena completa aterriza a ras: el retiro que necesita una sección normal
-   (para no quedar debajo de la nav) acá dejaría siete rem de la zona anterior
-   asomando arriba. La escena ya se retira sola, por dentro. */
-.escena[id] {
+/*
+ * Un plano y una escena aterrizan a ras.
+ *
+ * El retiro por defecto de un ancla (`--spacing-anchor`, siete rem) existe para
+ * que una sección no quede debajo de la nav fija. Pero un plano empieza donde
+ * termina una onda: retirarse siete rem es aterrizar **dentro de la transición
+ * anterior**, y lo que se ve arriba es el plano de antes — el resto de cielo que
+ * asomaba al ir a "Estudio". El destino correcto es el borde del plano, y el
+ * aire que hace falta para no quedar bajo la nav ya vive adentro, en el
+ * `padding-top` de `.plano` y `.escena`. Un solo criterio para los tres
+ * destinos de la nav.
+ */
+.escena[id],
+.plano[id] {
   scroll-margin-top: 0;
 }
 

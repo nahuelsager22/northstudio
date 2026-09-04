@@ -18,7 +18,7 @@ import { Transicion } from "@/components/transicion";
  *
  * Mapa de intensidad, que ahora se puede escribir porque hay contraste:
  *   umbral       contemplativo — pantalla completa, silencio, el cielo de noche
- *   trabajo      impacto       — la portada a sangre, el nombre en display
+ *   trabajo      impacto       — el bosque, la lámina y el nombre en display
  *   estudio      respiración   — corto, entrado, en voz baja
  *   conversación cierre
  *
@@ -40,6 +40,7 @@ export default function EsHomePage() {
       conIndice
     >
       <Umbral dict={dict} />
+      <Transicion desde="cielo" hacia="bosque" onda="atardecer" />
       <Trabajo
         dict={dict}
         locale="es"
@@ -50,9 +51,9 @@ export default function EsHomePage() {
           no dentro de cada momento: una transición pertenece a los dos lados y a
           ninguno. Cada una **es** el silencio entre dos momentos — por eso las
           secciones que rodean vuelven a terminar en su contenido. */}
-      <Transicion desde="cielo" hacia="arena" onda="amanecer" />
+      <Transicion desde="bosque" hacia="liquen" onda="amanecer" />
       <Estudio dict={dict} />
-      <Transicion desde="arena" hacia="tierra" onda="atardecer" />
+      <Transicion desde="liquen" hacia="tierra" onda="atardecer" />
       <Conversacion dict={dict} locale="es" />
       <Transicion desde="tierra" hacia="cielo" onda="amanecer" />
     </SiteShell>

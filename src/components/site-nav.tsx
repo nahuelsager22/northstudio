@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Destello } from "@/components/brand/destello";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { irASeccion, pausarScroll } from "@/lib/scroll";
+import { irArriba, irASeccion, pausarScroll } from "@/lib/scroll";
 import { SECCIONES, type SeccionId } from "@/lib/i18n/secciones";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/locales";
@@ -57,6 +58,8 @@ export function SiteNav({
   const [superficie, setSuperficie] = useState<string | null>(null);
   const [activa, setActiva] = useState<SeccionId | null>(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
+  /** Para saber si el logo tiene que navegar o simplemente volver arriba. */
+  const ruta = usePathname();
   const panel = useRef<HTMLDivElement>(null);
   const disparador = useRef<HTMLButtonElement>(null);
   const velo = useRef<HTMLDivElement>(null);
@@ -135,6 +138,7 @@ export function SiteNav({
           nodo.style.removeProperty("--nav-a");
           nodo.style.removeProperty("--nav-b");
           nodo.style.removeProperty("--nav-t");
+          nodo.style.removeProperty("opacity");
           setSuperficie(null);
           return;
         }
@@ -151,12 +155,35 @@ export function SiteNav({
         );
         nodo.style.setProperty("--nav-t", String((avance - parada(i)) / tramo));
 
-        // La tinta no se mezcla: salta una vez, a mitad del tramo, con la
-        // transición de color que ya tiene todo el sitio. Un valor intermedio
-        // entre dos tintas opuestas no se lee sobre ninguno de los dos fondos —
-        // el fondo puede ser continuo, el contraste no puede.
+        // Y sobre una transición el velo no se pinta.
+        //
+        // Un velo es el color que hay detrás, y sobre una onda no hay *un*
+        // color: la curva deja mitad de un plano y mitad del otro a lo ancho de
+        // la ventana. Pintar ahí el promedio de los dos —que parece la respuesta
+        // prudente— es pintar un color que no está en la pantalla, y se ve: una
+        // banda apoyada encima del recorrido, que es exactamente lo que el velo
+        // existe para no ser. Y el velo mide 7,5 rem, así que la curva le pasa
+        // por dentro mucho después de haberle pasado por la altura: cualquier
+        // mezcla queda mal en la mitad de abajo aunque esté bien arriba.
+        //
+        // Donde no hay un color que heredar, lo honesto es no pintar. Se puede
+        // porque una transición **es** el silencio entre dos momentos: no hay
+        // contenido pasando por debajo, que es lo único que el velo vela. Al
+        // entrar al plano siguiente vuelve entero y no se nota — ahí su color y
+        // el del plano son el mismo.
+        nodo.style.opacity = zona.dataset.paso ? "0" : "1";
+
+        // La tinta no se mezcla: salta una vez, y salta donde el fondo está
+        // justo a mitad de camino — no a mitad del tramo. Desde que se fueron
+        // los degradados, una transición es color de origen hasta la onda: a
+        // mitad del bloque el fondo todavía es el de arriba, y una tinta que se
+        // diera vuelta ahí quedaría treinta por ciento del tramo ilegible sobre
+        // su propio plano. Un valor intermedio entre dos tintas opuestas no se
+        // lee sobre ninguno de los dos fondos: el fondo puede ser continuo, el
+        // contraste no puede.
+        const cambio = (parada(2) + parada(3)) / 2;
         setSuperficie(
-          (avance < 0.5 ? zona.dataset.tintaA : zona.dataset.tintaB) ??
+          (avance < cambio ? zona.dataset.tintaA : zona.dataset.tintaB) ??
             zona.dataset.superficie ??
             null
         );
@@ -240,6 +267,32 @@ export function SiteNav({
     return () => pausarScroll(false);
   }, []);
 
+  /**
+   * El logo, cuando ya estamos en el lugar.
+   *
+   * ~~Antes era un `<Link>` a la raíz y nada más:~~ estando en la portada, eso
+   * pedía la misma ruta de nuevo — la página se remontaba y el scroll saltaba al
+   * tope de golpe, que es exactamente la sensación de una recarga. Volver arriba
+   * es un destino del encabezado como los otros tres y usa el mismo camino
+   * (`irArriba`, la misma instancia de Lenis).
+   *
+   * Desde otra ruta —un caso— el enlace sigue siendo un enlace de verdad: ahí sí
+   * hay que ir a otro lado, y el `<Link>` es lo correcto. Por eso la decisión se
+   * toma con la ruta y no con una prop.
+   */
+  function volverAlInicio(evento: React.MouseEvent<HTMLAnchorElement>) {
+    if (ruta !== homeHref) return;
+
+    evento.preventDefault();
+    setMenuAbierto(false);
+    // Igual que en `irA`: un Lenis detenido ignora un `scrollTo`.
+    pausarScroll(false);
+    irArriba();
+    // Y se limpia el ancla: quedarse con `#estudio` en la barra estando arriba
+    // sería mentir sobre dónde está el visitante.
+    history.replaceState(null, "", homeHref);
+  }
+
   function irA(id: SeccionId) {
     setMenuAbierto(false);
     // El recorrido se suelta antes de pedirle que vaya a ningún lado: un Lenis
@@ -283,6 +336,7 @@ export function SiteNav({
           <Link
             href={homeHref}
             aria-label={dict.nav.inicio}
+            onClick={volverAlInicio}
             className="-m-2xs p-2xs"
           >
             <Destello className="size-5" />

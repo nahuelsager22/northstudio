@@ -51,6 +51,27 @@ export function pausarScroll(pausado: boolean): void {
  * sección quedaba al doble de distancia. El valor vive en el CSS y nada más lo
  * repite; duplicarlo era el error.
  */
+/**
+ * Vuelve al comienzo del lugar.
+ *
+ * Existe por el mismo motivo que `irASeccion`: el logo de la nav llevaba al
+ * inicio con una navegación de ruta, y eso remonta la página y salta al tope de
+ * golpe — se sentía como una recarga. Volver arriba es un destino más del
+ * encabezado y tiene que hablar el mismo idioma que los otros tres.
+ *
+ * No duplica nada: usa la misma instancia de Lenis y el mismo desvío al scroll
+ * nativo si no la hay.
+ */
+export function irArriba(): void {
+  const lenis = obtenerLenis();
+  if (!lenis) {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    return;
+  }
+
+  lenis.scrollTo(0);
+}
+
 export function irASeccion(id: string): boolean {
   const destino = document.getElementById(id);
   if (!destino) return false;
