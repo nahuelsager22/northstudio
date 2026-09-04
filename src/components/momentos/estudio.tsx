@@ -51,10 +51,21 @@ export function Estudio({ dict }: { dict: Dictionary }) {
         </p>
 
         {/* Qué se hace. Es lo único que el visitante necesita retener, y ahora
-            llega directo después de la tesis. */}
+            llega directo después de la tesis.
+
+            **Es la única línea del sitio que habla en segunda persona**, y la
+            única que lleva el realce (`globals.css`). Las dos cosas son la misma
+            decisión: el color marca la frase que te habla a vos. Por eso no se
+            aplica en ningún otro lado — un color que aparece una vez es un
+            acontecimiento, el mismo color tres veces es un esquema.
+
+            Se probó ponerlo sólo sobre la itálica y no funciona: dos palabras en
+            cursiva a este tamaño no alcanzan para que el color registre, y la
+            frase quedaba igual que sin realce. El acento necesita la línea
+            entera. */}
         <p
           data-reveal
-          className="mt-2xl max-w-[36ch] font-serif text-title-3 text-ink md:ml-[30%] md:max-w-[40ch]"
+          className="mt-2xl max-w-[36ch] font-serif text-title-3 text-realce md:ml-[30%] md:max-w-[40ch]"
         >
           <Pasaje segmentos={e.cierre} />
         </p>

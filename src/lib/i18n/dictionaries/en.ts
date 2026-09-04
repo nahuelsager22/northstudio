@@ -23,7 +23,7 @@ const studioPassage: Segmento[] = [
 
 const studioClosing: Segmento[] = [
   { texto: "Websites built from the ground up to represent " },
-  { texto: "an identity", enfasis: true },
+  { texto: "your identity", enfasis: true },
   { texto: "." },
 ];
 

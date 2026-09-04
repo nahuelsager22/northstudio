@@ -67,6 +67,9 @@
   --color-muted: var(--muted);
   --color-hairline: var(--hairline);
   --color-polar: var(--polar);
+  /* Realce: la excepción, no un token de superficie. No se redeclara por plano
+     porque no cambia por plano — existe en un solo lugar de la web. */
+  --color-realce: var(--c-realce);
 
   /* Tipografía */
   --font-serif: var(--font-newsreader), Georgia, "Times New Roman", "Noto Serif", serif;
@@ -503,6 +506,38 @@
   --c-bosque: oklch(0.274 0.017 163);
   --c-piedra: oklch(0.7 0.025 91);
   --c-tierra: oklch(0.303 0.016 43);
+
+  /*
+   * El realce — **una excepción con nombre, y una sola frase.**
+   *
+   * No es un color del sistema y no debe volverse uno: existe para "Sitios web
+   * pensados desde cero para representar *tu identidad*", que es la única línea
+   * de todo el sitio que le habla al visitante en segunda persona. Ésa es la
+   * regla que lo vuelve legítimo y no decorativo — **el realce marca la frase
+   * que te habla a vos** —, y también la que impide que se disperse: si aparece
+   * en un segundo lugar deja de significar eso y pasa a ser un color de marca.
+   *
+   * De dónde sale: es **la piedra concentrada**. Matiz 87 contra los 91 del
+   * plano — cuatro grados—, así que no es un color traído de afuera sino el
+   * fondo llevado a su versión profunda y saturada. Por eso convive: no compite
+   * con la paleta, la intensifica en un punto.
+   *
+   * Croma 0.075, contra los 0.016–0.025 de los cuatro planos. Se sale de la
+   * disciplina a propósito, y no sin permiso: el sistema ya reservaba un acento
+   * saturado (`--polar`, 0.095) para orientación. Éste queda por debajo de aquél.
+   *
+   * ~~Estaba a `oklch(0.419 0.086 87)` — #614900.~~ Bajarlo a 0.36 hace las dos
+   * cosas al mismo tiempo: se ve **más** dorado (más profundo contra un fondo
+   * claro) y sube de 3.19:1 a 4.07:1.
+   *
+   * *Y el límite, dicho:* 4.07:1 es lo máximo que da un dorado sobre este plano.
+   * Queda por debajo del 4.5:1 que el resto del sitio respeta — es el único
+   * elemento que lo hace— y no se puede arreglar bajando más: por debajo de
+   * L 0.36 con este croma el color se sale de sRGB, el navegador lo recorta y
+   * deja de ser dorado para ser marrón. La frase mide 22px en serif y su
+   * contenido también está en el texto: es un realce, no la única vía de leerla.
+   */
+  --c-realce: oklch(0.36 0.075 87);
 }
 
 /* El cielo: el fondo del tema. No se pinta — se deja ver, para que el canvas de

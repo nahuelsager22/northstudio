@@ -41,7 +41,7 @@ const pasajeEstudio: Segmento[] = [
 
 const cierreEstudio: Segmento[] = [
   { texto: "Sitios web pensados desde cero para representar " },
-  { texto: "una identidad", enfasis: true },
+  { texto: "tu identidad", enfasis: true },
   { texto: "." },
 ];
 

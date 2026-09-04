@@ -49,20 +49,30 @@ export const delfinaGayoso: Proyecto = {
    * se puede elidir, así que ahí sí aparece — la elisión es una decisión de esta
    * lengua, no una regla del contenido.
    *
-   * ~~"Sin apuro y sin tecnicismos, aunque detrás haya oficio."~~ El problema no
-   * era la idea sino el "aunque": conceder es tratar su oficio como la excepción
-   * a la sencillez, y de paso obliga a nombrarlo para defenderlo. **"Que es la
-   * parte difícil"** dice lo mismo al revés — la sencillez no ocurre a pesar del
-   * oficio, es el oficio— y no hace falta explicar nada. Se gana además el
-   * silencio: la frase es más corta que la que reemplaza.
+   * ~~"Sin apuro y sin tecnicismos, aunque detrás haya oficio."~~ ~~"Sin apuro y
+   * sin tecnicismos, que es la parte difícil."~~ Las dos hablaban de lo mismo —el
+   * oficio, la dificultad, el conocimiento detrás— y las dos, por más ajustadas
+   * que estuvieran, describían a Delfina desde afuera y en abstracto. **El
+   * problema no era la redacción: era el tema.**
+   *
+   * **"Sin apuro y con humor"** cambia la temperatura de la frase entera, y lo
+   * hace con un giro mínimo: las versiones anteriores eran *sin* y *sin* —dos
+   * restas, la descripción de lo que ella evita—; ésta gira en la "y" de resta a
+   * suma y pasa a decir lo que trae. Es la diferencia entre definir a alguien por
+   * lo que no hace y por cómo es.
+   *
+   * *Se evaluó ir más lejos* —nombrar algo concreto, una risa, una escena— y se
+   * descartó por las dos razones de siempre: no hay material real para
+   * sostenerlo (principio 9) y un tercer tiempo sobrecargaría una frase que
+   * funciona en dos. Acá la contención no es prudencia: es el registro.
    */
   presentacion: {
     es: `Comparte una manera de cocinar que se siente simple y cotidiana.
 
-Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro y sin tecnicismos, que es la parte difícil.`,
+Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro y con humor.`,
     en: `She shares a way of cooking that feels simple and everyday.
 
-The way she *teaches* makes cooking feel much closer. No rush and no jargon, which is the hard part.`,
+The way she *teaches* makes cooking feel much closer. No rush, and plenty of laughs.`,
   },
   año: 2026,
   rol: [

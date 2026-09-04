@@ -47,12 +47,28 @@ const ROTULO = "font-sans text-label uppercase text-muted";
  * El dato, en la voz del sitio. Serif y no mono: no es un metadato, es una
  * puerta.
  *
- * ~~Antes en `text-title-3`.~~ A esa altura los dos datos competían con la firma
- * que tienen en el medio, que es lo único que el cierre tiene que dejar. En
- * `text-body` siguen siendo puertas —serif, subrayado al pasar— y la firma vuelve
- * a ser lo más grande de la escena.
+ * ~~Antes en `text-title-3`, después en `text-body` y siempre en `text-ink`.~~
+ * Bajar el tamaño no alcanzó, y el motivo es que el problema no era el tamaño:
+ * **eran el único otro texto en tinta plena de la escena**, así que tonalmente
+ * eran pares de la firma por más chicos que fueran. Dos cosas del mismo color se
+ * leen como del mismo rango.
+ *
+ * Tres decisiones, ninguna de tamaño:
+ *
+ * 1. **Contraste.** Pasan a la voz baja. La firma se queda sola en tinta plena y
+ *    la jerarquía se resuelve sin achicar nada más.
+ * 2. **Se encienden al tocarlos.** En reposo son información; con la intención
+ *    encima son la puerta que siempre fueron. Un enlace que cambia de rango
+ *    cuando lo vas a usar está diseñado; uno que es chico y ya, no.
+ * 3. **Tracking.** Una pizca de aire entre letras — el rótulo que tienen arriba
+ *    lleva 0.12em, y esto los emparenta con él: el par rótulo/dato se lee como
+ *    una unidad compuesta y no como dos líneas que quedaron cerca.
  */
-const DATO = "font-serif text-body text-ink";
+const DATO = [
+  "font-serif text-body tracking-[0.015em] text-muted",
+  "transition-colors duration-[var(--duration-base)] ease-[var(--ease-out-calm)]",
+  "hover:text-ink focus-visible:text-ink",
+].join(" ");
 
 export function Pie({ dict }: { dict: Dictionary }) {
   return (
