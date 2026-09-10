@@ -67,9 +67,7 @@ export const delfinaGayoso: Proyecto = {
    * funciona en dos. Acá la contención no es prudencia: es el registro.
    */
   presentacion: {
-    es: `Comparte una manera de cocinar que se siente simple y cotidiana.
-
-Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro y con humor.`,
+    es: `Su forma de *enseñar* hace que cocinar parezca mucho más cercano. Sin apuro y con humor.`,
     en: `She shares a way of cooking that feels simple and everyday.
 
 The way she *teaches* makes cooking feel much closer. No rush, and plenty of laughs.`,
