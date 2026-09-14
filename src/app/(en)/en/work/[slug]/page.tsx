@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { metadataDe } from "@/lib/metadata";
 import { obtenerProyecto, listarSlugsPublicados } from "@/lib/content/proyectos";
 import { SiteShell } from "@/components/site-shell";
 import { ProyectoAdentro } from "@/components/proyecto/proyecto-adentro";
@@ -21,13 +22,15 @@ export async function generateMetadata({
   const proyecto = obtenerProyecto(slug);
   if (!proyecto) return {};
 
-  const dict = getDictionary("en");
-
   return {
-    title: `${proyecto.persona} — ${dict.meta.title}`,
-    description: proyecto.descriptor
-      ? resolverCampo(proyecto.descriptor, "en")
-      : undefined,
+    ...metadataDe({
+      locale: "en",
+      titulo: proyecto.persona,
+      descripcion: proyecto.descriptor
+        ? resolverCampo(proyecto.descriptor, "en")
+        : undefined,
+      rutas: { es: `/proyectos/${slug}`, en: `/en/work/${slug}` },
+    }),
     robots: proyecto.estado === "borrador" ? { index: false, follow: false } : undefined,
   };
 }
