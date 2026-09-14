@@ -73,7 +73,21 @@ Los SVG de las variantes firmadas llevan ese logotipo incrustado en base64: es l
 
 ---
 
-## 4. Detalles de implementación
+## 4. La tarjeta de previsualización (Open Graph)
+
+Lo que aparece al compartir un enlace del sitio en WhatsApp, Instagram, iMessage, Slack o cualquier lector de Open Graph. Se genera con `node scripts/og.mjs` y sale a `public/og.png` (1200×630); los layouts la declaran en `openGraph.images` y `twitter.images`, con ancho, alto y texto alternativo traducido.
+
+**Lleva la firma sola, sobre la noche, con un cielo discreto.** Sin frase, sin dirección, sin claim: la tarjeta se muestra siempre al lado del título y la descripción de la página, que ya dicen qué es North Studio. La imagen tiene un solo trabajo — que la firma se reconozca a 300 px de ancho en un teléfono — y todo lo que se le sume compite con eso.
+
+**Es un PNG estático y no una ruta `opengraph-image.tsx`** por el mismo motivo que el logotipo es un raster (§3): la ruta dinámica de Next rasteriza con Satori, y Satori no lee woff2. La tarjeta se compone con la misma cadena que las fotos de perfil, así que el nombre sale en Newsreader real.
+
+**Pesa ~11 KB a propósito.** WhatsApp no muestra la vista grande si la imagen pasa de ~300 KB. Un campo plano en PNG con paleta entra en una fracción de eso.
+
+**Lo compartido entre generadores vive en `scripts/marca.mjs`:** la carga de sharp, la conversión de color, la geometría canónica del cordón y el logotipo. Se extrajo de `perfil.mjs` cuando apareció el segundo consumidor; los avatares regenerados después de la extracción salieron byte a byte iguales.
+
+*Límite conocido:* WhatsApp guarda la tarjeta en caché por enlace durante días. Si se cambia la imagen, un enlace ya compartido puede seguir mostrando la anterior; un parámetro distinto en la URL fuerza una tarjeta nueva.
+
+## 5. Detalles de implementación
 
 - Los componentes usan `fill="currentColor"`: un solo componente por variante, heredando el color del tema. No hay versiones claro/oscuro separadas en el código.
 - **El favicon es un archivo aparte** porque el navegador lo renderiza fuera del DOM de la página y no puede heredar `data-theme`. Resuelve claro/oscuro con `prefers-color-scheme` embebido en el propio SVG.

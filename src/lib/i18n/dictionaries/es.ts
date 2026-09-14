@@ -72,6 +72,9 @@ export const es = {
     title: "North Studio",
     description:
       "North Studio diseña y desarrolla sitios que representan una identidad. Sitios web, landing pages, portfolios y experiencias digitales.",
+    /** Lo que ve quien no ve la tarjeta de previsualización. Describe la imagen, no el estudio. */
+    imagenAlt:
+      "La firma de North Studio: un cordón montañoso y un destello polar sobre un cielo de noche, con el nombre debajo.",
   },
   nav: {
     /** Nombre accesible de la firma; también el destino "volver al inicio". */

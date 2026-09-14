@@ -46,6 +46,8 @@ export const en: DeepPartial<typeof es> = {
     title: "North Studio",
     description:
       "North Studio designs and builds sites that represent an identity. Websites, landing pages, portfolios and digital experiences.",
+    imagenAlt:
+      "North Studio's signature: a mountain ridge and a polar star over a night sky, with the name beneath.",
   },
   nav: {
     inicio: "North Studio — back to the start",
